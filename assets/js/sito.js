@@ -258,6 +258,26 @@
     };
   }
 
+  /* ——— Archivio: filtro per categoria (senza JS si vedono tutti i testi) ——— */
+  function filtri(box) {
+    var items = Array.prototype.slice.call(document.querySelectorAll('[data-elenco] li[data-categoria]'));
+    var buttons = Array.prototype.slice.call(box.querySelectorAll('[data-filtro]'));
+    box.hidden = false;
+    function apply(cat) {
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-filtro') === cat)); });
+      items.forEach(function (li) { li.hidden = !!cat && li.getAttribute('data-categoria') !== cat; });
+    }
+    buttons.forEach(function (b) {
+      b.addEventListener('click', function () {
+        var cat = b.getAttribute('data-filtro');
+        apply(cat);
+        try { history.replaceState(null, '', cat ? '#' + cat : location.pathname); } catch (e) {}
+      });
+    });
+    var start = decodeURIComponent(location.hash.slice(1));
+    if (start && buttons.some(function (b) { return b.getAttribute('data-filtro') === start; })) apply(start);
+  }
+
   /* ——— Avvio ——— */
   function init() {
     var s;
@@ -265,6 +285,7 @@
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
     Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-puntatore]'), lampadaAlPuntatore);
     Array.prototype.forEach.call(document.querySelectorAll('.archivio'), archivio);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-filtri]'), filtri);
     var c = document.querySelector('[data-lettura]');
     if (c) scene.push(lettura(c));
 

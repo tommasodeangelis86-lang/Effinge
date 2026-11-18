@@ -1,0 +1,51 @@
+{
+  "sito": {
+    "nome": "Effinge",
+    "descrizione": "Effinge, pubblicazione letteraria indipendente.",
+    "indirizzo": "https://effinge.it",
+    "indicizza": false,
+    "piede": "Contatti: canali da scegliere"
+  },
+  "apertura": {
+    "scritta": "Effinge",
+    "sottotitolo": "Un atlante delle cose invisibili.",
+    "intestazione_sinistra": "Effinge",
+    "intestazione_destra": "Pubblicazione letteraria",
+    "firma_sinistra": "Indipendente",
+    "firma_destra": "MMXXVI"
+  },
+  "animazione": {
+    "attiva": true,
+    "velocita": 85,
+    "ritardo": 350,
+    "dissolvenza": 340,
+    "cursore": true,
+    "ripetizione": "sempre"
+  },
+  "lampada": {
+    "colore": "#F0CB8A",
+    "intensita": 80
+  },
+  "colori": {
+    "stanza": "#0A0A09",
+    "carta": "#ECE7DC",
+    "inchiostro": "#1A1916",
+    "testo": "#E9E5DB"
+  },
+  "progetto": {
+    "mostra": true,
+    "titolo": "Il progetto",
+    "righe": [
+      "Un luogo per la scrittura.",
+      "Prima del libro,",
+      "prima della pagina,",
+      "ciò che prende forma."
+    ]
+  },
+  "home": {
+    "mostra_ultimo": true,
+    "mostra_archivio": true,
+    "quanti_in_archivio": 4,
+    "congedo": "Un atlante delle cose invisibili."
+  }
+}

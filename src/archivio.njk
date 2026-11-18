@@ -1,0 +1,26 @@
+---
+layout: base.njk
+permalink: /archivio/
+titolo: Archivio
+seo_descrizione: Tutti i testi pubblicati su Effinge, dal più recente.
+---
+{%- set cats = collections.testi | categorie -%}
+<main id="contenuto" class="archivio-pagina">
+  <header class="sezione-testa"><h1>Archivio</h1><span class="meta">{{ collections.testi.length }} {{ 'testo' if collections.testi.length == 1 else 'testi' }}</span></header>
+  {%- if cats.length > 1 %}
+  <div class="filtri" role="group" aria-label="Filtra per categoria" hidden data-filtri>
+    <button type="button" aria-pressed="true" data-filtro="">Tutti</button>
+    {%- for c in cats %}
+    <button type="button" aria-pressed="false" data-filtro="{{ c | slugify }}">{{ c }}</button>
+    {%- endfor %}
+  </div>
+  {%- endif %}
+  {%- set annoCorrente = '' %}
+  <ul class="archivio" data-elenco>
+    {%- for t in collections.testi %}
+    <li data-categoria="{{ t.data.categoria | slugify }}"><a href="{{ t.url }}"><span class="t">{{ t.data.titolo }}</span><span class="c">{{ t.data.categoria }}</span><span class="d">{{ t.date | dataBreve }}</span></a></li>
+    {%- else %}
+    <li class="vuoto">Ancora nessun testo pubblicato.</li>
+    {%- endfor %}
+  </ul>
+</main>

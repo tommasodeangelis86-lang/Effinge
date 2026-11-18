@@ -4,13 +4,26 @@
 import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
 const { chromium } = createRequire(import.meta.url)('playwright');
 const root = resolve(new URL('..', import.meta.url).pathname);
 const out = process.env.OUT || join(root, 'tests', 'screens');
 mkdirSync(out, { recursive: true });
-const home = pathToFileURL(join(root, 'index.html')).href;
-const read = pathToFileURL(join(root, 'lettura.html')).href;
+// Serve il sito generato (_site/) su un server locale: esegui prima `npm run build`.
+import { createServer } from 'node:http';
+import { readFile } from 'node:fs/promises';
+import { extname } from 'node:path';
+const site = join(root, '_site');
+const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
+const server = createServer(async (req, res) => {
+  let p = decodeURIComponent(req.url.split('?')[0]);
+  if (p.endsWith('/')) p += 'index.html';
+  try { const body = await readFile(join(site, p)); res.writeHead(200, { 'content-type': types[extname(p)] || 'application/octet-stream' }); res.end(body); }
+  catch { res.writeHead(404); res.end('404'); }
+}).listen(0);
+const base = `http://localhost:${server.address().port}`;
+const home = base + '/';
+const read = base + '/testi/titolo-del-testo-piu-recente/';
+const arch = base + '/archivio/';
 const problems = [];
 const b = await chromium.launch();
 
@@ -56,5 +69,18 @@ for (const [label, opts] of [['nojs', { javaScriptEnabled: false }], ['ridotto',
   await page.screenshot({ path: join(out, `${label}.png`), fullPage: true });
   await ctx.close();
 }
+{
+  const ctx = await b.newContext({ viewport: { width: 1024, height: 900 } });
+  const page = await ctx.newPage();
+  page.on('pageerror', e => problems.push(`archivio: ${e.message}`));
+  await page.goto(arch); await page.waitForTimeout(500);
+  await page.screenshot({ path: join(out, 'archivio.png') });
+  await page.click('[data-filtro="frammento"]'); await page.waitForTimeout(300);
+  const visibili = await page.$$eval('[data-elenco] li:not([hidden])', l => l.length);
+  if (visibili !== 1) problems.push(`archivio: filtro Frammento mostra ${visibili} testi invece di 1`);
+  await page.screenshot({ path: join(out, 'archivio-filtro.png') });
+  await ctx.close();
+}
 await b.close();
+server.close();
 console.log(problems.length ? 'PROBLEMI:\n' + problems.join('\n') : 'Nessun problema rilevato.');

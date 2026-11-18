@@ -1,0 +1,208 @@
+# Pannello di gestione di Effinge (Pages CMS — https://app.pagescms.org)
+# Ogni salvataggio crea una modifica nel repository; Netlify ripubblica il sito in circa un minuto.
+
+media:
+  input: media
+  output: /media
+  categories: [image]
+
+content:
+  - name: testi
+    label: Testi
+    description: I testi pubblicati su Effinge. Spunta «Bozza» per lavorarci senza pubblicarli.
+    type: collection
+    path: src/testi
+    format: yaml-frontmatter
+    filename: "{year}-{month}-{day}-{primary}.md"
+    view:
+      fields: [titolo, categoria, date, bozza]
+      primary: titolo
+      sort: [date, titolo]
+      default:
+        sort: date
+        order: desc
+    fields:
+      - name: titolo
+        label: Titolo
+        type: string
+        required: true
+      - name: date
+        label: Data di pubblicazione
+        type: date
+        required: true
+      - name: categoria
+        label: Categoria
+        description: Per esempio Racconto, Frammento, Prosa breve, Nota. Serve anche per i filtri dell’archivio.
+        type: string
+      - name: estratto
+        label: Estratto
+        description: Due o tre righe mostrate in homepage e nelle anteprime sui social.
+        type: text
+      - name: in_evidenza
+        label: In evidenza in homepage
+        type: boolean
+        default: false
+      - name: bozza
+        label: Bozza (non pubblicato)
+        description: "Una bozza non compare nel sito. Puoi vederla in anteprima all’indirizzo /anteprima/ seguito dal nome del file, senza la data (es. /anteprima/il-mio-testo/)."
+        type: boolean
+        default: true
+      - name: colore_carta
+        label: Colore della carta (facoltativo)
+        description: "Solo per questo testo. Codice colore, per esempio #ECE7DC (avorio), #F3F1EC (bianco), #E4DED2 (sabbia), #DCD9D2 (grigio perla). Vuoto = colore generale."
+        type: string
+        pattern:
+          regex: "^(#[0-9a-fA-F]{6})?$"
+          message: "Scrivi un codice colore come #ECE7DC, oppure lascia vuoto."
+      - name: immagine
+        label: Immagine (facoltativa)
+        type: image
+      - name: immagine_alt
+        label: Descrizione dell’immagine
+        description: Per chi non vede l’immagine. Lascia vuoto se è solo decorativa.
+        type: string
+      - name: seo_titolo
+        label: Titolo per Google (facoltativo)
+        type: string
+      - name: seo_descrizione
+        label: Descrizione per Google (facoltativa)
+        type: text
+      - name: body
+        label: Testo
+        type: rich-text
+        options:
+          format: markdown
+
+  - name: pagine
+    label: Pagine
+    description: Pagine libere, come Il progetto e Contatti. Creane una nuova per aggiungere una pagina al sito.
+    type: collection
+    path: src/pagine
+    format: yaml-frontmatter
+    filename: "{primary}.md"
+    view:
+      fields: [titolo, nel_menu, ordine]
+      primary: titolo
+    fields:
+      - name: titolo
+        label: Titolo
+        type: string
+        required: true
+      - name: nel_menu
+        label: Mostra nel menu in alto
+        type: boolean
+        default: true
+      - name: ordine
+        label: Posizione nel menu
+        description: 1 = prima, 2 = seconda, e così via.
+        type: number
+        default: 3
+      - name: bozza
+        label: Bozza (non pubblicata)
+        type: boolean
+        default: false
+      - name: colore_carta
+        label: Colore della carta (facoltativo)
+        type: string
+        pattern:
+          regex: "^(#[0-9a-fA-F]{6})?$"
+          message: "Scrivi un codice colore come #ECE7DC, oppure lascia vuoto."
+      - name: seo_descrizione
+        label: Descrizione per Google
+        type: text
+      - name: body
+        label: Testo
+        type: rich-text
+        options:
+          format: markdown
+
+  - name: impostazioni
+    label: Impostazioni del sito
+    description: Apertura, animazione, lampada, colori e homepage.
+    type: file
+    path: src/_data/impostazioni.json
+    format: json
+    fields:
+      - name: sito
+        label: Sito
+        type: object
+        fields:
+          - { name: nome, label: Nome del sito, type: string, required: true }
+          - { name: descrizione, label: Descrizione per Google, type: text }
+          - { name: indirizzo, label: Indirizzo del sito, type: string, description: "Per esempio https://effinge.it" }
+          - { name: indicizza, label: "Visibile su Google", type: boolean, description: "Attivalo solo quando il sito è pronto e collegato a effinge.it." }
+          - { name: piede, label: Testo a piè di pagina, type: string }
+      - name: apertura
+        label: Apertura della homepage
+        type: object
+        fields:
+          - { name: scritta, label: Scritta animata, type: string, required: true, options: { maxlength: 18 } }
+          - { name: sottotitolo, label: Sottotitolo, type: string }
+          - { name: intestazione_sinistra, label: "Intestazione del foglio (sinistra)", type: string }
+          - { name: intestazione_destra, label: "Intestazione del foglio (destra)", type: string }
+          - { name: firma_sinistra, label: "Piede del foglio (sinistra)", type: string }
+          - { name: firma_destra, label: "Piede del foglio (destra)", type: string }
+      - name: animazione
+        label: Animazione della scritta
+        type: object
+        fields:
+          - { name: attiva, label: Animazione attiva, type: boolean }
+          - { name: velocita, label: "Velocità (millisecondi per lettera)", type: number, description: "Più basso = più veloce. Consigliato 70–120.", options: { min: 30, max: 400, step: 5 } }
+          - { name: ritardo, label: "Attesa prima di iniziare (ms)", type: number, options: { min: 0, max: 2000, step: 50 } }
+          - { name: dissolvenza, label: "Durata della luce su ogni lettera (ms)", type: number, description: "Consigliato 220–400.", options: { min: 120, max: 1200, step: 20 } }
+          - { name: cursore, label: Mostra il cursore mentre scrive, type: boolean }
+          - name: ripetizione
+            label: Quando ripetere l’animazione
+            type: select
+            options:
+              values:
+                - { value: sempre, label: "A ogni visita della homepage" }
+                - { value: sessione, label: "Una volta per visita (non a ogni ritorno)" }
+      - name: lampada
+        label: Lampada
+        type: object
+        fields:
+          - name: colore
+            label: Colore della luce
+            description: "#F0CB8A candela (predefinito), #F5DDB0 caldo tenue, #E8E4D8 luce bianca, #E9B97A ambra."
+            type: string
+            pattern:
+              regex: "^#[0-9a-fA-F]{6}$"
+              message: "Scrivi un codice colore come #F0CB8A."
+          - { name: intensita, label: "Intensità della luce (0–100)", type: number, description: "Più basso = lampada più fioca.", options: { min: 0, max: 100, step: 5 } }
+      - name: colori
+        label: Colori
+        type: object
+        fields:
+          - name: stanza
+            label: Colore della stanza (sfondo)
+            type: string
+            pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Scrivi un codice colore come #0A0A09." }
+          - name: carta
+            label: Colore della carta
+            description: "#ECE7DC avorio (predefinito), #F3F1EC bianco, #E4DED2 sabbia, #DCD9D2 grigio perla."
+            type: string
+            pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Scrivi un codice colore come #ECE7DC." }
+          - name: inchiostro
+            label: Colore dell’inchiostro
+            type: string
+            pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Scrivi un codice colore come #1A1916." }
+          - name: testo
+            label: Colore del testo sullo sfondo
+            type: string
+            pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Scrivi un codice colore come #E9E5DB." }
+      - name: progetto
+        label: Il progetto (le righe che si accendono)
+        type: object
+        fields:
+          - { name: mostra, label: Mostra questa scena, type: boolean }
+          - { name: titolo, label: Titolo, type: string }
+          - { name: righe, label: Righe, type: string, list: true }
+      - name: home
+        label: Homepage
+        type: object
+        fields:
+          - { name: mostra_ultimo, label: Mostra «Ultimo testo», type: boolean }
+          - { name: mostra_archivio, label: Mostra «Dall’archivio», type: boolean }
+          - { name: quanti_in_archivio, label: Quanti testi in «Dall’archivio», type: number, options: { min: 1, max: 12 } }
+          - { name: congedo, label: Frase finale, type: string }

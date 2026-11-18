@@ -1,0 +1,52 @@
+{%- set s = impostazioni -%}
+{%- set titoloPagina = (seo_titolo or titolo or title) -%}
+{%- set descr = seo_descrizione or estratto or s.sito.descrizione -%}
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="{{ s.colori.stanza | colore('#0A0A09') }}">
+{%- if noindex or not s.sito.indicizza %}
+<meta name="robots" content="noindex">
+{%- endif %}
+<title>{% if titoloPagina and page.url != '/' %}{{ titoloPagina }} — {% endif %}{{ s.sito.nome }}</title>
+<meta name="description" content="{{ descr }}">
+<link rel="canonical" href="{{ page.url | assoluto(s.sito.indirizzo) }}">
+<meta property="og:type" content="{{ 'article' if layout == 'testo.njk' else 'website' }}">
+<meta property="og:site_name" content="{{ s.sito.nome }}">
+<meta property="og:title" content="{{ titoloPagina or s.sito.nome }}">
+<meta property="og:description" content="{{ descr }}">
+<meta property="og:url" content="{{ page.url | assoluto(s.sito.indirizzo) }}">
+{%- if immagine %}
+<meta property="og:image" content="{{ immagine | assoluto(s.sito.indirizzo) }}">
+{%- endif %}
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A09'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' text-anchor='middle' fill='%23ECE7DC'%3EE%3C/text%3E%3C/svg%3E">
+<link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>document.documentElement.classList.add('js')</script>
+<link rel="stylesheet" href="/assets/css/fonts.css">
+<link rel="stylesheet" href="/assets/css/sito.css">
+<style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
+</head>
+<body>
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+<header class="barra{% if page.url != '/' %} piena{% endif %}">
+  <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
+  <nav aria-label="Principale">
+    <a href="/archivio/"{% if page.url == '/archivio/' %} aria-current="page"{% endif %}>Archivio</a>
+    {%- for p in collections.pagine %}{% if p.data.nel_menu %}
+    <a href="{{ p.url }}"{% if page.url == p.url %} aria-current="page"{% endif %}{% if not loop.last %} class="facoltativo"{% endif %}>{{ p.data.titolo }}</a>
+    {%- endif %}{% endfor %}
+  </nav>
+</header>
+{{ content | safe }}
+<footer class="piede" id="contatti">
+  <span>{{ s.sito.nome }} © {{ build.anno }}</span>
+  <span>{{ s.sito.piede }}</span>
+  <span><a href="/archivio/">Archivio</a></span>
+</footer>
+<script src="/assets/js/sito.js" defer></script>
+</body>
+</html>

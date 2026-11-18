@@ -2,70 +2,47 @@
 
 Sito di Effinge, pubblicazione letteraria indipendente (effinge.it).
 
-## Direzione scelta: «La pagina e la lampada»
+## Il sito: «La pagina e la lampada»
 
-Un foglio di carta in una stanza buia. Una lampada fioca e calda scorre sulla scrittura;
-le lettere della scritta si accendono una alla volta sotto la luce e tornano inchiostro;
-le righe del progetto si illuminano mentre si scorre, come nel focus di Alhora. Le scene
-sono legate allo scorrimento, in stile Apple (sezioni fissate con `position: sticky`).
+Un foglio di carta in una stanza buia, una lampada fioca che scorre sulla scrittura, righe che
+si accendono mentre si scorre (come il focus di Alhora), scene a scorrimento in stile Apple.
 
-- `index.html` — homepage: apertura (il foglio si raddrizza scorrendo), il progetto riga per riga, ultimo testo, archivio.
-- `lettura.html` — pagina di lettura su un foglio: il paragrafo che si legge resta acceso; comandi «Concentrazione» e «Lampada» (ricordati nel browser).
-- `assets/css/sito.css`, `assets/js/sito.js` — stile e comportamento.
-- Font: **Cormorant Garamond** (titoli), **EB Garamond** (lettura), **Inter Tight** (interfaccia), self-hosted.
-- Verifica: `node tests/sito.mjs` (fotogrammi della scrittura e delle scene, desktop e smartphone, senza JS, movimento ridotto).
-
-Le tre proposte precedenti (A, B, C) restano in `direzioni/` come archivio.
-
-## Cosa c’è
+**Per gestirlo leggi la [guida](docs/guida.md)**: pubblicare testi, creare pagine, cambiare
+colori e animazione, mettere il sito online e collegare effinge.it.
 
 | Percorso | Contenuto |
 |---|---|
-| `direzioni/index.html` | Pagina di confronto delle tre proposte precedenti |
-| `direzioni/a-afterlight/` | A · Afterlight: buio carbone, lampada che passa di lettera in lettera |
-| `direzioni/b-frontespizio/` | B · Frontespizio: avorio piatto, lettere che si scaldano d’oro e si raffreddano in inchiostro |
-| `direzioni/c-fessura/` | C · Fessura: buio profondo, asse centrale, lama di luce verticale |
-| `assets/js/luce.js` | Motore dell’animazione «Illuminated Type Reveal», comune alle tre direzioni |
-| `assets/css/luce.css` | Struttura della luce (ogni direzione ne regola forma e colore) |
-| `assets/fonts/` | Newsreader, IBM Plex Sans, IBM Plex Mono, self-hosted (licenza OFL) |
-| `riferimenti/v3/` | Prototipo «Luce mobile v3» originale, conservato come riferimento |
-| `tests/screens.mjs` | Verifica visiva con Playwright |
-| `docs/brief.md` | Il brief di direzione creativa |
-| `.claude/skills/` | Skill di design installate per Claude Code (vedi sotto) |
+| `src/testi/` | I testi (un file per testo), modificabili dal pannello |
+| `src/pagine/` | Pagine libere: Il progetto, Contatti, e le nuove |
+| `src/_data/impostazioni.json` | Apertura, animazione, lampada, colori, homepage |
+| `src/_includes/` | Modelli: struttura, lettura, pagina |
+| `src/index.njk`, `src/archivio.njk` | Homepage e archivio filtrabile |
+| `assets/css/sito.css`, `assets/js/sito.js` | Stile e comportamento (lampada, scrittura, scene) |
+| `assets/fonts/` | Cormorant Garamond, EB Garamond, Inter Tight (self-hosted, OFL) |
+| `.pages.yml` | Configurazione del pannello Pages CMS |
+| `netlify.toml` | Pubblicazione su Netlify |
+| `media/` | Immagini caricate dal pannello |
+| `direzioni/`, `riferimenti/` | Proposte precedenti e prototipo v3, solo come archivio |
 
-Per vedere le pagine basta aprire `index.html` nel browser: non serve nessun build.
+```bash
+npm install
+npm start          # anteprima locale con aggiornamento automatico
+npm run build      # genera il sito in _site/
+npm test           # verifica visiva (dopo npm run build)
+```
 
-## L’animazione e il CMS
-
-Ogni impostazione della scritta è un attributo `data-*` sull’`<h1 data-scrittura>` (stessi nomi nel sito e nelle proposte). In Webflow ogni attributo
-verrà collegato a un campo della raccolta **Impostazioni homepage**, così ogni controllo agisce
-davvero sul sito:
-
-| Attributo | Campo CMS | Valore |
-|---|---|---|
-| testo dell’`<h1>` | Scritta animata | testo |
-| `data-enabled` | Animazione attiva | `true` / `false` |
-| `data-speed` | Velocità (ms per lettera) | 20–600, brief: 80 |
-| `data-delay` | Ritardo iniziale (ms) | brief: 250 |
-| `data-fade` | Dissolvenza della luce (ms) | brief: 220–400 |
-| `data-intensity` | Intensità luminosa | 0–1 |
-| `data-color` | Colore della luce | `#RRGGBB` |
-| `data-cursor` | Cursore | `true` / `false` |
-| `data-repeat` | Ripetizione | `sempre` / `sessione` |
-
-Garanzie: senza JavaScript il titolo è testo normale; con «riduci movimento» attivo nel sistema
-l’animazione non parte; gli screen reader leggono sempre la parola intera; le lettere occupano
-il loro spazio fin dall’inizio, quindi il layout non si muove.
+Le bozze (`bozza: true`) non compaiono nel sito: sono visibili solo su `/anteprima/<nome>/`,
+con `noindex`. Finché in impostazioni «Visibile su Google» è spento, tutto il sito è `noindex`.
 
 ## Verifica visiva
 
 ```bash
-node tests/screens.mjs            # tutte le pagine di direzioni/
-OUT=/percorso node tests/screens.mjs direzioni/a-afterlight/index.html
+npm run build && npm test          # sito: scene, lettura, archivio, senza JS, movimento ridotto
+node tests/screens.mjs             # proposte in direzioni/
 ```
 
-Cattura ogni pagina a 390, 768, 1024 e 1440 px, un fotogramma a metà animazione, la home senza
-JavaScript e con movimento ridotto, e segnala errori JavaScript e scroll orizzontale.
+Cattura fotogrammi su desktop e smartphone e segnala errori JavaScript, scroll orizzontale,
+titolo illeggibile senza JavaScript o con movimento ridotto, filtro dell'archivio non funzionante.
 
 ## Skill di design installate
 
@@ -77,10 +54,7 @@ In `.claude/skills/`, caricate automaticamente da Claude Code in questo reposito
 
 Il brief ha sempre la precedenza sulle skill.
 
-## Prossimi passi (dal brief)
+## Prossimi passi
 
-1. Approvare una direzione.
-2. Prototipo navigabile completo: archivio filtrabile, lettura, progetto, contatti, pannello impostazioni.
-3. Design system documentato.
-4. Costruzione in Webflow con CMS; guida operativa; collaudo con l’autore.
-5. Solo alla fine: collegamento del dominio effinge.it.
+1. Collaudo dell'autore sull'indirizzo provvisorio di Netlify (vedi guida).
+2. Collegamento di effinge.it su Aruba e attivazione di «Visibile su Google».

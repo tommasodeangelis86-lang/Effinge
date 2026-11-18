@@ -1,0 +1,33 @@
+---
+layout: base.njk
+---
+<main id="contenuto" class="lettura-pagina">
+  <article class="foglio">
+    <div class="contenuto">
+      <header class="lettura-testa">
+        {%- if bozza %}<div class="meta" style="color:#8a5a1c;margin-bottom:12px">Bozza · visibile solo con questo indirizzo</div>{% endif %}
+        <div class="meta">{% if categoria %}<a href="/archivio/#{{ categoria | slugify }}">{{ categoria }}</a> · {% endif %}<time datetime="{{ page.date | dataIso }}">{{ page.date | dataEstesa }}</time> · {{ content | minutiDiLettura }} minuti</div>
+        <h1>{{ titolo }}</h1>
+      </header>
+      {%- if immagine %}
+      <figure class="immagine"><img src="{{ immagine }}" alt="{{ immagine_alt or '' }}" loading="lazy"></figure>
+      {%- endif %}
+      <div class="corpo" data-lettura>
+{{ content | safe }}
+      </div>
+      {%- set prec = collections.testi | getNextCollectionItem(page) %}
+      {%- set succ = collections.testi | getPreviousCollectionItem(page) %}
+      {%- if prec or succ %}
+      <nav class="seguenti" aria-label="Altri testi">
+        {%- if prec %}<a class="prec" href="{{ prec.url }}"><span>Precedente</span>{{ prec.data.titolo }}</a>{% else %}<i></i>{% endif %}
+        {%- if succ %}<a class="succ" href="{{ succ.url }}"><span>Successivo</span>{{ succ.data.titolo }}</a>{% endif %}
+      </nav>
+      {%- endif %}
+    </div>
+  </article>
+</main>
+<div class="vignetta" aria-hidden="true"></div>
+<div class="comandi" role="group" aria-label="Impostazioni di lettura">
+  <button type="button" data-comando="concentrazione" aria-pressed="true">Concentrazione</button>
+  <button type="button" data-comando="lampada" aria-pressed="true">Lampada</button>
+</div>

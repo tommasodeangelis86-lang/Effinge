@@ -1,0 +1,16 @@
+---
+layout: base.njk
+---
+<main id="contenuto" class="lettura-pagina">
+  <article class="foglio">
+    <div class="contenuto">
+      <header class="lettura-testa">
+        {%- if bozza %}<div class="meta" style="color:#8a5a1c">Bozza · visibile solo con questo indirizzo</div>{% endif %}
+        <h1>{{ titolo }}</h1>
+      </header>
+      <div class="corpo">
+{{ content | safe }}
+      </div>
+    </div>
+  </article>
+</main>

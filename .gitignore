@@ -1,4 +1,5 @@
 tests/screens/
 node_modules/
+_site/
 .DS_Store
 .taste-skill/
