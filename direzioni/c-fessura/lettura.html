@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#08090A">
+<meta name="robots" content="noindex">
+<title>Titolo del testo — Effinge · Direzione C · Fessura</title>
+<meta name="description" content="Pagina di lettura — proposta visiva C di Effinge.">
+<link rel="preload" href="../../assets/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/fonts.css">
+<style>
+:root{
+  --fondo:#08090A;--superficie:#111312;--testo:#E8E6DF;--testo-2:#A3A49D;--testo-3:#80837C;--luce:#C6B08B;--filo:#2A2D2B;
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --colonna:min(100% - 40px,40rem);
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--fondo);color:var(--testo);-webkit-text-size-adjust:100%;scrollbar-color:#30332f var(--fondo)}
+body{margin:0;font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--luce) 38%,transparent);color:#fff}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:2px}
+.salta{position:absolute;left:12px;top:-60px;padding:10px 14px;background:var(--testo);color:var(--fondo);font:500 .875rem var(--sans);z-index:10}
+.salta:focus{top:12px}
+
+.lettura{width:min(100% - 40px,40rem);margin:0 auto;padding:clamp(72px,12vh,140px) 0 clamp(80px,12vh,140px)}
+.lettura-testa{margin-bottom:clamp(48px,8vh,88px)}
+.lettura h1{margin:16px 0 0;font:300 clamp(2.5rem,6vw,4.25rem)/1.05 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.025em;text-wrap:balance}
+.lettura-meta{margin:0;font:400 .75rem/1.6 var(--mono);letter-spacing:.04em;color:var(--testo-3)}
+.lettura-meta a{text-decoration:underline;text-underline-offset:4px;text-decoration-color:var(--filo)}
+.lettura-meta a:hover{text-decoration-color:currentColor}
+.corpo{font:400 clamp(1.1875rem,1.1rem + .35vw,1.3125rem)/1.7 var(--serif);font-variation-settings:"opsz" 18;hyphens:auto;-webkit-hyphens:auto;max-width:66ch}
+.corpo p{margin:0}
+.corpo p + p{text-indent:1.6em}
+.corpo hr{border:0;height:1px;width:3rem;background:var(--filo);margin:2.2em auto}
+.seguenti{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:clamp(64px,10vh,120px);padding-top:28px;border-top:1px solid var(--filo)}
+.seguenti a{font:400 1.125rem/1.35 var(--serif);transition:color .2s ease}
+.seguenti a:last-child{text-align:right}
+.seguenti span{display:block;margin-bottom:8px;font:400 .75rem/1 var(--sans);color:var(--testo-3)}
+.piede{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;padding:24px clamp(20px,5vw,80px) 32px;border-top:1px solid var(--filo);font:400 .75rem/1.6 var(--mono);color:var(--testo-3)}
+
+.testata{display:flex;justify-content:center;gap:clamp(20px,4vw,48px);padding:26px 20px;font:400 .8125rem/1 var(--sans);color:var(--testo-2)}
+.testata a{padding:8px 2px}.testata a:hover{color:var(--testo)}
+.lettura-testa{text-align:center}
+.corpo{color:#CFCCC4}
+.seguenti a:hover{color:#fff}
+.piede{flex-direction:column;align-items:center;text-align:center}
+
+</style>
+</head>
+<body>
+<a class="salta" href="#testo">Vai al testo</a>
+<header class="testata">
+  <nav aria-label="Principale" style="display:contents">
+    <a href="index.html#archivio">Archivio</a>
+    <a href="./" >Effinge</a>
+    <a href="index.html#progetto">Il progetto</a>
+  </nav>
+</header>
+<main id="testo">
+  <article class="lettura">
+    <header class="lettura-testa">
+      <p class="lettura-meta"><a href="index.html#archivio">Racconto</a> · <time datetime="2026-11-12">12 novembre 2026</time> · lettura di 4 minuti</p>
+      <h1>Titolo del testo più recente</h1>
+    </header>
+    <div class="corpo">
+      <p>Questo paragrafo è un segnaposto di impaginazione. Mostra come apparirà la colonna di lettura: circa sessantacinque caratteri per riga, un corpo ampio, un’interlinea generosa e nessun elemento che distragga dal testo.</p>
+      <p>Il contenuto definitivo verrà inserito dall’autore attraverso il CMS. Fino ad allora queste righe servono soltanto a verificare il ritmo dei paragrafi, la lunghezza delle righe su schermi diversi e il contrasto tra testo e fondo.</p>
+      <p>Un secondo blocco di prova permette di controllare lo spazio tra un paragrafo e l’altro, la sillabazione automatica in italiano e il modo in cui la pagina respira quando il testo si allunga oltre la prima schermata.</p>
+      <hr>
+      <p>Dopo una pausa, il testo riprende. Il segno che separa le parti è sobrio e non decorativo; l’autore può inserirlo dal campo di testo ricco del CMS.</p>
+      <p>L’ultimo paragrafo chiude la prova. Nessuna di queste frasi appartiene all’autore né deve essere pubblicata.</p>
+    </div>
+    <nav class="seguenti" aria-label="Altri testi">
+      <a href="lettura.html"><span>Precedente</span>Titolo di un secondo testo</a>
+      <a href="lettura.html"><span>Successivo</span>Titolo di un testo in evidenza</a>
+    </nav>
+  </article>
+</main>
+<footer class="piede" id="contatti">
+  <span>Effinge © 2026 · Contatti: canali da scegliere</span>
+  <span>Proposta C · Fessura — anteprima non pubblicata</span>
+</footer>
+</body>
+</html>

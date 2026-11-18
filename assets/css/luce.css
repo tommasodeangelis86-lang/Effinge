@@ -1,0 +1,23 @@
+/* Effinge — Illuminated Type Reveal. Struttura comune; ogni direzione regola forma e colore della luce. */
+html:has([data-luce]),html:has([data-luce]) body{overflow-x:clip}
+[data-luce]{position:relative;--luce:#C6B08B;--luce-intensita:.75;--luce-fade:320ms}
+.luce-sr{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.luce-riga{display:inline}
+.luce-glifo{display:inline-block;white-space:pre}
+/* Prima che lo script parta il titolo resta nascosto (max 2,5 s, poi riappare comunque). */
+.luce-attesa [data-luce]:not([data-enabled="false"]){opacity:0}
+.luce-vista .luce-attesa [data-luce][data-repeat="sessione"],.luce-attesa.luce-vista [data-luce][data-repeat="sessione"]{opacity:1}
+.luce-in-corso .luce-glifo:not(.acceso){opacity:0}
+.luce-scena{position:absolute;inset:0;pointer-events:none;overflow:visible;z-index:1}
+.luce-lampada,.luce-scia,.luce-cursore{position:absolute;left:0;top:0;opacity:0;will-change:transform,opacity;transition:opacity var(--luce-fade) cubic-bezier(.23,1,.32,1)}
+.luce-lampada{width:1.5em;height:1.05em;border-radius:50%;mix-blend-mode:screen;filter:blur(.08em);
+  background:radial-gradient(closest-side,rgba(255,247,226,.5),color-mix(in srgb,var(--luce) 32%,transparent) 45%,transparent)}
+.luce-scia{width:2.6em;height:1.2em;border-radius:50%;filter:blur(.2em);
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--luce) 22%,transparent),transparent)}
+.luce-cursore{width:max(2px,.012em);height:.78em;border-radius:2px;
+  background:linear-gradient(180deg,transparent,rgba(255,250,236,.95) 25%,rgba(255,250,236,.95) 75%,transparent);
+  box-shadow:0 0 .06em .01em color-mix(in srgb,var(--luce) 70%,transparent)}
+.luce-accesa .luce-lampada{opacity:calc(.2 + var(--luce-intensita) * .8)}
+.luce-accesa .luce-scia{opacity:calc(var(--luce-intensita) * .8)}
+.luce-accesa[data-cursor-visible="true"] .luce-cursore{opacity:calc(.3 + var(--luce-intensita) * .6)}
+@media (prefers-reduced-motion:reduce){.luce-attesa [data-luce]{opacity:1!important}.luce-scena{display:none}}

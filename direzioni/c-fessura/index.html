@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#08090A">
+<meta name="robots" content="noindex">
+<title>Effinge — Direzione C · Fessura</title>
+<meta name="description" content="Effinge, pubblicazione letteraria indipendente. Proposta visiva C: Fessura.">
+<link rel="preload" href="../../assets/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/fonts.css">
+<link rel="stylesheet" href="../../assets/css/luce.css">
+<script>(function(d){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('luce-attesa');if(sessionStorage.getItem('effinge-luce-vista')==='1')d.classList.add('luce-vista');setTimeout(function(){d.classList.remove('luce-attesa')},2500)}catch(e){}})(document.documentElement)</script>
+<style>
+:root{
+  --fondo:#08090A;--superficie:#111312;--testo:#E8E6DF;--testo-2:#A3A49D;--testo-3:#80837C;--luce:#C6B08B;--filo:#2A2D2B;
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --colonna:min(100% - 40px,40rem);
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--fondo);color:var(--testo);-webkit-text-size-adjust:100%;scrollbar-color:#30332f var(--fondo)}
+body{margin:0;font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--luce) 38%,transparent);color:#fff}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:2px}
+.salta{position:absolute;left:12px;top:-60px;padding:10px 14px;background:var(--testo);color:var(--fondo);font:500 .875rem var(--sans);z-index:10}
+.salta:focus{top:12px}
+
+.testata{position:absolute;inset:0 0 auto;display:flex;justify-content:center;gap:clamp(20px,4vw,48px);padding:26px 20px;font:400 .8125rem/1 var(--sans);color:var(--testo-2);z-index:2}
+.testata a{padding:8px 2px;transition:color .2s ease}
+.testata a:hover,.testata a[aria-current]{color:var(--testo)}
+
+/* Apertura: un asse, una fessura di luce */
+.apertura{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:96px 20px;position:relative}
+.titolo{margin:0;font:300 clamp(2.75rem,9.5vw,8.5rem)/1 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:.32em;margin-right:-.32em;color:#D9D6CE;white-space:nowrap}
+.sottotitolo{margin:2.2em 0 0;font:italic 300 clamp(1.125rem,1.7vw,1.375rem)/1.4 var(--serif);font-variation-settings:"opsz" 20;color:var(--testo-2)}
+.discesa{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;font:400 .75rem/1 var(--sans);color:var(--testo-3)}
+.discesa a{padding:6px;transition:color .2s ease}.discesa a:hover{color:var(--testo)}
+.discesa .asse{width:1px;height:48px;background:linear-gradient(var(--filo),transparent)}
+.riaccendi{position:absolute;right:20px;bottom:28px;background:none;border:0;padding:8px;font:400 .75rem/1 var(--sans);color:var(--testo-3);cursor:pointer;transition:color .2s ease}
+.riaccendi:hover{color:var(--testo)}
+/* La fessura: una lama verticale stretta, a velocità costante */
+.titolo .luce-lampada{width:.16em;height:1.9em;border-radius:0;filter:blur(.05em);mix-blend-mode:screen;
+  background:linear-gradient(90deg,transparent,rgba(255,248,230,.75) 45%,rgba(255,248,230,.75) 55%,transparent);
+  -webkit-mask:linear-gradient(transparent,#000 30%,#000 70%,transparent);mask:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+.titolo .luce-scia{width:1.6em;height:2.2em;filter:blur(.25em);background:radial-gradient(closest-side,color-mix(in srgb,var(--luce) 26%,transparent),transparent)}
+.titolo .luce-cursore{display:none}
+
+/* Lettura in apertura: la home comincia dal testo */
+.colonna{width:var(--colonna);margin:0 auto}
+.sezione{padding:clamp(88px,14vh,150px) 0 0}
+.etichetta{display:block;text-align:center;margin:0 0 40px;font:400 .75rem/1 var(--mono);letter-spacing:.08em;color:var(--testo-3)}
+.ultimo{text-align:center}
+.ultimo h2{margin:0;font:300 clamp(2.25rem,5vw,3.75rem)/1.08 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.02em;text-wrap:balance}
+.ultimo .meta{margin:18px 0 44px}
+.ultimo p{margin:0 0 1.2em;text-align:left;font:400 1.25rem/1.65 var(--serif);font-variation-settings:"opsz" 18;color:#CFCCC4;hyphens:auto}
+.ultimo p:first-of-type::first-letter{font-size:1.06em}
+.sfuma{position:relative}
+.sfuma::after{content:"";position:absolute;inset:auto 0 0;height:4.5em;background:linear-gradient(transparent,var(--fondo));pointer-events:none}
+.continua{display:inline-flex;margin-top:12px;font:500 .875rem/1 var(--sans);padding:12px 0;border-bottom:1px solid var(--luce);gap:10px;transition:gap .3s var(--ease)}
+.continua:hover{gap:16px}
+.meta{font:400 .75rem/1.6 var(--mono);letter-spacing:.04em;color:var(--testo-3);font-variant-numeric:tabular-nums}
+
+.elenco{list-style:none;margin:0;padding:0;text-align:center}
+.elenco li + li{margin-top:34px}
+.elenco a{display:inline-block;padding:4px 0}
+.elenco .t{display:block;font:300 clamp(1.5rem,2.6vw,2rem)/1.2 var(--serif);font-variation-settings:"opsz" 40;transition:color .25s ease}
+.elenco .m{display:block;margin-top:8px}
+.elenco a:hover .t{color:#fff}
+.tutto{text-align:center;margin-top:48px}
+.tutto a{font:400 .875rem/1 var(--sans);color:var(--testo-2);padding:8px 0;transition:color .2s ease}.tutto a:hover{color:var(--testo)}
+
+.progetto{padding:clamp(110px,18vh,190px) 0;text-align:center}
+.progetto p{margin:0 auto;max-width:22ch;font:italic 300 clamp(1.75rem,3.4vw,2.75rem)/1.25 var(--serif);font-variation-settings:"opsz" 48;text-wrap:balance}
+.progetto .tenue{color:var(--testo-3)}
+.progetto small{display:block;margin-top:28px;font:400 .875rem/1.6 var(--sans);color:var(--testo-2)}
+.filo{width:1px;height:64px;background:var(--filo);margin:0 auto}
+
+.piede{display:flex;flex-direction:column;align-items:center;gap:6px;padding:40px 20px 44px;border-top:1px solid var(--filo);font:400 .75rem/1.6 var(--mono);color:var(--testo-3);text-align:center}
+
+@media (max-width:640px){
+  .titolo{font-size:clamp(2.25rem,11.5vw,4rem);letter-spacing:.22em;margin-right:-.22em}
+  .riaccendi{right:50%;transform:translateX(50%);bottom:auto;top:calc(50% + 120px)}
+  .discesa{display:none}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+<header class="testata">
+  <nav aria-label="Principale" style="display:contents">
+    <a href="#archivio">Archivio</a>
+    <a href="./" aria-current="page">Effinge</a>
+    <a href="#progetto">Il progetto</a>
+  </nav>
+</header>
+
+<main id="contenuto">
+  <section class="apertura" aria-label="Apertura">
+    <h1 class="titolo" data-luce data-mode="slit" data-enabled="true" data-speed="95" data-delay="250" data-fade="360" data-intensity="0.8" data-color="#C6B08B" data-cursor="false" data-repeat="sempre">EFFINGE</h1>
+    <p class="sottotitolo">Un atlante delle cose invisibili.</p>
+    <button class="riaccendi" type="button" data-luce-replay>Riaccendi la luce</button>
+    <div class="discesa"><a href="#ultimo">Leggi</a><span class="asse" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="sezione colonna ultimo" id="ultimo" aria-labelledby="h-ultimo">
+    <span class="etichetta">Ultimo testo · Racconto · 12.11.2026</span>
+    <h2 id="h-ultimo"><a href="lettura.html">Titolo del testo più recente</a></h2>
+    <div class="meta">Segnaposto di impaginazione</div>
+    <div class="sfuma">
+      <p>Questo paragrafo è un segnaposto. In questa proposta la homepage non presenta il testo: lo comincia. Le prime righe dell’ultimo testo pubblicato compaiono qui, nella stessa colonna e nello stesso corpo della pagina di lettura.</p>
+      <p>Il contenuto definitivo verrà inserito dall’autore attraverso il CMS. Fino ad allora queste righe servono soltanto a verificare misura, interlinea e contrasto.</p>
+    </div>
+    <a class="continua" href="lettura.html">Continua a leggere <span aria-hidden="true">→</span></a>
+  </section>
+
+  <section class="sezione colonna" id="archivio" aria-labelledby="h-archivio">
+    <h2 class="etichetta" id="h-archivio" style="margin-bottom:48px">Dall’archivio</h2>
+    <ul class="elenco">
+      <li><a href="lettura.html"><span class="t">Titolo di un testo in evidenza</span><span class="m meta">Frammento · 03.10.2026</span></a></li>
+      <li><a href="lettura.html"><span class="t">Titolo di un secondo testo</span><span class="m meta">Prosa breve · 14.08.2026</span></a></li>
+      <li><a href="lettura.html"><span class="t">Titolo di un terzo testo</span><span class="m meta">Nota · 02.06.2026</span></a></li>
+    </ul>
+    <p class="tutto"><a href="#archivio">Tutto l’archivio →</a></p>
+  </section>
+
+  <section class="progetto colonna" id="progetto" aria-labelledby="h-progetto">
+    <div class="filo" aria-hidden="true" style="margin-bottom:56px"></div>
+    <h2 class="etichetta" id="h-progetto">Il progetto</h2>
+    <p>Un luogo per la scrittura. <span class="tenue">Prima del libro, prima della pagina, ciò che prende forma.</span></p>
+    <small>Testo di presentazione da definire con l’autore.</small>
+  </section>
+</main>
+
+<footer class="piede" id="contatti">
+  <span>Effinge © 2026 · Contatti: canali da scegliere</span>
+  <span>Proposta C · Fessura — anteprima non pubblicata</span>
+</footer>
+<script src="../../assets/js/luce.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B0D0C">
+<meta name="robots" content="noindex">
+<title>Effinge — Direzione A · Afterlight</title>
+<meta name="description" content="Effinge, pubblicazione letteraria indipendente. Proposta visiva A: Afterlight.">
+<link rel="preload" href="../../assets/fonts/newsreader-latin-opsz-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../assets/css/fonts.css">
+<link rel="stylesheet" href="../../assets/css/luce.css">
+<script>(function(d){try{if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;d.classList.add('luce-attesa');if(sessionStorage.getItem('effinge-luce-vista')==='1')d.classList.add('luce-vista');setTimeout(function(){d.classList.remove('luce-attesa')},2500)}catch(e){}})(document.documentElement)</script>
+<style>
+:root{
+  --fondo:#0B0D0C;--superficie:#141715;--testo:#E8E6DF;--testo-2:#A3A49D;--testo-3:#7E817A;--luce:#C6B08B;--filo:#323632;
+  --serif:"Newsreader","Iowan Old Style","Palatino Linotype",Georgia,serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --margine:clamp(20px,5.5vw,96px);
+  --ease:cubic-bezier(.23,1,.32,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--fondo);color:var(--testo);-webkit-text-size-adjust:100%;scrollbar-color:#3a3e3b var(--fondo)}
+body{margin:0;font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--luce) 38%,transparent);color:#fff}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:2px}
+.salta{position:absolute;left:12px;top:-60px;padding:10px 14px;background:var(--testo);color:var(--fondo);font:500 .875rem var(--sans);z-index:10}
+.salta:focus{top:12px}
+
+/* Testata */
+.testata{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px var(--margine)}
+.marchio{font:500 .8125rem/1 var(--sans);letter-spacing:.2em;text-transform:uppercase}
+.nav{display:flex;gap:clamp(18px,3vw,44px)}
+.nav a{font:400 .875rem/1 var(--sans);color:var(--testo-2);padding:8px 0;background:linear-gradient(currentColor,currentColor) 0 100%/0 1px no-repeat;transition:color .2s ease,background-size .35s var(--ease)}
+.nav a:hover{color:var(--testo);background-size:100% 1px}
+.nav a[aria-current]{color:var(--testo)}
+
+/* Apertura */
+.apertura{min-height:calc(100svh - 82px);display:grid;grid-template-rows:1fr auto;padding:0 var(--margine)}
+.apertura-centro{align-self:center;padding:6vh 0 10vh;margin-left:clamp(0px,6vw,120px)}
+.titolo{margin:0;font:250 clamp(4.25rem,15.5vw,14.5rem)/.9 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.045em;color:#DAD7CF;white-space:nowrap;
+  --luce:#C6B08B}
+.sottotitolo{margin:.9em 0 0 .15em;max-width:30ch;font:italic 300 clamp(1.25rem,2.2vw,1.875rem)/1.35 var(--serif);font-variation-settings:"opsz" 24;color:var(--testo-2)}
+.apertura-piede{display:flex;justify-content:space-between;align-items:center;gap:16px;border-top:1px solid var(--filo);padding:20px 0 26px;font:400 .8125rem/1 var(--sans);color:var(--testo-2)}
+.apertura-piede a,.apertura-piede button{display:inline-flex;align-items:center;gap:10px;padding:8px 0;transition:color .2s ease}
+.apertura-piede a:hover,.apertura-piede button:hover{color:var(--testo)}
+.apertura-piede button{background:none;border:0;color:inherit;font:inherit;cursor:pointer}
+.apertura-piede svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.25}
+
+/* Sezioni */
+.sezione{padding:clamp(96px,14vh,160px) var(--margine) 0}
+.sezione-testa{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--filo)}
+.sezione-testa h2{margin:0;font:500 .8125rem/1 var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--testo-2)}
+.sezione-testa a{font:400 .875rem/1 var(--sans);color:var(--testo-2);transition:color .2s ease}
+.sezione-testa a:hover{color:var(--testo)}
+
+.ultimo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,22rem);gap:clamp(32px,6vw,120px);padding:48px 0 0;align-items:end}
+.ultimo h3{margin:0;font:300 clamp(2.5rem,6vw,5.5rem)/1.02 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.03em;text-wrap:balance}
+.ultimo h3 a{transition:color .25s ease}
+.ultimo h3 a:hover{color:#fff}
+.ultimo p{margin:0 0 1.25em;font:400 1.125rem/1.6 var(--serif);font-variation-settings:"opsz" 16;color:var(--testo-2)}
+.meta{font:400 .75rem/1.6 var(--mono);letter-spacing:.04em;color:var(--testo-3);font-variant-numeric:tabular-nums}
+.leggi{display:inline-flex;gap:10px;align-items:center;font:500 .875rem/1 var(--sans);padding:10px 0;border-bottom:1px solid var(--luce);transition:gap .3s var(--ease)}
+.leggi:hover{gap:16px}
+
+.elenco{list-style:none;margin:0;padding:0}
+.elenco li{border-bottom:1px solid var(--filo)}
+.elenco a{display:grid;grid-template-columns:minmax(0,1fr) 10rem 7rem;gap:24px;align-items:baseline;padding:26px 0}
+.elenco .t{font:300 clamp(1.5rem,2.6vw,2.25rem)/1.15 var(--serif);font-variation-settings:"opsz" 48;letter-spacing:-.015em;transition:color .25s ease}
+.elenco a:hover .t{color:#fff}
+.elenco .c,.elenco .d{font:400 .75rem/1 var(--mono);letter-spacing:.04em;color:var(--testo-3)}
+.elenco .d{text-align:right;font-variant-numeric:tabular-nums}
+
+.progetto{display:grid;grid-template-columns:minmax(0,14rem) minmax(0,1fr);gap:clamp(24px,6vw,120px);padding:48px 0 clamp(96px,14vh,160px)}
+.progetto p{margin:0;max-width:24ch;font:300 clamp(1.875rem,3.6vw,3.25rem)/1.18 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.02em;text-wrap:balance}
+.progetto .tenue{color:var(--testo-3)}
+.progetto aside{font:400 .875rem/1.6 var(--sans);color:var(--testo-2)}
+
+.piede{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:24px var(--margine) 32px;border-top:1px solid var(--filo);font:400 .75rem/1.6 var(--mono);color:var(--testo-3)}
+.piede a:hover{color:var(--testo)}
+
+@media (max-width:760px){
+  .testata{padding-top:20px;padding-bottom:20px}
+  .nav{gap:18px}.nav a.facoltativo{display:none}
+  .apertura{min-height:calc(100svh - 66px)}
+  .apertura-centro{margin-left:0;padding-bottom:14vh}
+  .titolo{font-size:clamp(3.5rem,23vw,9rem);letter-spacing:-.05em}
+  .ultimo,.progetto{grid-template-columns:1fr}
+  .elenco a{grid-template-columns:1fr auto;gap:10px 16px}
+  .elenco .t{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<a class="salta" href="#contenuto">Vai al contenuto</a>
+<header class="testata">
+  <a class="marchio" href="./" aria-label="Effinge, home">Effinge</a>
+  <nav class="nav" aria-label="Principale">
+    <a href="#archivio">Archivio</a>
+    <a href="#progetto" class="facoltativo">Il progetto</a>
+    <a href="#contatti">Contatti</a>
+  </nav>
+</header>
+
+<main id="contenuto">
+  <section class="apertura" aria-label="Apertura">
+    <div class="apertura-centro">
+      <!-- Collegamenti CMS «Impostazioni homepage»: scritta, attiva, velocità, ritardo, dissolvenza, intensità, colore, cursore, ripetizione -->
+      <h1 class="titolo" data-luce data-mode="lamp" data-enabled="true" data-speed="80" data-delay="250" data-fade="320" data-intensity="0.75" data-color="#C6B08B" data-cursor="true" data-repeat="sempre">EFFINGE</h1>
+      <p class="sottotitolo">Un atlante delle cose invisibili.</p>
+    </div>
+    <div class="apertura-piede">
+      <a href="#ultimo">Ultimo testo <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 1v12M2 8l5 5 5-5"/></svg></a>
+      <button type="button" data-luce-replay>Riaccendi la luce <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M12 7a5 5 0 1 1-1.5-3.6M12 1v3h-3"/></svg></button>
+    </div>
+  </section>
+
+  <section class="sezione" id="ultimo" aria-labelledby="h-ultimo">
+    <div class="sezione-testa"><h2 id="h-ultimo">Ultimo testo</h2><span class="meta">Segnaposto</span></div>
+    <article class="ultimo">
+      <h3><a href="lettura.html">Titolo del testo più recente</a></h3>
+      <div>
+        <p>Qui comparirà l’estratto scelto dall’autore nel CMS. Nessuna frase è stata scritta al suo posto.</p>
+        <div class="meta">Racconto · 12 novembre 2026</div>
+        <p style="margin:1.5em 0 0"><a class="leggi" href="lettura.html">Leggi il testo <span aria-hidden="true">→</span></a></p>
+      </div>
+    </article>
+  </section>
+
+  <section class="sezione" id="archivio" aria-labelledby="h-archivio">
+    <div class="sezione-testa"><h2 id="h-archivio">Dall’archivio</h2><a href="#archivio">Tutto l’archivio →</a></div>
+    <ul class="elenco">
+      <li><a href="lettura.html"><span class="t">Titolo di un testo in evidenza</span><span class="c">Frammento</span><span class="d">03.10.2026</span></a></li>
+      <li><a href="lettura.html"><span class="t">Titolo di un secondo testo</span><span class="c">Prosa breve</span><span class="d">14.08.2026</span></a></li>
+      <li><a href="lettura.html"><span class="t">Titolo di un terzo testo, più lungo, su due righe quando serve</span><span class="c">Nota</span><span class="d">02.06.2026</span></a></li>
+    </ul>
+  </section>
+
+  <section class="sezione" id="progetto" aria-labelledby="h-progetto">
+    <div class="sezione-testa"><h2 id="h-progetto">Il progetto</h2></div>
+    <div class="progetto">
+      <aside>Testo di presentazione da definire con l’autore.</aside>
+      <p>Un luogo per la scrittura. <span class="tenue">Prima del libro, prima della pagina, ciò che prende forma.</span></p>
+    </div>
+  </section>
+</main>
+
+<footer class="piede" id="contatti">
+  <span>Effinge © 2026</span>
+  <span>Contatti: canali da scegliere</span>
+  <span>Proposta A · Afterlight — anteprima non pubblicata</span>
+</footer>
+<script src="../../assets/js/luce.js" defer></script>
+</body>
+</html>

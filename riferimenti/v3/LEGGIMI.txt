@@ -1,0 +1,11 @@
+EFFINGE — Prototipo luce in movimento, versione 3
+
+1. Estrai il pacchetto ZIP.
+2. Apri index.html in Chrome, Edge, Firefox o Safari (su computer).
+3. La luce si sposta sulle lettere durante l'animazione.
+4. Premi «RIVEDI L'ANIMAZIONE» per ricominciare.
+5. Premi «PERSONALIZZA» per cambiare testo, sottotitolo, velocità, luminosità e colore.
+
+Le impostazioni sono salvate soltanto nel browser: non si tratta ancora del CMS definitivo Webflow.
+L'anteprima GIF è stata catturata dall'animazione eseguita in Chromium.
+Nessun collegamento al dominio Aruba è stato modificato.

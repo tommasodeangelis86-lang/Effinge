@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="description" content="Effinge — concept di una pubblicazione letteraria indipendente.">
+<title>EFFINGE — Luce in movimento / Prototipo v3</title>
+<style>
+:root{--bg:#0a0b0b;--ink:#eae8e3;--soft:#aaaaa4;--line:#292b2b;--beam:#c6b08b;--glow-intensity:.72;--serif:"Noto Serif", "GFS Didot", "Didot", "Times New Roman", serif;--sans:Arial,Helvetica,sans-serif;--mono:"Courier New",monospace}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:#ddd9d1;font-family:var(--sans);-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--beam);outline-offset:5px}
+.page{overflow:hidden}header{height:112px;padding:0 clamp(24px,5.3vw,94px);display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid transparent;position:relative;z-index:4}
+.brand{font-size:16px;letter-spacing:.15em;font-weight:600}.menu{display:flex;align-items:center;gap:clamp(26px,3.3vw,56px)}.menu a{color:#b1b1ac;letter-spacing:.16em;font-size:10px;font-weight:600;transition:color .2s}.menu a:hover{color:white}.menu button{background:none;border:1px solid #4d504f;color:#e5e4df;border-radius:30px;font-size:10px;font-weight:600;letter-spacing:.15em;padding:12px 19px;transition:border .2s,background .2s}.menu button:hover{border-color:#888;background:#141615}
+.hero{min-height:min(840px,calc(100svh - 110px));min-height:max(710px,calc(100svh - 112px));display:flex;flex-direction:column;position:relative;padding:0 clamp(24px,5.3vw,94px)}
+.hero-center{flex:1;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;position:relative;max-width:100%;margin-left:clamp(0px,7.7vw,150px);padding-bottom:38px}
+.kicker{font-family:var(--mono);font-size:10px;letter-spacing:.27em;color:#808581;line-height:1.8;margin:0 0 29px 4px}
+/* A moving lamp, not a succession of text glows */
+.title-wrap{position:relative;max-width:100%;isolation:isolate}
+.title{position:relative;font:200 clamp(84px,12.8vw,190px)/.95 var(--serif);margin:0;letter-spacing:-.074em;white-space:nowrap;font-variant-ligatures:none;font-feature-settings:"liga" 0;color:#cdcac4;padding:0 24px 28px 0;z-index:2}
+.glyph{display:inline-block;opacity:1;position:relative;transition:color .35s;will-change:opacity,filter}
+.animating .glyph{opacity:0}
+.animating .glyph.on{animation:reveal .33s both}
+.glyph.flash{animation:reveal .33s both,lit 1.05s ease-out both}
+.glyph.dot{letter-spacing:-.04em;color:var(--beam)}
+@keyframes reveal{0%{opacity:0;filter:blur(6px);transform:translateY(3px)}100%{opacity:1;filter:blur(0);transform:translateY(0)}}
+@keyframes lit{0%{text-shadow:none;color:#d9d5cd}16%{color:#fffaf0;text-shadow:0 0 calc(22px * var(--glow-intensity)) rgba(255,246,222,.95),0 0 calc(82px * var(--glow-intensity)) rgba(239,191,116,.82)}55%{color:#f2e9d8;text-shadow:0 0 calc(20px * var(--glow-intensity)) rgba(235,198,140,.5)}100%{color:#cdcac4;text-shadow:none}}
+/* These three physically travel together along the word. The lamp is above the glyphs, not behind them. */
+.spot{position:absolute;z-index:3;width:350px;height:270px;pointer-events:none;top:0;left:0;opacity:0;transform:translate(-50%,-50%);filter:blur(16px);mix-blend-mode:screen;background:radial-gradient(ellipse 42% 46% at 50% 54%,rgba(255,246,219,.55) 0%,color-mix(in srgb,var(--beam) 34%,transparent) 29%,color-mix(in srgb,var(--beam) 12%,transparent) 56%,transparent 75%);will-change:transform,opacity;transition:opacity .38s ease;}
+.spot:after{content:"";position:absolute;inset:15% 26%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,243,204,.60),color-mix(in srgb,var(--beam) 18%,transparent) 45%,transparent 76%);filter:blur(14px)}
+.spot.visible{opacity:calc(.25 + var(--glow-intensity)*1.02)}
+.spot-trail{position:absolute;z-index:1;width:430px;height:260px;pointer-events:none;top:0;left:0;opacity:0;transform:translate(-50%,-50%);filter:blur(34px);background:radial-gradient(ellipse at center,color-mix(in srgb,var(--beam) 29%,transparent),color-mix(in srgb,var(--beam) 9%,transparent) 40%,transparent 76%);will-change:transform,opacity;transition:opacity .6s ease;}
+.spot-trail.visible{opacity:calc(var(--glow-intensity)*.74)}
+.light-caret{position:absolute;z-index:4;top:0;left:0;width:2px;height:108px;border-radius:2px;pointer-events:none;transform:translate(-50%,-50%);background:linear-gradient(180deg,transparent,rgba(255,247,212,.8) 23%,rgba(255,254,244,.95) 50%,rgba(255,247,212,.8) 76%,transparent);box-shadow:0 0 12px 2px color-mix(in srgb,var(--beam) 55%,transparent),0 0 34px 3px color-mix(in srgb,var(--beam) 22%,transparent);opacity:0;transition:opacity .25s ease;will-change:transform,opacity}
+.light-caret.visible{opacity:calc(var(--glow-intensity)*.78)}
+.subtitle{max-width:650px;margin:7px 0 0 9px;color:#9e9e98;font:italic clamp(20px,2.1vw,31px)/1.32 var(--serif);letter-spacing:.003em}
+.under-hero{border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;padding:23px 3px 31px;font-family:var(--mono);font-size:10px;letter-spacing:.15em;color:#858883}.under-hero a{display:flex;align-items:center;gap:12px}.under-hero a span{font-size:20px;line-height:.7;color:#b7b6b0}.under-hero button{background:none;border:0;color:inherit;letter-spacing:inherit;font:inherit}.under-hero button:hover{color:var(--ink)}
+.marquee-line{position:absolute;left:0;right:0;top:32%;height:1px;background:linear-gradient(90deg,transparent,rgba(229,232,217,.025) 38%,transparent);pointer-events:none}
+.section{padding:128px clamp(24px,5.3vw,94px) 166px}.s-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:26px;border-bottom:1px solid #393b39;gap:15px}.s-eyebrow,.s-more{font-size:10px;letter-spacing:.22em;color:#999e99;font-weight:600}.s-more:hover{color:white}.entry{display:grid;grid-template-columns:1fr 270px;gap:30px;padding:36px 0 44px;border-bottom:1px solid #292b29;align-items:center}.entry-title{margin:0;font:normal clamp(31px,3.8vw,58px)/1.13 var(--serif);letter-spacing:-.03em;color:#d8d8d0}.entry-title a:hover{color:#fff}.entry-meta{font:11px/1.8 var(--mono);letter-spacing:.06em;color:#777c78;text-align:right}.placeholder{font:11px/1.7 var(--mono);letter-spacing:.03em;color:#636964;margin-top:16px}
+.about{border-top:1px solid var(--line);padding:105px clamp(24px,5.3vw,94px) 120px;display:grid;grid-template-columns:240px 1fr;gap:80px}.about h2{font-size:10px;font-weight:600;letter-spacing:.22em;color:#aaa}.about p{max-width:670px;font:normal clamp(26px,3vw,42px)/1.25 var(--serif);letter-spacing:-.017em;color:#c5c6c0;margin:0}.about .faint{color:#747b76}
+footer{padding:26px clamp(24px,5.3vw,94px) 30px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;color:#7b817b;font:10px/1.6 var(--mono);letter-spacing:.08em}
+/* Studio panel */
+.shade{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9;opacity:0;pointer-events:none;transition:opacity .3s}.shade.open{opacity:1;pointer-events:auto}.studio{position:fixed;right:0;top:0;bottom:0;z-index:10;width:min(435px,100%);background:#131514;box-shadow:-30px 0 90px rgba(0,0,0,.5);border-left:1px solid #3b3c37;transform:translateX(101%);transition:transform .35s cubic-bezier(.2,.8,.2,1);padding:30px;overflow:auto}.studio.open{transform:translateX(0)}.studio-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:28px;border-bottom:1px solid #353936}.studio-head strong{font-weight:600;letter-spacing:.14em;font-size:12px}.studio-head p{font-size:12px;line-height:1.6;color:#979b97;margin:8px 0 0}.close{border:0;background:transparent;color:var(--ink);font-size:27px;line-height:1;padding:0}.form-group{padding:20px 0;border-bottom:1px solid #2d322f}.form-label{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#c5c8c3;letter-spacing:.06em;margin:0 0 12px}.form-label output{font:12px var(--mono);color:#aaa}.f-input,.f-textarea{width:100%;border:1px solid #424740;border-radius:4px;background:#0b0e0c;color:white;padding:12px 13px;font-size:16px;outline-offset:2px}.f-textarea{resize:vertical;min-height:75px}.range{width:100%;accent-color:#c6b08b}.switch{display:flex;align-items:center;justify-content:space-between;gap:14px}.switch input{accent-color:#c6b08b;width:18px;height:18px}.color-wrap{display:flex;gap:8px}.color-option{width:32px;height:32px;border:2px solid #252926;border-radius:50%;padding:3px;background:transparent}.color-option:after{content:"";display:block;width:100%;height:100%;border-radius:50%;background:var(--choice)}.color-option.selected{border-color:#bcbeba}.buttons{display:grid;gap:10px;padding-top:25px}.primary{border:1px solid #eee9de;background:#e8e6df;color:#181b19;letter-spacing:.14em;font-size:11px;font-weight:600;padding:15px}.secondary{border:1px solid #555b55;background:transparent;color:#c7c9c4;letter-spacing:.11em;font-size:11px;padding:13px}.smallprint{margin-top:18px;color:#8a8d86;font-size:12px;line-height:1.55}.tag{display:inline-block;border:1px solid #464c46;padding:5px 8px;margin-top:7px;color:#abb2a9;font:9px var(--mono);letter-spacing:.09em}
+.skip-link{position:absolute;top:-100px;left:15px;background:white;color:black;padding:12px;z-index:20}.skip-link:focus{top:12px}
+@media(max-width:700px){header{height:86px}.brand{font-size:14px}.menu{gap:0}.menu a{display:none}.menu button{font-size:9px;padding:11px 12px}.hero{min-height:calc(100svh - 86px);min-height:max(620px,calc(100svh - 86px))}.hero-center{margin-left:0;padding-bottom:60px}.kicker{font-size:9px;letter-spacing:.17em;margin-bottom:29px}.title{font-size:clamp(69px,17vw,116px);padding-right:10px;letter-spacing:-.075em}.subtitle{font-size:21px;margin-top:8px;margin-left:2px}.under-hero{font-size:9px;letter-spacing:.03em}.section{padding-top:87px;padding-bottom:105px}.entry{grid-template-columns:1fr;gap:16px}.entry-meta{text-align:left}.about{grid-template-columns:1fr;gap:20px;padding-top:70px;padding-bottom:90px}.about p{font-size:31px}.studio{padding:24px}footer{font-size:9px}}
+@media(max-width:360px){.title{font-size:17.1vw}.under-hero{font-size:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.001ms!important;transition-duration:.001ms!important}.animating .glyph{opacity:1!important}.spot,.spot-trail,.light-caret{display:none}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#content">Vai al contenuto</a>
+<div class="page">
+<header>
+<a class="brand" href="#inizio" aria-label="Effinge, torna all'inizio">E /</a>
+<nav class="menu" aria-label="Navigazione principale">
+<a href="#pubblicazioni">ARCHIVIO</a><a href="#progetto">IL PROGETTO</a>
+<button id="openStudio" type="button" aria-controls="studio" aria-expanded="false">PERSONALIZZA&nbsp; ↗</button>
+</nav>
+</header>
+<main id="content">
+<section class="hero" id="inizio" aria-label="Apertura Effinge">
+<div class="marquee-line" aria-hidden="true"></div>
+<div class="hero-center">
+<p class="kicker">UNA PUBBLICAZIONE LETTERARIA INDIPENDENTE</p>
+<div class="title-wrap"><div class="spot-trail" id="spotTrail" aria-hidden="true"></div><div class="spot" id="spot" aria-hidden="true"></div><div class="light-caret" id="lightCaret" aria-hidden="true"></div><h1 class="title" id="heroTitle" aria-label="EFFINGE">EFFINGE</h1></div>
+<p class="subtitle" id="heroSubtitle">Un atlante delle cose invisibili.</p>
+</div>
+<div class="under-hero"><a href="#pubblicazioni">SCOPRI I TESTI <span aria-hidden="true">↓</span></a><button id="replay" type="button">RIVEDI L'ANIMAZIONE ↺</button></div>
+</section>
+<section class="section" id="pubblicazioni" aria-labelledby="sectionTitle">
+<div class="s-head"><span class="s-eyebrow" id="sectionTitle">L'ARCHIVIO</span><span class="s-more">TESTI / IN PREPARAZIONE</span></div>
+<div class="entry"><h2 class="entry-title">Il primo testo apparirà qui.</h2><div class="entry-meta">01 — FRAMMENTI<br>TESTO DA PUBBLICARE</div></div>
+<div class="entry"><h2 class="entry-title">Uno spazio per le parole.</h2><div class="entry-meta">02 — PROSE<br>TESTO DA PUBBLICARE</div></div>
+<p class="placeholder">Questi sono segnaposto di impaginazione. Nessun testo letterario è stato inventato.</p>
+</section>
+<section class="about" id="progetto"><h2>IL PROGETTO</h2><p>Un luogo per la scrittura. <span class="faint">Prima del libro, prima della pagina, ciò che prende forma.</span></p></section>
+</main>
+<footer><span>EFFINGE © <span id="year"></span></span><span>ANTEPRIMA DI DESIGN · NON PUBBLICATA</span></footer>
+</div>
+<div class="shade" id="shade"></div>
+<aside class="studio" id="studio" role="dialog" aria-modal="true" aria-labelledby="studioTitle" aria-hidden="true">
+<div class="studio-head"><div><strong id="studioTitle">REGIA / LUCE MOBILE</strong><p>La sorgente luminosa segue la scrittura. Regola il suo movimento e l’intensità.</p><span class="tag">PROTOTIPO INTERATTIVO</span></div><button class="close" type="button" id="closeStudio" aria-label="Chiudi pannello">×</button></div>
+<div class="form-group"><label class="form-label" for="titleInput">SCRITTA PRINCIPALE</label><input id="titleInput" class="f-input" type="text" maxlength="18" value="EFFINGE" autocapitalize="characters" spellcheck="false"></div>
+<div class="form-group"><label class="form-label" for="subtitleInput">SOTTOTITOLO <span>PROVVISORIO</span></label><textarea id="subtitleInput" class="f-textarea">Un atlante delle cose invisibili.</textarea></div>
+<div class="form-group"><label class="form-label" for="speedInput">TEMPO PER LETTERA <output id="speedOut">170 ms</output></label><input id="speedInput" class="range" type="range" min="50" max="350" step="10" value="170"></div>
+<div class="form-group"><label class="form-label" for="glowInput">INTENSITÀ DELLA LUCE <output id="glowOut">75%</output></label><input id="glowInput" class="range" type="range" min="0" max="100" step="1" value="75"></div>
+<div class="form-group"><div class="form-label">COLORE DELLA LUCE</div><div class="color-wrap" role="group" aria-label="Colore della luce"><button type="button" class="color-option selected" data-color="#c6b08b" style="--choice:#c6b08b" aria-label="Ambra tenue" aria-pressed="true"></button><button type="button" class="color-option" data-color="#ced8d5" style="--choice:#ced8d5" aria-label="Bianco lunare" aria-pressed="false"></button><button type="button" class="color-option" data-color="#b8b4d0" style="--choice:#b8b4d0" aria-label="Lavanda fredda" aria-pressed="false"></button></div></div>
+<div class="form-group switch"><label class="form-label" for="motionInput" style="margin:0">ATTIVA L'ANIMAZIONE</label><input id="motionInput" type="checkbox" checked></div>
+<div class="buttons"><button type="button" class="primary" id="apply">APPLICA E RIPRODUCI ↗</button><button type="button" class="secondary" id="reset">RIPRISTINA IMPOSTAZIONI</button></div>
+<p class="smallprint">Questa demo salva le tue preferenze solo in questo browser. Nella versione definitiva, il pannello sarà collegato al CMS e le modifiche potranno essere pubblicate su effinge.it.</p><p class="smallprint">Aggiornamento v3: luce e scia si spostano davvero da una lettera all’altra, con movimento continuo.</p>
+</aside>
+<script>
+(()=>{
+'use strict';
+const defaultSettings={title:'EFFINGE',subtitle:'Un atlante delle cose invisibili.',speed:170,glow:75,color:'#c6b08b',motion:true};
+const $=id=>document.getElementById(id);
+let settings={...defaultSettings};try{const saved=JSON.parse(localStorage.getItem('effinge-afterlight-v3-settings'));if(saved&&typeof saved==='object') settings={...settings,...saved}}catch(e){}
+const title=$('heroTitle'),spot=$('spot'),trail=$('spotTrail'),caret=$('lightCaret'),wrap=title.closest('.title-wrap');
+let timers=[],frame=0,active=false,targets={x:0,y:0},lamp={x:0,y:0,tx:0,ty:0},lastFrame=0;
+function stop(){timers.forEach(clearTimeout);timers=[];cancelAnimationFrame(frame);active=false;[spot,trail,caret].forEach(x=>x.classList.remove('visible'))}
+function segments(str){if(window.Intl&&Intl.Segmenter)return [...new Intl.Segmenter('it',{granularity:'grapheme'}).segment(str)].map(x=>x.segment);return Array.from(str)}
+function plainTitle(){title.textContent=settings.title;title.setAttribute('aria-label',settings.title);title.classList.remove('animating');title.removeAttribute('aria-busy')}
+function point(el){const b=el.getBoundingClientRect(),p=wrap.getBoundingClientRect();return {x:b.right-p.left-3,y:b.top-p.top+b.height*.51}}
+function position(el,x,y){el.style.transform=`translate(${x}px,${y}px) translate(-50%,-50%)`}
+function glide(t){if(!active)return;const dt=Math.min((t-lastFrame)||16,40);lastFrame=t;const ease=1-Math.exp(-dt/88);lamp.x+=(targets.x-lamp.x)*ease;lamp.y+=(targets.y-lamp.y)*ease;lamp.tx+=(lamp.x-lamp.tx)*(1-Math.exp(-dt/240));lamp.ty+=(lamp.y-lamp.ty)*(1-Math.exp(-dt/240));
+ position(spot,lamp.x,lamp.y);position(trail,lamp.tx-25,lamp.ty+7);position(caret,lamp.x,lamp.y);frame=requestAnimationFrame(glide)}
+function startLight(x,y){active=true;lastFrame=performance.now();lamp={x,y,tx:x-20,ty:y};targets={x,y};[spot,trail,caret].forEach(el=>el.classList.add('visible'));frame=requestAnimationFrame(glide)}
+function playback(){stop();document.documentElement.style.setProperty('--beam',settings.color);document.documentElement.style.setProperty('--glow-intensity',String(settings.glow/100));$('heroSubtitle').textContent=settings.subtitle;
+const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(!settings.motion||reduce){plainTitle();return}
+const chars=segments(settings.title);title.replaceChildren();title.setAttribute('aria-label',settings.title);title.setAttribute('aria-busy','true');title.classList.add('animating');
+const spans=chars.map(char=>{const span=document.createElement('span');span.className='glyph'+(char==='.'?' dot':'');span.setAttribute('aria-hidden','true');span.textContent=char===' '?'\u00a0':char;title.append(span);return span});
+if(!spans.length){plainTitle();return}
+const begin=340;const p=point(spans[0]);startLight(p.x-24,p.y);
+spans.forEach((span,i)=>{timers.push(setTimeout(()=>{span.classList.add('on','flash');const q=point(span);targets={x:q.x,y:q.y};if(i===spans.length-1){timers.push(setTimeout(()=>{[spot,trail,caret].forEach(el=>el.classList.remove('visible'));title.setAttribute('aria-busy','false');timers.push(setTimeout(()=>{active=false;cancelAnimationFrame(frame)},500))},1300))}},begin+i*settings.speed))});
+}
+const fields={title:$('titleInput'),subtitle:$('subtitleInput'),speed:$('speedInput'),glow:$('glowInput'),motion:$('motionInput')};
+function syncControls(){fields.title.value=settings.title;fields.subtitle.value=settings.subtitle;fields.speed.value=settings.speed;fields.glow.value=settings.glow;fields.motion.checked=settings.motion;$('speedOut').textContent=settings.speed+' ms';$('glowOut').textContent=settings.glow+'%';document.querySelectorAll('.color-option').forEach(el=>{const on=el.dataset.color===settings.color;el.classList.toggle('selected',on);el.setAttribute('aria-pressed',on)})}
+function store(){try{localStorage.setItem('effinge-afterlight-v3-settings',JSON.stringify(settings))}catch(e){}}
+function setStudio(open){$('studio').classList.toggle('open',open);$('shade').classList.toggle('open',open);$('studio').setAttribute('aria-hidden',String(!open));$('openStudio').setAttribute('aria-expanded',String(open));document.body.style.overflow=open?'hidden':'';if(open)fields.title.focus();else $('openStudio').focus()}
+$('openStudio').addEventListener('click',()=>setStudio(true));$('closeStudio').addEventListener('click',()=>setStudio(false));$('shade').addEventListener('click',()=>setStudio(false));document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('studio').classList.contains('open'))setStudio(false)});
+fields.speed.addEventListener('input',()=>{$('speedOut').textContent=fields.speed.value+' ms'});fields.glow.addEventListener('input',()=>{$('glowOut').textContent=fields.glow.value+'%'});
+document.querySelectorAll('.color-option').forEach(el=>el.addEventListener('click',()=>{settings.color=el.dataset.color;document.querySelectorAll('.color-option').forEach(x=>{x.classList.toggle('selected',x===el);x.setAttribute('aria-pressed',String(x===el))})}));
+$('apply').addEventListener('click',()=>{settings.title=(fields.title.value.trim()||'EFFINGE').slice(0,18);settings.subtitle=fields.subtitle.value.trim();settings.speed=Number(fields.speed.value);settings.glow=Number(fields.glow.value);settings.motion=fields.motion.checked;store();setStudio(false);window.scrollTo({top:0,behavior:'instant'});playback()});
+$('reset').addEventListener('click',()=>{settings={...defaultSettings};store();syncControls();playback()});$('replay').addEventListener('click',playback);$('year').textContent=new Date().getFullYear();syncControls();playback();
+})();
+</script>
+</body>
+</html>
