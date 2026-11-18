@@ -1,13 +1,27 @@
 # Effinge
 
 Sito di Effinge, pubblicazione letteraria indipendente (effinge.it).
-Fase attuale: **scelta fra tre direzioni visive** (deliverable 1 del [brief](docs/brief.md)).
+
+## Direzione scelta: «La pagina e la lampada»
+
+Un foglio di carta in una stanza buia. Una lampada fioca e calda scorre sulla scrittura;
+le lettere della scritta si accendono una alla volta sotto la luce e tornano inchiostro;
+le righe del progetto si illuminano mentre si scorre, come nel focus di Alhora. Le scene
+sono legate allo scorrimento, in stile Apple (sezioni fissate con `position: sticky`).
+
+- `index.html` — homepage: apertura (il foglio si raddrizza scorrendo), il progetto riga per riga, ultimo testo, archivio.
+- `lettura.html` — pagina di lettura su un foglio: il paragrafo che si legge resta acceso; comandi «Concentrazione» e «Lampada» (ricordati nel browser).
+- `assets/css/sito.css`, `assets/js/sito.js` — stile e comportamento.
+- Font: **Cormorant Garamond** (titoli), **EB Garamond** (lettura), **Inter Tight** (interfaccia), self-hosted.
+- Verifica: `node tests/sito.mjs` (fotogrammi della scrittura e delle scene, desktop e smartphone, senza JS, movimento ridotto).
+
+Le tre proposte precedenti (A, B, C) restano in `direzioni/` come archivio.
 
 ## Cosa c’è
 
 | Percorso | Contenuto |
 |---|---|
-| `index.html` | Pagina di confronto delle tre direzioni |
+| `direzioni/index.html` | Pagina di confronto delle tre proposte precedenti |
 | `direzioni/a-afterlight/` | A · Afterlight: buio carbone, lampada che passa di lettera in lettera |
 | `direzioni/b-frontespizio/` | B · Frontespizio: avorio piatto, lettere che si scaldano d’oro e si raffreddano in inchiostro |
 | `direzioni/c-fessura/` | C · Fessura: buio profondo, asse centrale, lama di luce verticale |
@@ -23,7 +37,7 @@ Per vedere le pagine basta aprire `index.html` nel browser: non serve nessun bui
 
 ## L’animazione e il CMS
 
-Ogni impostazione della scritta è un attributo `data-*` sull’`<h1>`. In Webflow ogni attributo
+Ogni impostazione della scritta è un attributo `data-*` sull’`<h1 data-scrittura>` (stessi nomi nel sito e nelle proposte). In Webflow ogni attributo
 verrà collegato a un campo della raccolta **Impostazioni homepage**, così ogni controllo agisce
 davvero sul sito:
 

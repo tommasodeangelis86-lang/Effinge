@@ -1,0 +1,188 @@
+/* Effinge — «La pagina e la lampada»
+   Una stanza buia, un foglio vero, una lampada fioca che scorre sulla scrittura.
+   Layout: scene a scorrimento fissate (sticky), una per schermo; tutto il resto è quieto. */
+:root{
+  --stanza:#0A0A09;
+  --stanza-2:#121110;
+  --carta:#ECE7DC;
+  --inchiostro:#1A1916;
+  --inchiostro-2:#5B5850;
+  --testo:#E9E5DB;
+  --testo-2:#A29D92;
+  --testo-3:#7F7B72;
+  --luce:#F0CB8A;
+  --filo:#2A2926;
+
+  --display:"Cormorant Garamond","Cormorant",Garamond,"Times New Roman",serif;
+  --lettura:"EB Garamond",Garamond,"Iowan Old Style",Georgia,serif;
+  --ui:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+  --margine:max(20px,env(safe-area-inset-left,0px));
+  --ease:cubic-bezier(.23,1,.32,1);
+  --ease-io:cubic-bezier(.77,0,.175,1);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--stanza);color:var(--testo);-webkit-text-size-adjust:100%;scrollbar-color:#34322e var(--stanza)}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--stanza);font:400 1rem/1.6 var(--ui);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+::selection{background:color-mix(in srgb,var(--luce) 40%,transparent);color:var(--inchiostro)}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:3px}
+.salta{position:fixed;left:12px;top:-60px;padding:10px 14px;background:var(--carta);color:var(--inchiostro);font:500 .875rem var(--ui);z-index:50}
+.salta:focus{top:12px}
+.sr{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap}
+
+/* ——— Barra ——— */
+.barra{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:24px;
+  padding:calc(18px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) 18px max(24px,env(safe-area-inset-left,0px));
+  transition:background-color .4s ease,backdrop-filter .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
+.barra.piena{background:color-mix(in srgb,var(--stanza) 72%,transparent);-webkit-backdrop-filter:saturate(1.2) blur(18px);backdrop-filter:saturate(1.2) blur(18px);border-color:var(--filo)}
+.marchio{font:400 1.375rem/1 var(--display);letter-spacing:.02em}
+.barra nav{display:flex;gap:clamp(18px,3vw,36px);font:450 .8125rem/1 var(--ui);letter-spacing:.01em;color:var(--testo-2)}
+.barra nav a{padding:8px 0;transition:color .2s ease}
+.barra nav a:hover,.barra nav a[aria-current]{color:var(--testo)}
+
+/* ——— Il foglio ——— */
+.foglio{position:relative;container-type:inline-size;background:var(--carta);color:var(--inchiostro);overflow:hidden;border-radius:2px;
+  box-shadow:0 1px 0 rgba(255,255,255,.04),0 30px 80px -20px rgba(0,0,0,.85),0 12px 30px -12px rgba(0,0,0,.7)}
+/* grana appena percettibile: carta vera, non carta antica */
+.foglio::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.5;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .38 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* La lampada: il buio intorno al cono di luce e il calore al centro. Si muovono solo con transform. */
+.lampada{position:absolute;left:0;top:0;width:260cqw;height:260cqw;pointer-events:none;z-index:3;border-radius:50%;will-change:transform,opacity;
+  transform:translate3d(var(--lx,50cqw),var(--ly,30cqw),0) translate(-50%,-50%)}
+.lampada.buio{background:radial-gradient(closest-side,rgba(9,8,7,0) 0%,rgba(9,8,7,.12) 9%,rgba(9,8,7,.5) 24%,rgba(9,8,7,.82) 44%,rgba(9,8,7,.95) 100%);opacity:var(--buio,.94)}
+.lampada.calore{width:110cqw;height:110cqw;mix-blend-mode:multiply;opacity:var(--calore,.9);
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--luce) 42%,#fff),color-mix(in srgb,var(--luce) 22%,#fff) 40%,rgba(255,255,255,0) 75%)}
+.foglio > .contenuto{position:relative;z-index:1}
+/* Senza JavaScript la lampada è ferma e generosa; tutto resta leggibile. */
+html:not(.js) .lampada.buio{opacity:.35}
+
+/* ——— Scena 1: apertura ——— */
+.scena{position:relative}
+.scena > .palco{position:sticky;top:0;height:100svh;display:grid;place-items:center;overflow:hidden}
+.apertura{height:280svh}
+.apertura .palco{perspective:1600px;background:radial-gradient(60% 55% at 50% 42%,#171512 0%,var(--stanza) 70%)}
+.apertura .foglio{width:min(86vw,58svh);aspect-ratio:1/1.414;transform-origin:50% 60%;
+  transform:translateY(var(--ty,0)) rotateX(var(--rx,0deg)) scale(var(--s,1))}
+.apertura .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 11cqw}
+.intestazione{position:absolute;top:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:500 1.75cqw/1 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--inchiostro-2)}
+.titolo{margin:0;font:300 19cqw/.9 var(--display);letter-spacing:-.01em;color:var(--inchiostro);white-space:nowrap;margin-left:-.06em}
+.sottotitolo{margin:5cqw 0 0;font:italic 300 5.4cqw/1.25 var(--display);color:var(--inchiostro-2);max-width:20ch}
+.firma{position:absolute;bottom:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:400 1.75cqw/1 var(--ui);letter-spacing:.06em;color:var(--inchiostro-2)}
+.indizio{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;font:450 .75rem/1 var(--ui);letter-spacing:.08em;color:var(--testo-3);opacity:var(--indizio,1);transition:opacity .3s ease}
+.indizio i{display:block;width:1px;height:36px;background:linear-gradient(var(--testo-3),transparent)}
+.riaccendi{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));background:none;border:0;padding:8px 0;font:450 .75rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-3);cursor:pointer;transition:color .2s ease}
+.riaccendi:hover{color:var(--testo)}
+
+/* Lettere che si accendono, come in Alhora */
+.glifo{display:inline-block;white-space:pre}
+.scrivendo .glifo:not(.acceso){opacity:0}
+.cursore{display:inline-block;width:.035em;height:.72em;margin-left:.04em;background:var(--inchiostro);vertical-align:-.02em;opacity:0}
+.scrivendo .cursore{opacity:.85}
+
+/* ——— Scena 2: il progetto, riga per riga ——— */
+.progetto{height:360svh}
+.progetto .palco{background:var(--stanza)}
+.progetto .foglio{width:min(90vw,72svh,820px);aspect-ratio:1.414/1}
+.progetto .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 9cqw}
+.progetto .intestazione{left:9cqw;right:9cqw;top:6cqw;font-size:1.35cqw}
+.righe{margin:0;padding:0;list-style:none}
+.righe li{font:300 6.4cqw/1.18 var(--display);letter-spacing:-.005em;opacity:.16;transition:opacity .6s var(--ease),color .6s ease}
+.righe li.attiva{opacity:1}
+.righe li.letta{opacity:.38}
+.righe li:first-child{font-style:normal}
+.righe li + li{font-style:italic}
+html:not(.js) .righe li{opacity:1}
+
+/* ——— Sezioni normali ——— */
+.sezione{padding:clamp(110px,18vh,190px) max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px))}
+.sezione-testa{max-width:1180px;margin:0 auto clamp(40px,7vh,72px);display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+.sezione-testa h2{margin:0;font:300 clamp(2.5rem,5.5vw,4.75rem)/1 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.sezione-testa a{font:450 .875rem/1 var(--ui);color:var(--testo-2);padding:8px 0;white-space:nowrap;transition:color .2s ease}
+.sezione-testa a:hover{color:var(--testo)}
+
+.ultimo{max-width:1180px;margin:0 auto}
+.ultimo .foglio{display:block;width:100%;aspect-ratio:2.5/1;transition:transform .6s var(--ease)}
+.ultimo .foglio:hover{transform:translateY(-3px)}
+.ultimo .contenuto{height:100%;display:grid;grid-template-columns:1.25fr 1fr;gap:6cqw;align-items:end;padding:5cqw 6cqw}
+.ultimo h3{margin:0;font:300 5cqw/1 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.ultimo p{margin:0 0 2cqw;font:400 max(1rem,1.4cqw)/1.6 var(--lettura);color:var(--inchiostro-2)}
+.meta{font:450 .75rem/1.6 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--testo-3);font-variant-numeric:tabular-nums}
+.ultimo .meta{font-size:1.05cqw;color:var(--inchiostro-2)}
+.ultimo .leggi{display:inline-flex;gap:.6em;font:500 1.15cqw/1 var(--ui);letter-spacing:.02em;border-bottom:1px solid currentColor;padding-bottom:.4em}
+
+.archivio{max-width:1180px;margin:0 auto;list-style:none;padding:0;border-top:1px solid var(--filo);position:relative}
+.archivio li{border-bottom:1px solid var(--filo)}
+.archivio a{display:grid;grid-template-columns:minmax(0,1fr) 11rem 7rem;gap:24px;align-items:baseline;padding:30px 0;position:relative}
+.archivio .t{font:300 clamp(1.75rem,3vw,2.625rem)/1.1 var(--display);transition:color .35s ease,transform .5s var(--ease)}
+.archivio .c,.archivio .d{font:450 .75rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--testo-3)}
+.archivio .d{text-align:right;font-variant-numeric:tabular-nums}
+.archivio a::before{content:"";position:absolute;inset:0 -24px;opacity:0;pointer-events:none;transition:opacity .4s ease;
+  background:radial-gradient(260px 120px at var(--mx,50%) 50%,color-mix(in srgb,var(--luce) 13%,transparent),transparent 70%)}
+.archivio a:hover::before{opacity:1}
+.archivio a:hover .t{color:#fff;transform:translateX(6px)}
+
+.chiusura{padding:clamp(140px,24vh,240px) 24px clamp(100px,16vh,160px);text-align:center}
+.chiusura p{margin:0 auto;max-width:18ch;font:italic 300 clamp(2rem,4.4vw,3.5rem)/1.2 var(--display);color:var(--testo-2);text-wrap:balance}
+.piede{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 24px;padding:24px max(24px,env(safe-area-inset-right,0px)) calc(30px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));border-top:1px solid var(--filo);font:450 .75rem/1.6 var(--ui);color:var(--testo-3)}
+
+/* Comparsa allo scorrimento: solo se JavaScript c'è, sempre da uno stato già leggibile */
+.js .sale{opacity:.001;transform:translateY(28px);transition:opacity .9s var(--ease),transform 1.1s var(--ease)}
+.js .sale.visto{opacity:1;transform:none}
+
+/* ——— Pagina di lettura ——— */
+.lettura-pagina{padding:calc(120px + env(safe-area-inset-top,0px)) 16px 120px}
+.lettura-pagina .foglio{max-width:50rem;margin:0 auto;overflow:visible;border-radius:2px}
+.lettura-pagina .foglio::before{border-radius:inherit}
+.lettura-pagina .contenuto{padding:clamp(48px,9vw,112px) clamp(24px,8vw,104px) clamp(64px,10vw,120px)}
+.lettura-testa{text-align:center;margin-bottom:clamp(48px,7vw,80px)}
+.lettura-testa .meta{color:var(--inchiostro-2)}
+.lettura-testa h1{margin:18px 0 0;font:300 clamp(2.75rem,7vw,4.75rem)/1 var(--display);letter-spacing:-.01em;text-wrap:balance}
+.corpo{font:400 clamp(1.1875rem,1.08rem + .4vw,1.3125rem)/1.72 var(--lettura);hyphens:auto;-webkit-hyphens:auto;max-width:34em;margin:0 auto;color:var(--inchiostro)}
+.corpo p{margin:0;transition:opacity .7s var(--ease)}
+.corpo p + p{text-indent:1.5em}
+.corpo hr{border:0;margin:2em auto;width:2.5em;height:1px;background:color-mix(in srgb,var(--inchiostro) 30%,transparent);transition:opacity .7s var(--ease)}
+.concentrazione .corpo > *:not(.fuoco){opacity:.24}
+.seguenti{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:34em;margin:clamp(64px,9vw,96px) auto 0;padding-top:24px;border-top:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent)}
+.seguenti a{font:300 1.375rem/1.25 var(--display)}
+.seguenti a:last-child{text-align:right}
+.seguenti span{display:block;margin-bottom:6px;font:450 .6875rem/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--inchiostro-2)}
+/* la lampada sulla pagina di lettura: un cono fisso sul punto in cui si legge */
+.vignetta{position:fixed;inset:0;pointer-events:none;z-index:30;opacity:0;transition:opacity .8s ease;
+  background:radial-gradient(85vmax 62vmax at 50% 46%,rgba(9,9,8,0) 0%,rgba(9,9,8,.05) 30%,rgba(9,9,8,.5) 62%,rgba(9,9,8,.82) 100%)}
+.lampada-accesa .vignetta{opacity:1}
+.comandi{position:fixed;right:max(16px,env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:41;display:flex;gap:6px;padding:6px;border-radius:999px;
+  background:color-mix(in srgb,var(--stanza-2) 80%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--filo)}
+.comandi button{border:0;background:transparent;padding:9px 14px;border-radius:999px;font:500 .75rem/1 var(--ui);letter-spacing:.02em;color:var(--testo-2);cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease)}
+.comandi button:active{transform:scale(.97)}
+.comandi button[aria-pressed="true"]{background:var(--carta);color:var(--inchiostro)}
+
+@media (max-width:760px){
+  .barra nav .facoltativo{display:none}
+  .apertura .foglio{width:min(88vw,62svh)}
+  .progetto .foglio{width:90vw;aspect-ratio:1/1.3}
+  .progetto .contenuto{padding:0 8cqw}
+  .righe li{font-size:10.5cqw}
+  .progetto .intestazione{font-size:2.6cqw}
+  .ultimo .foglio{aspect-ratio:auto}
+  .ultimo .contenuto{grid-template-columns:1fr;gap:28px;padding:44px 28px}
+  .ultimo h3{font-size:2.75rem}.ultimo p{font-size:1.125rem}.ultimo .meta{font-size:.75rem}.ultimo .leggi{font-size:.9375rem}
+  .archivio a{grid-template-columns:1fr auto;gap:10px 16px;padding:24px 0}
+  .archivio .t{grid-column:1/-1}
+  .comandi button{padding:9px 11px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
+  .apertura,.progetto{height:auto}
+  .scena > .palco{position:relative;height:auto;min-height:100svh;padding:110px 0 80px}
+  .apertura .foglio{transform:none}
+  .indizio{display:none}
+  .righe li{opacity:1!important}
+  .js .sale{opacity:1;transform:none}
+}
+/* Il titolo resta nascosto solo finché lo script lo prepara (al massimo 2,5 s). */
+.js [data-scrittura]:not(.pronto){opacity:0;animation:effinge-mostra 0s 2.5s forwards}
+@keyframes effinge-mostra{to{opacity:1}}

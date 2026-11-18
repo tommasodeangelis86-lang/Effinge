@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B0D0C">
+<meta name="robots" content="noindex">
+<title>Effinge, tre direzioni</title>
+<meta name="description" content="Effinge: tre proposte visive da approvare prima del prototipo navigabile.">
+<link rel="stylesheet" href="../assets/css/fonts.css">
+<style>
+:root{--fondo:#0B0D0C;--testo:#E8E6DF;--testo-2:#A3A49D;--testo-3:#80837C;--luce:#C6B08B;--filo:#323632;--serif:"Newsreader",Georgia,serif;--sans:"IBM Plex Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;--m:clamp(20px,5vw,80px)}
+*,*::before,*::after{box-sizing:border-box}
+html{background:var(--fondo);color:var(--testo)}
+body{margin:0;font:400 1rem/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px}
+::selection{background:color-mix(in srgb,var(--luce) 38%,transparent)}
+header{padding:clamp(56px,10vh,110px) var(--m) clamp(40px,6vh,64px);max-width:64rem}
+h1{margin:0;font:300 clamp(2.5rem,6vw,4.5rem)/1.05 var(--serif);font-variation-settings:"opsz" 72;letter-spacing:-.025em}
+header p{margin:20px 0 0;max-width:46ch;color:var(--testo-2);font:400 1.0625rem/1.6 var(--sans)}
+ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--filo)}
+li{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) auto;gap:24px clamp(24px,4vw,64px);padding:40px var(--m);border-bottom:1px solid var(--filo);align-items:start}
+h2{margin:0;font:300 clamp(2rem,3.6vw,3rem)/1.05 var(--serif);font-variation-settings:"opsz" 60;letter-spacing:-.02em}
+h2 span{display:block;margin-bottom:10px;font:400 .75rem/1 var(--mono);letter-spacing:.06em;color:var(--testo-3)}
+li p{margin:0 0 10px;color:var(--testo-2);max-width:52ch}
+li p strong{color:var(--testo);font-weight:500}
+.vai{display:flex;flex-direction:column;gap:10px;font:500 .875rem/1 var(--sans);white-space:nowrap}
+.vai a{padding:10px 0;border-bottom:1px solid var(--filo);transition:border-color .2s ease,color .2s ease}
+.vai a:first-child{border-color:var(--luce)}
+.vai a:hover{color:#fff;border-color:var(--testo)}
+footer{padding:28px var(--m) 40px;color:var(--testo-3);font:400 .75rem/1.7 var(--mono)}
+@media (max-width:820px){li{grid-template-columns:1fr}.vai{flex-direction:row;gap:24px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Effinge, tre direzioni</h1>
+  <p>Stessa animazione della luce, stesso motore, tre mondi visivi. Scegline una: diventerà il prototipo navigabile completo, con archivio, pagine e pannello delle impostazioni.</p>
+</header>
+<main>
+<ol>
+  <li>
+    <h2><span>A</span>Afterlight</h2>
+    <div>
+      <p><strong>Buio carbone, titolo enorme a sinistra.</strong> Una lampada calda si sposta di lettera in lettera, con una scia e un cursore luminoso: è l’evoluzione rigorosa del prototipo v3.</p>
+      <p>Home in sezioni separate da filetti: ultimo testo, elenco dall’archivio, progetto.</p>
+    </div>
+    <div class="vai"><a href="a-afterlight/index.html">Homepage →</a><a href="a-afterlight/lettura.html">Pagina di lettura</a></div>
+  </li>
+  <li>
+    <h2><span>B</span>Frontespizio</h2>
+    <div>
+      <p><strong>Fondo avorio piatto, composizione da frontespizio.</strong> Maiuscole spaziate e centrate; le lettere si scaldano d’oro mentre emergono e poi si raffreddano in inchiostro.</p>
+      <p>Sotto, una doppia pagina: ultimo testo a sinistra, indice con puntini di guida a destra. Il progetto come colophon.</p>
+    </div>
+    <div class="vai"><a href="b-frontespizio/index.html">Homepage →</a><a href="b-frontespizio/lettura.html">Pagina di lettura</a></div>
+  </li>
+  <li>
+    <h2><span>C</span>Fessura</h2>
+    <div>
+      <p><strong>Buio profondo, tutto su un asse centrale.</strong> Una lama di luce verticale attraversa la scritta a velocità costante, come luce sotto una porta, rivelando le lettere al suo passaggio.</p>
+      <p>La home non presenta l’ultimo testo: lo comincia, nella stessa colonna della lettura.</p>
+    </div>
+    <div class="vai"><a href="c-fessura/index.html">Homepage →</a><a href="c-fessura/lettura.html">Pagina di lettura</a></div>
+  </li>
+</ol>
+</main>
+<footer>Anteprima di design, non pubblicata. Tutti i testi sono segnaposto di impaginazione: nessuna prosa è stata scritta al posto dell’autore. Il sottotitolo e la frase sul progetto vengono dal prototipo v3.</footer>
+</body>
+</html>
