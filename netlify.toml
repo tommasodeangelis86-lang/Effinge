@@ -39,3 +39,14 @@
   [headers.values]
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Scorciatoia per l'autore: effinge.it/admin apre il pannello di gestione (Pages CMS)
+[[redirects]]
+  from = "/admin"
+  to = "https://app.pagescms.org/"
+  status = 302
+
+[[redirects]]
+  from = "/admin/*"
+  to = "https://app.pagescms.org/"
+  status = 302

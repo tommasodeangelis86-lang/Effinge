@@ -3,7 +3,7 @@
 Questa guida spiega come mettere online il sito la prima volta (si fa una sola volta) e come
 gestirlo ogni giorno: pubblicare testi, creare pagine, cambiare colori e animazione.
 
-Non serve scrivere codice. Tutto si fa da un pannello web, **Pages CMS**. Ogni salvataggio
+Non serve scrivere codice. Tutto si fa da un pannello web, **Pages CMS**. Per aprirlo vai su **effinge.it/admin** (porta a app.pagescms.org). Ogni salvataggio
 ripubblica il sito da solo in circa un minuto.
 
 ---
