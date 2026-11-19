@@ -218,6 +218,27 @@
     foglio.addEventListener('pointerleave', rest);
   }
 
+  function fogliettoScrivi(foglio) {
+    var L = new Lampada(foglio);
+    var frase = foglio.querySelector('[data-scrittura]');
+    var s = new Scrittura(frase, L);
+    var pronto = false;
+    var p0 = L.at(frase, 0, .5); L.jump(p0.x, p0.y); L.intensity = .7;
+    if (!reduce) { frase.classList.add('scrivendo'); s.glifi[0].before(s.cursore); }   // foglietto bianco, cursore all'inizio, finché non arriva sullo schermo
+    var parti = function () { s.play(true, function () { pronto = true; L.lag = 260; }); };
+    if (reduce) { pronto = true; }
+    else if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (e) { if (e[0].isIntersecting) { io.disconnect(); setTimeout(parti, 250); } }, { threshold: .55 });
+      io.observe(foglio);
+    } else parti();
+    foglio.addEventListener('pointermove', function (e) {
+      if (!pronto || e.pointerType !== 'mouse') return;
+      var b = foglio.getBoundingClientRect();
+      L.to(e.clientX - b.left, e.clientY - b.top); L.intensity = 1;
+    });
+    foglio.addEventListener('pointerleave', function () { if (!pronto) return; var p = L.at(frase, 1, .5); L.to(p.x, p.y); L.intensity = .7; });
+  }
+
   function archivio(list) {
     list.addEventListener('pointermove', function (e) {
       var a = e.target.closest && e.target.closest('a'); if (!a) return;
@@ -287,6 +308,7 @@
     if ((s = document.querySelector('.apertura'))) scene.push(scenaApertura(s));
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
     Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-puntatore]'), lampadaAlPuntatore);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-scrittura-al-passaggio]'), fogliettoScrivi);
     Array.prototype.forEach.call(document.querySelectorAll('.archivio'), archivio);
     Array.prototype.forEach.call(document.querySelectorAll('[data-filtri]'), filtri);
     var c = document.querySelector('[data-lettura]');

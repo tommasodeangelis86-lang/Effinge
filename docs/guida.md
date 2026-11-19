@@ -124,11 +124,15 @@ Un testo può avere un’**Immagine** facoltativa: caricala dal campo o da **Med
 
 ---
 
-### Scrivere sul foglio (spazio privato)
+### Scrivere sul foglio
 
-All’indirizzo **/scrivi/** del sito (per esempio `https://effinge.it/scrivi/`) c’è un foglio
-su cui scrivere davvero: ogni lettera si accende sotto la lampada, la lampada segue il cursore e
-il paragrafo su cui stai scrivendo resta acceso mentre gli altri si attenuano.
+La pagina **Scrivi** (nel menu in alto, e nella sezione «Scrivi» della homepage prima di
+«Ultimo testo») è un foglio su cui scrivere davvero: ogni lettera si accende sotto la lampada,
+la lampada segue il cursore e il paragrafo su cui stai scrivendo resta acceso mentre gli altri si
+attenuano.
+
+Titolo, testo e pulsante della sezione in homepage, la frase che si scrive sul foglietto e la
+presenza della voce nel menu si cambiano in **Impostazioni del sito → Homepage → Scrivi**.
 
 - **Fogli**: elenco dei tuoi scritti; da qui ne crei uno nuovo, ne apri uno o lo elimini
   (si tocca «Elimina» e poi «Conferma»). Puoi anche scaricare il foglio aperto in un file .txt.
@@ -145,8 +149,8 @@ Il salvataggio è automatico, ma **solo nel browser e sul dispositivo che stai u
 scrivi su iPhone non compare sul computer. Se cancelli i dati di Safari, i fogli si perdono:
 per i testi importanti usa «Copia» o «Scarica».
 
-La pagina non è nel menu e Google non la indicizza, ma chi conosce l’indirizzo può aprirla.
-Non vede però i tuoi fogli: ognuno vede solo quelli scritti nel proprio browser. Su iPhone
+Chiunque visiti il sito può usarla, ma nessuno vede i fogli degli altri: ognuno vede solo quelli
+scritti nel proprio browser, e niente viene inviato a te o al sito. Su iPhone
 puoi aggiungerla alla schermata Home (Condividi → Aggiungi alla schermata Home).
 
 ## Cosa richiede ancora me (o un tecnico)

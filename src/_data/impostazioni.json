@@ -46,6 +46,14 @@
     "mostra_ultimo": true,
     "mostra_archivio": true,
     "quanti_in_archivio": 4,
-    "congedo": "Un atlante delle cose invisibili."
+    "congedo": "Un atlante delle cose invisibili.",
+    "scrivi": {
+      "mostra": true,
+      "nel_menu": true,
+      "titolo": "Scrivi",
+      "testo": "Un foglio nel buio e una lampada che segue la penna. Ogni lettera si accende mentre la scrivi.",
+      "pulsante": "Inizia a scrivere",
+      "frase_foglio": "Comincia a scrivere…"
+    }
   }
 }

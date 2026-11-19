@@ -49,6 +49,10 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   await page.waitForTimeout(2200); await page.screenshot({ path: join(out, `${tag}-02-scritta.png`) });
   for (const p of [.35, .8]) { await scrollTo(page, '.apertura', p); await page.screenshot({ path: join(out, `${tag}-03-apertura-${p}.png`) }); }
   for (const p of [.05, .45, .9]) { await scrollTo(page, '.progetto', p); await page.screenshot({ path: join(out, `${tag}-04-progetto-${p}.png`) }); }
+  await page.evaluate(() => document.querySelector('#scrivi').scrollIntoView()); await page.waitForTimeout(400);
+  await page.screenshot({ path: join(out, `${tag}-05-scrivi-mentre.png`) });
+  await page.waitForTimeout(2600);
+  await page.screenshot({ path: join(out, `${tag}-05-scrivi.png`) });
   await page.evaluate(() => document.querySelector('#ultimo').scrollIntoView()); await page.waitForTimeout(1400);
   await page.screenshot({ path: join(out, `${tag}-05-ultimo.png`) });
   await page.evaluate(() => document.querySelector('#archivio').scrollIntoView()); await page.waitForTimeout(1400);

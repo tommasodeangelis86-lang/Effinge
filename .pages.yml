@@ -206,3 +206,13 @@ content:
           - { name: mostra_archivio, label: Mostra «Dall’archivio», type: boolean }
           - { name: quanti_in_archivio, label: Quanti testi in «Dall’archivio», type: number, options: { min: 1, max: 12 } }
           - { name: congedo, label: Frase finale, type: string }
+          - name: scrivi
+            label: Scrivi (sezione in homepage e voce di menu)
+            type: object
+            fields:
+              - { name: mostra, label: Mostra la sezione in homepage, type: boolean }
+              - { name: nel_menu, label: Mostra «Scrivi» nel menu in alto, type: boolean }
+              - { name: titolo, label: Titolo della sezione, type: string }
+              - { name: testo, label: Testo della sezione, type: text }
+              - { name: pulsante, label: Testo del pulsante, type: string }
+              - { name: frase_foglio, label: Frase che si scrive sul foglietto, type: string, options: { maxlength: 40 } }

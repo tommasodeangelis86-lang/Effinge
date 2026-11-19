@@ -276,3 +276,24 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
    testo vero e specchio la disegnano identica, quindi restano allineati in ogni browser. */
 .manoscritto .scrivi-specchio,.manoscritto .scrivi-testo{tab-size:var(--rientro,2cqw);-moz-tab-size:var(--rientro,2cqw)}
 @media (max-width:760px){.scrivi-testa{flex-wrap:wrap}.scrivi-info{flex-direction:row;flex-wrap:wrap;align-items:center;width:100%;justify-content:flex-start;gap:10px 12px;text-align:left}.scrivi-stato{line-height:1.5}}
+
+/* ——— Invito a scrivere in homepage ——— */
+.scrivi-invito-griglia{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(40px,7vw,110px);align-items:center}
+.scrivi-invito h2{margin:0;font:300 clamp(2.5rem,5.5vw,4.75rem)/1 var(--display);letter-spacing:-.01em}
+.scrivi-invito-testo p{margin:24px 0 36px;max-width:30ch;font:400 1.1875rem/1.6 var(--lettura);color:var(--testo-2)}
+.pulsante{display:inline-flex;align-items:center;gap:.6em;padding:15px 24px;border-radius:999px;background:var(--carta);color:var(--inchiostro);font:500 .9375rem/1 var(--ui);letter-spacing:.01em;transition:transform .16s var(--ease),gap .3s var(--ease),background-color .2s ease}
+.pulsante:hover{gap:.9em}
+.pulsante:active{transform:scale(.97)}
+.scrivi-anteprima{display:block;aspect-ratio:1.414/1;transition:transform .6s var(--ease)}
+.scrivi-anteprima:hover{transform:translateY(-3px) rotate(-.4deg)}
+.scrivi-anteprima .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 9cqw}
+.scrivi-anteprima .intestazione{left:9cqw;right:9cqw;top:6.5cqw;font-size:1.5cqw}
+.scrivi-anteprima-frase{margin:0;font:italic 300 6.4cqw/1.2 var(--display);color:var(--inchiostro);white-space:nowrap}
+.scrivi-anteprima-righe{display:grid;gap:3.6cqw;margin-top:6cqw}
+.scrivi-anteprima-righe i{display:block;height:1px;background:color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.scrivi-anteprima-righe i:nth-child(2){width:86%}.scrivi-anteprima-righe i:nth-child(3){width:58%}
+@media (max-width:760px){
+  .scrivi-invito-griglia{grid-template-columns:1fr;gap:36px}
+  .scrivi-anteprima-frase{font-size:8cqw}
+  .scrivi-anteprima .intestazione{font-size:2.4cqw}
+}

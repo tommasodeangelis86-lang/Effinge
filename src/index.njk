@@ -42,6 +42,26 @@ permalink: /
   {%- endif %}
 
   {%- set ultimo = collections.testi[0] %}
+  {%- set sc = s.home.scrivi %}
+  {%- if sc.mostra %}
+  <section class="sezione scrivi-invito" id="scrivi" aria-labelledby="h-scrivi">
+    <div class="scrivi-invito-griglia">
+      <div class="scrivi-invito-testo sale">
+        <h2 id="h-scrivi">{{ sc.titolo }}</h2>
+        {%- if sc.testo %}<p>{{ sc.testo }}</p>{% endif %}
+        <a class="pulsante" href="/scrivi/">{{ sc.pulsante }} <span aria-hidden="true">→</span></a>
+      </div>
+      <a class="foglio scrivi-anteprima sale" href="/scrivi/" data-scrittura-al-passaggio aria-label="{{ sc.pulsante }}">
+        <div class="contenuto">
+          <div class="intestazione" aria-hidden="true"><span>Foglio</span><span>{{ s.sito.nome }}</span></div>
+          <p class="scrivi-anteprima-frase" data-scrittura data-speed="{{ s.animazione.velocita }}" data-delay="200" data-fade="{{ s.animazione.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="true" data-repeat="sempre">{{ sc.frase_foglio }}</p>
+          <div class="scrivi-anteprima-righe" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+      </a>
+    </div>
+  </section>
+  {%- endif %}
+
   {%- if s.home.mostra_ultimo and ultimo %}
   <section class="sezione" id="ultimo" aria-labelledby="h-ultimo">
     <div class="sezione-testa sale"><h2 id="h-ultimo">Ultimo testo</h2></div>

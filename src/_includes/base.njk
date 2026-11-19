@@ -37,8 +37,11 @@
   <nav aria-label="Principale">
     <a href="/archivio/"{% if page.url == '/archivio/' %} aria-current="page"{% endif %}>Archivio</a>
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}
-    <a href="{{ p.url }}"{% if page.url == p.url %} aria-current="page"{% endif %}{% if not loop.last %} class="facoltativo"{% endif %}>{{ p.data.titolo }}</a>
+    <a href="{{ p.url }}"{% if page.url == p.url %} aria-current="page"{% endif %}{% if not loop.last or impostazioni.home.scrivi.nel_menu %} class="facoltativo"{% endif %}>{{ p.data.titolo }}</a>
     {%- endif %}{% endfor %}
+    {%- if impostazioni.home.scrivi.nel_menu %}
+    <a href="/scrivi/"{% if page.url == '/scrivi/' %} aria-current="page"{% endif %}>Scrivi</a>
+    {%- endif %}
   </nav>
 </header>
 {{ content | safe }}
