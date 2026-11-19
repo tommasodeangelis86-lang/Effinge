@@ -643,9 +643,181 @@
     }).catch(function (err) { avviso('Esportazione non riuscita', 4000); if (window.console) console.error(err); });
   });
 
+  /* ——— Autore: pubblicare sul sito (solo dove è stata inserita la chiave GitHub) ———
+     La chiave è un «fine-grained token» di GitHub con permesso Contents: lettura e scrittura,
+     limitato al repository del sito. Resta in questo browser. Il capitolo diventa un file
+     src/testi/AAAA-MM-GG-titolo.md, lo stesso formato del pannello; Netlify ripubblica da solo. */
+  var API = 'https://api.github.com', KEY_AUTORE = 'effinge-autore';
+  var autore = null;
+  try { autore = JSON.parse(leggi(KEY_AUTORE) || 'null'); } catch (e) { autore = null; }
+  var dlgAut = $('#autore'), dlgPub = $('#pubblica'), btnPub = $('[data-comando="pubblica"]');
+  function gh(path, opt) {
+    opt = opt || {};
+    var h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Authorization': 'Bearer ' + (opt.token || autore.token) };
+    if (opt.body) h['Content-Type'] = 'application/json';
+    return fetch(API + path, { method: opt.method || 'GET', headers: h, body: opt.body ? JSON.stringify(opt.body) : undefined }).then(function (r) {
+      return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) { var err = new Error((j && j.message) || ('HTTP ' + r.status)); err.status = r.status; throw err; } return j; });
+    });
+  }
+  function mostraAutore() {
+    var dentro = !!autore;
+    if (btnPub) btnPub.hidden = !dentro;
+    $('[data-autore-fuori]').hidden = dentro;
+    $('[data-autore-dentro]').hidden = !dentro;
+    $('[data-collega-autore]').hidden = dentro;
+    $('[data-scollega-autore]').hidden = !dentro;
+    if (dentro) $('[data-autore-chi]').textContent = 'Collegato come ' + autore.login + ' al repository ' + autore.repo + ' (ramo ' + autore.ramo + ').';
+  }
+  function esito(el, msg, tipo) { el.textContent = msg; el.className = 'esito' + (tipo ? ' ' + tipo : ''); }
+  $('[data-apri-autore]').addEventListener('click', function () { dlgOpere.close(); mostraAutore(); esito($('[data-esito-autore]'), ''); dlgAut.showModal(); });
+  $('[data-collega-autore]').addEventListener('click', function () {
+    var token = $('#chiave-autore').value.trim(), out = $('[data-esito-autore]');
+    if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(token)) { esito(out, 'Questa non sembra una chiave GitHub: deve iniziare con github_pat_.', 'errore'); return; }
+    esito(out, 'Verifico la chiave…');
+    var login;
+    gh('/user', { token: token }).then(function (u) {
+      login = u.login;
+      return gh('/user/repos?per_page=100&sort=updated', { token: token });
+    }).then(function (repos) {
+      var r = (repos || []).filter(function (x) { return x.permissions && x.permissions.push; });
+      var scelto = r.filter(function (x) { return /(^|\/)effinge$/i.test(x.full_name); })[0] || (r.length === 1 ? r[0] : null);
+      if (!scelto) throw new Error('La chiave non dà accesso in scrittura al repository Effinge. Controlla di averla limitata a Effinge con il permesso «Contents: Read and write».');
+      return gh('/repos/' + scelto.full_name + '/contents/.pages.yml?ref=' + encodeURIComponent(scelto.default_branch || 'main'), { token: token }).then(function () { return scelto; });
+    }).then(function (rep) {
+      autore = { token: token, login: login, repo: rep.full_name, ramo: rep.default_branch || 'main' };
+      scriviPref(KEY_AUTORE, JSON.stringify(autore));
+      $('#chiave-autore').value = '';
+      mostraAutore();
+      avviso('Accesso autore attivo su questo dispositivo');
+    }).catch(function (e) {
+      esito(out, e.status === 401 ? 'GitHub non riconosce questa chiave: forse è scaduta o copiata male.' : e.message, 'errore');
+    });
+  });
+  $('[data-scollega-autore]').addEventListener('click', function () {
+    autore = null;
+    try { localStorage.removeItem(KEY_AUTORE); } catch (e) {}
+    mostraAutore();
+  });
+
+  // HTML del foglio → Markdown del sito (il formato del pannello). Ciò che il Markdown non sa dire resta HTML.
+  function md(html) {
+    var t = document.createElement('div'); t.innerHTML = html || '';
+    function esc(x) { return x.replace(/\\/g, '\\\\').replace(/([`*_\[\]<>~])/g, '\\$1').replace(/\s+/g, ' '); }
+    function inl(n) {
+      var out = '';
+      Array.prototype.forEach.call(n.childNodes, function (c) {
+        if (c.nodeType === 3) { out += esc(c.nodeValue); return; }
+        if (c.nodeType !== 1) return;
+        var x = inl(c), m = /^(\s*)([\s\S]*?)(\s*)$/.exec(x);
+        if (!m[2] && c.tagName !== 'BR') { out += x; return; }
+        switch (c.tagName) {
+          case 'STRONG': case 'B': out += m[1] + '**' + m[2] + '**' + m[3]; break;
+          case 'EM': case 'I': out += m[1] + '*' + m[2] + '*' + m[3]; break;
+          case 'S': out += m[1] + '~~' + m[2] + '~~' + m[3]; break;
+          case 'U': out += '<u>' + x + '</u>'; break;
+          case 'SUP': out += '<sup>' + x + '</sup>'; break;
+          case 'SUB': out += '<sub>' + x + '</sub>'; break;
+          case 'BR': out += '<br>'; break;
+          default: out += x;
+        }
+      });
+      return out.trim();
+    }
+    function inizio(x) { return x.replace(/^(#{1,6}\s|>|[-+]\s|\d+[.)]\s)/, '\\$1'); }
+    var blocchi = [];
+    Array.prototype.forEach.call(t.children, function (el) {
+      var tag = el.tagName, cl = el.classList;
+      if (tag === 'P') {
+        if (cl.contains('stacco')) blocchi.push('***');
+        else if (cl.contains('centro') || cl.contains('destra')) blocchi.push('<p class="' + (cl.contains('centro') ? 'centro' : 'destra') + '">' + el.innerHTML + '</p>');
+        else { var x = inl(el); if (x) blocchi.push(inizio(x)); }
+      } else if (tag === 'H1' || tag === 'H2') blocchi.push('## ' + inl(el));
+      else if (tag === 'H3') blocchi.push('### ' + inl(el));
+      else if (tag === 'BLOCKQUOTE') {
+        var ps = el.querySelectorAll('p');
+        blocchi.push((ps.length ? Array.prototype.map.call(ps, inl) : [inl(el)]).map(function (r) { return '> ' + r; }).join('\n>\n'));
+      } else if (tag === 'UL' || tag === 'OL') {
+        blocchi.push(Array.prototype.map.call(el.children, function (li, i) { return (tag === 'UL' ? '- ' : (i + 1) + '. ') + inl(li); }).join('\n'));
+      } else if (tag === 'HR') blocchi.push('***');
+      else if (tag === 'DIV') blocchi.push('<div class="note">\n' + el.innerHTML + '\n</div>');
+    });
+    return blocchi.join('\n\n') + '\n';
+  }
+  function yaml(v) { return JSON.stringify(String(v == null ? '' : v)); }
+  function slug(x) {
+    return String(x || 'testo').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 70) || 'testo';
+  }
+  function b64(str) {
+    var bytes = new TextEncoder().encode(str), bin = '';
+    for (var i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin);
+  }
+  function oggi() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+
+  if (btnPub) btnPub.addEventListener('click', function () {
+    salva(true);
+    var s = sezioni[corrente], p = s.pubblicato || {};
+    var testo = testoDi(String(s.html || '').replace(/<p class="stacco">[^<]*<\/p>/g, '')).replace(/\s+/g, ' ').trim();
+    $('#pub-titolo').value = p.titolo || s.titolo || (s.tipo === 'capitolo' ? (opera.titolo || '') + ' — ' + etichettaDi(s.id).breve : opera.titolo || '');
+    $('#pub-categoria').value = p.categoria || (s.tipo === 'capitolo' ? 'Capitolo' : '');
+    $('#pub-data').value = p.data || oggi();
+    $('#pub-estratto').value = p.estratto || (testo.length > 220 ? testo.slice(0, 220).replace(/\s+\S*$/, '') + '…' : testo);
+    $('#pub-evidenza').checked = !!p.evidenza;
+    esito($('[data-esito-pubblica]'), p.path ? 'Questo capitolo è già sul sito: pubblicandolo di nuovo lo aggiorni.' : '');
+    $('[data-conferma-pubblica]').textContent = p.path ? 'Aggiorna sul sito' : 'Pubblica';
+    $('[data-conferma-pubblica]').disabled = false;
+    dlgPub.showModal();
+  });
+  $('[data-conferma-pubblica]').addEventListener('click', function () {
+    var out = $('[data-esito-pubblica]'), btn = this;
+    var s = sezioni[corrente];
+    var tit = $('#pub-titolo').value.trim(), data = $('#pub-data').value || oggi();
+    if (!tit) { esito(out, 'Scrivi un titolo.', 'errore'); $('#pub-titolo').focus(); return; }
+    if (!testoDi(s.html).trim()) { esito(out, 'Il capitolo è vuoto: non c’è niente da pubblicare.', 'errore'); return; }
+    var bozza = (document.querySelector('input[name="pub-modo"]:checked') || {}).value === 'bozza';
+    var info = { titolo: tit, categoria: $('#pub-categoria').value.trim(), data: data, estratto: $('#pub-estratto').value.trim(), evidenza: $('#pub-evidenza').checked };
+    var file = '---\n' +
+      'titolo: ' + yaml(info.titolo) + '\n' +
+      'date: ' + data + '\n' +
+      (info.categoria ? 'categoria: ' + yaml(info.categoria) + '\n' : '') +
+      (info.estratto ? 'estratto: ' + yaml(info.estratto) + '\n' : '') +
+      'in_evidenza: ' + info.evidenza + '\n' +
+      'bozza: ' + bozza + '\n' +
+      '---\n' + md(s.html);
+    var vecchio = s.pubblicato && s.pubblicato.path;
+    var nome = data + '-' + slug(tit);
+    var path = vecchio || ('src/testi/' + nome + '.md');
+    var base = '/repos/' + autore.repo + '/contents/';
+    var enc = function (x) { return x.split('/').map(encodeURIComponent).join('/'); };
+    btn.disabled = true;
+    esito(out, 'Pubblicazione in corso…');
+    // se esiste già un file con quel nome (o è quello di prima), serve il suo «sha» per aggiornarlo
+    gh(base + enc(path) + '?ref=' + encodeURIComponent(autore.ramo)).then(function (f) { return f && f.sha; }, function (e) { if (e.status === 404) return null; throw e; }).then(function (sha) {
+      if (sha && !vecchio) { path = 'src/testi/' + nome + '-' + Date.now().toString(36).slice(-4) + '.md'; sha = null; }
+      return gh(base + enc(path), { method: 'PUT', body: { message: (sha ? 'Aggiorna' : 'Pubblica') + ' «' + tit + '» da Scrivi', content: b64(file), branch: autore.ramo, sha: sha || undefined } });
+    }).then(function () {
+      var fileSlug = path.replace(/^.*\//, '').replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
+      var url = (bozza ? '/anteprima/' : '/testi/') + fileSlug + '/';
+      info.path = path;
+      s.pubblicato = info;
+      salva(true);
+      esito(out, '');
+      out.append(document.createTextNode((bozza ? 'Bozza salvata.' : 'Pubblicato.') + ' Sarà online tra circa un minuto: '));
+      var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = location.host + url; out.append(a);
+      out.className = 'esito ok';
+      btn.textContent = 'Aggiorna sul sito';
+      btn.disabled = false;
+    }).catch(function (e) {
+      btn.disabled = false;
+      esito(out, e.status === 401 || e.status === 403 ? 'GitHub ha rifiutato la chiave: forse è scaduta o non ha il permesso di scrittura. Rifai «Accesso autore».' : 'Pubblicazione non riuscita: ' + e.message, 'errore');
+    });
+  });
+  mostraAutore();
+
   // usato dal modulo Word e dai test
   window.EffingeScrivi = {
     pulisci: pulisci,
+    markdown: md,
     opera: function () { return opera; },
     sezioni: function () { return opera ? opera.ordine.map(function (x) { return sezioni[x]; }) : []; },
     pronto: null

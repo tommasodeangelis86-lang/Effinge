@@ -159,6 +159,22 @@ rientro 0,42 cm, Times New Roman 12, numeri di pagina): copertina, poi ogni part
 pagina nuova con lo stile «Titolo 1». Il file si può reimportare con la stessa struttura. Le note
 a piè di pagina diventano note in fondo al capitolo, non note di Word.
 
+**Pubblica sul sito (solo per te).** Dal foglio puoi pubblicare il capitolo aperto come testo di
+Effinge, senza passare dal pannello. Serve una volta sola, su ogni dispositivo, l’«Accesso autore»:
+
+1. Su GitHub crea una chiave personale: vai su **github.com/settings/personal-access-tokens/new**.
+   - *Token name*: `Effinge Scrivi`; *Expiration*: la durata che preferisci (alla scadenza ne crei un’altra).
+   - *Repository access*: **Only select repositories** → **Effinge**.
+   - *Permissions* → *Repository permissions* → **Contents: Read and write**.
+   - **Generate token** e copia la chiave (inizia con `github_pat_`; GitHub la mostra una volta sola).
+2. In Scrivi: **Opere** → **Accesso autore** → incolla la chiave → **Collega**.
+3. In alto compare **Pubblica sul sito**: scegli titolo, categoria, data ed estratto, «Pubblica subito» o
+   «Salva come bozza», e conferma. Dopo circa un minuto il testo è online (le bozze solo in anteprima).
+   Ripubblicando lo stesso capitolo, il testo sul sito viene aggiornato.
+
+La chiave resta solo nel browser di quel dispositivo e può scrivere solo nel repository Effinge. Non
+inserirla su computer di altri. Per toglierla: «Scollega»; per revocarla ovunque, eliminala su GitHub.
+
 **Dove finisce quello che scrivi.** Tutto resta **nel browser del dispositivo che usi**: quello che
 scrivi su iPhone non compare sul computer, e niente viene inviato a te o al sito. Se cancelli i dati
 del browser, le opere si perdono: esporta in Word regolarmente come copia di sicurezza.

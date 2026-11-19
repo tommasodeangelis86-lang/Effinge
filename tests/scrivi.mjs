@@ -133,6 +133,59 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   } else console.log('(nessun DOCX: importazione reale non provata)');
   await ctx.close();
 }
+// ——— Pubblicare sul sito (GitHub simulato: niente viene scritto davvero) ———
+{
+  const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await ctx.newPage();
+  page.on('pageerror', e => problems.push('pubblica: ' + e.message));
+  const scritti = [];
+  await page.route('https://api.github.com/**', async route => {
+    const u = new URL(route.request().url()), m = route.request().method();
+    const j = (st, body) => route.fulfill({ status: st, contentType: 'application/json', body: JSON.stringify(body) });
+    if (u.pathname === '/user') return j(200, { login: 'autore-prova' });
+    if (u.pathname === '/user/repos') return j(200, [{ full_name: 'autore-prova/Effinge', default_branch: 'main', permissions: { push: true } }]);
+    if (u.pathname.endsWith('/contents/.pages.yml')) return j(200, { sha: 'x' });
+    if (m === 'GET') return j(404, { message: 'Not Found' });
+    if (m === 'PUT') { const body = JSON.parse(route.request().postData()); scritti.push({ path: decodeURIComponent(u.pathname.split('/contents/')[1]), ...body }); return j(201, { content: { sha: 'nuovo' } }); }
+    return j(404, {});
+  });
+  await pronto(page);
+  ok(await page.isHidden('[data-comando="pubblica"]'), 'il pulsante Pubblica è visibile senza accesso autore');
+  await page.click('[data-comando="opere"]'); await page.click('[data-apri-autore]');
+  await page.fill('#chiave-autore', 'github_pat_' + 'A'.repeat(40));
+  await page.click('[data-collega-autore]');
+  await page.waitForSelector('[data-comando="pubblica"]:not([hidden])', { timeout: 5000 });
+  await page.click('#autore [data-chiudi]');
+  await page.fill('#titolo-sezione', 'La finestra sul canale');
+  await page.click('.scrivi-editor');
+  await page.keyboard.type('Primo paragrafo con ', { delay: 2 });
+  await page.keyboard.press('Control+b'); await page.keyboard.type('grassetto', { delay: 2 }); await page.keyboard.press('Control+b');
+  await page.keyboard.type(' e ', { delay: 2 });
+  await page.keyboard.press('Control+i'); await page.keyboard.type('corsivo', { delay: 2 }); await page.keyboard.press('Control+i');
+  await page.keyboard.type('. Prezzo: 3*4 [nota]', { delay: 2 });
+  await page.keyboard.press('Enter'); await page.click('[data-inserisci="stacco"]');
+  await page.keyboard.type('Fine centrata', { delay: 2 }); await page.click('[data-cmd="justifyCenter"]');
+  await page.waitForTimeout(700);
+  await page.click('[data-comando="pubblica"]');
+  ok((await page.inputValue('#pub-titolo')) === 'La finestra sul canale', 'titolo non precompilato');
+  await page.fill('#pub-categoria', 'Racconto');
+  await page.click('[data-conferma-pubblica]');
+  await page.waitForSelector('[data-esito-pubblica].ok', { timeout: 5000 });
+  ok(scritti.length === 1, `file scritti su GitHub: ${scritti.length}`);
+  if (scritti[0]) {
+    const f = Buffer.from(scritti[0].content, 'base64').toString('utf8');
+    console.log('file pubblicato:', scritti[0].path, '\n' + f);
+    ok(/^src\/testi\/\d{4}-\d{2}-\d{2}-la-finestra-sul-canale\.md$/.test(scritti[0].path), 'percorso del file: ' + scritti[0].path);
+    ok(/titolo: "La finestra sul canale"/.test(f) && /bozza: false/.test(f) && /categoria: "Racconto"/.test(f), 'intestazione del file');
+    ok(/\*\*grassetto\*\*/.test(f) && /\*corsivo\*/.test(f) && /3\\\*4 \\\[nota\\\]/.test(f) && /\n\*\*\*\n/.test(f) && /<p class="centro">Fine centrata<\/p>/.test(f), 'contenuto Markdown del file');
+    if (process.env.FILE_PUBBLICATO) (await import('node:fs')).writeFileSync(process.env.FILE_PUBBLICATO, f);
+  }
+  // ripubblicare aggiorna lo stesso file
+  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(800);
+  ok(scritti.length === 2 && scritti[1].path === scritti[0].path, 'la ripubblicazione non aggiorna lo stesso file');
+  await page.screenshot({ path: join(out, 'scrivi-pubblica.png') });
+  await ctx.close();
+}
 // ——— Telefono ———
 {
   const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });

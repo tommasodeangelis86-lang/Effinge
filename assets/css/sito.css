@@ -23,6 +23,7 @@
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
 html{background:var(--stanza);color:var(--testo);-webkit-text-size-adjust:100%;scrollbar-color:#34322e var(--stanza)}
 html,body{overflow-x:clip}
 body{margin:0;background:var(--stanza);font:400 1rem/1.6 var(--ui);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -227,3 +228,8 @@ html:not(.js) .righe li{opacity:1}
   .scrivi-anteprima-frase{font-size:8cqw}
   .scrivi-anteprima .intestazione{font-size:2.4cqw}
 }
+/* Paragrafi centrati o a destra e note, anche nei testi pubblicati da Scrivi */
+.corpo .centro{text-align:center;text-indent:0}
+.corpo .destra{text-align:right;text-indent:0}
+.corpo .note{margin-top:2.5em;padding-top:1em;border-top:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);font-size:.85em}
+.corpo .note p{text-indent:0}

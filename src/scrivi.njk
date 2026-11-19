@@ -48,6 +48,7 @@ eleventyExcludeFromCollections: true
       <button type="button" class="pill" data-comando="lampada" aria-pressed="true">Lampada</button>
     </div>
     <div class="barra-dx">
+      <button type="button" class="pill pubblica" data-comando="pubblica" hidden>Pubblica sul sito</button>
       <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word">{{ icona('imp') }}<span>Importa da Word</span></button>
       <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word">{{ icona('esp') }}<span>Esporta in Word</span></button>
       <input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden data-file-word>
@@ -156,8 +157,50 @@ eleventyExcludeFromCollections: true
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <ul class="finestra-elenco" data-elenco-opere></ul>
-  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button></div>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button><button type="button" class="pill" data-apri-autore>Accesso autore</button></div>
   <p class="finestra-nota">Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».</p>
+</dialog>
+
+<dialog class="finestra" id="autore" aria-labelledby="h-autore">
+  <div class="finestra-testa"><h2 id="h-autore">Accesso autore</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <div class="finestra-corpo">
+    <div data-autore-fuori>
+      <p>Con l’accesso autore compare il pulsante <strong>Pubblica sul sito</strong>: il capitolo aperto diventa un testo di Effinge.</p>
+      <p>Incolla qui la chiave personale che hai creato su GitHub (inizia con <code>github_pat_</code>). Resta solo in questo browser; va inserita una volta su ogni dispositivo.</p>
+      <label class="campo"><span>Chiave GitHub</span><input type="password" id="chiave-autore" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
+      <p class="esito" data-esito-autore aria-live="polite"></p>
+    </div>
+    <div data-autore-dentro hidden>
+      <p data-autore-chi></p>
+      <p>Per toglierla da questo dispositivo usa «Scollega». Per revocarla ovunque, eliminala dalle impostazioni di GitHub.</p>
+    </div>
+  </div>
+  <div class="finestra-piede">
+    <button type="button" class="pill primario" data-collega-autore>Collega</button>
+    <button type="button" class="pill" data-scollega-autore hidden>Scollega</button>
+  </div>
+</dialog>
+
+<dialog class="finestra" id="pubblica" aria-labelledby="h-pubblica">
+  <div class="finestra-testa"><h2 id="h-pubblica">Pubblica sul sito</h2><button type="button" class="pill" data-chiudi>Annulla</button></div>
+  <form class="finestra-corpo modulo" data-modulo-pubblica>
+    <label class="campo"><span>Titolo</span><input type="text" id="pub-titolo" required autocomplete="off"></label>
+    <div class="campi-due">
+      <label class="campo"><span>Categoria</span><input type="text" id="pub-categoria" list="pub-categorie" autocomplete="off" placeholder="es. Racconto"></label>
+      <label class="campo"><span>Data</span><input type="date" id="pub-data" required></label>
+    </div>
+    <datalist id="pub-categorie"><option value="Racconto"><option value="Capitolo"><option value="Frammento"><option value="Prosa breve"><option value="Nota"><option value="Poesia"></datalist>
+    <label class="campo"><span>Estratto <small>(per la homepage e le anteprime sui social)</small></span><textarea id="pub-estratto" rows="3"></textarea></label>
+    <label class="spunta"><input type="checkbox" id="pub-evidenza"> In evidenza in homepage</label>
+    <fieldset class="scelta">
+      <legend>Come</legend>
+      <label class="spunta"><input type="radio" name="pub-modo" value="pubblica" checked> Pubblica subito</label>
+      <label class="spunta"><input type="radio" name="pub-modo" value="bozza"> Salva come bozza (visibile solo in anteprima)</label>
+    </fieldset>
+    <p class="esito" data-esito-pubblica aria-live="polite"></p>
+  </form>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-conferma-pubblica>Pubblica</button></div>
+  <p class="finestra-nota">Viene pubblicato il testo del capitolo aperto. Dopo puoi modificarlo dal pannello, oppure ripubblicarlo da qui: il testo sul sito viene aggiornato.</p>
 </dialog>
 
 <dialog class="finestra" id="importa" aria-labelledby="h-importa">
