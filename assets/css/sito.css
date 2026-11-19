@@ -260,3 +260,19 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 .fogli-piede .primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
 .fogli-nota{margin:0;padding:6px 22px 20px;font:400 .75rem/1.5 var(--ui);color:var(--testo-3)}
 @media (max-width:760px){.scrivi-pagina{padding-top:calc(124px + env(safe-area-inset-top,0px));padding-left:10px;padding-right:10px}.scrivi-comandi button{padding:9px 10px}}
+
+/* Riepilogo e pulsante «Manoscritto» */
+.scrivi-info{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:10px;text-align:right}
+.scrivi-manoscritto{border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);background:transparent;color:var(--inchiostro-2);border-radius:999px;padding:7px 12px;font:500 .6875rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease)}
+.scrivi-manoscritto:hover{color:var(--inchiostro);border-color:color-mix(in srgb,var(--inchiostro) 45%,transparent)}
+.scrivi-manoscritto:active{transform:scale(.97)}
+.scrivi-manoscritto[aria-pressed="true"]{background:var(--inchiostro);border-color:var(--inchiostro);color:var(--carta)}
+/* Impaginazione da manoscritto: foglio A4 (21 cm), margini 2,3 cm, interlinea 1,5, rientro 0,42 cm.
+   Su schermi più stretti di 21 cm le misure restano in proporzione al foglio (cqw = 1% della larghezza). */
+.manoscritto .scrivi-foglio{max-width:21cm}
+.manoscritto .scrivi-foglio .contenuto{padding:10.952cqw}           /* 2,3 / 21 */
+.manoscritto .scrivi-specchio,.manoscritto .scrivi-testo{font-size:max(1rem,2.0155cqw);line-height:1.5}  /* 12 pt su 21 cm */
+/* Il rientro è una tabulazione all'inizio di ogni paragrafo, larga 0,42 cm (2% del foglio, misurato da scrivi.js):
+   testo vero e specchio la disegnano identica, quindi restano allineati in ogni browser. */
+.manoscritto .scrivi-specchio,.manoscritto .scrivi-testo{tab-size:var(--rientro,2cqw);-moz-tab-size:var(--rientro,2cqw)}
+@media (max-width:760px){.scrivi-testa{flex-wrap:wrap}.scrivi-info{flex-direction:row;flex-wrap:wrap;align-items:center;width:100%;justify-content:flex-start;gap:10px 12px;text-align:left}.scrivi-stato{line-height:1.5}}

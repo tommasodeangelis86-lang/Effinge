@@ -134,6 +134,12 @@ il paragrafo su cui stai scrivendo resta acceso mentre gli altri si attenuano.
   (si tocca «Elimina» e poi «Conferma»). Puoi anche scaricare il foglio aperto in un file .txt.
 - **Concentrazione** e **Lampada** accendono o spengono i due effetti.
 - **Copia** copia titolo e testo, per incollarli nel pannello quando vuoi pubblicarli.
+- Sotto il titolo vedi **parole, battute e cartelle** (cartella editoriale = 2000 battute, spazi
+  inclusi, a capo esclusi).
+- **Manoscritto** porta il foglio all’impaginazione di un manoscritto reale: foglio A4 (21 cm),
+  margini di 2,3 cm su tutti i lati, interlinea 1,5 e rientro di 0,42 cm a ogni paragrafo. Sul
+  telefono il foglio è più stretto di 21 cm: margini e rientro restano in proporzione. Il rientro
+  è automatico; quando copi o scarichi il testo non viene incluso.
 
 Il salvataggio è automatico, ma **solo nel browser e sul dispositivo che stai usando**: quello che
 scrivi su iPhone non compare sul computer. Se cancelli i dati di Safari, i fogli si perdono:

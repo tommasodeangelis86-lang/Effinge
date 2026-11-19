@@ -13,7 +13,10 @@ eleventyExcludeFromCollections: true
       <div class="scrivi-testa">
         <label class="sr" for="titolo-foglio">Titolo del foglio</label>
         <input id="titolo-foglio" class="scrivi-titolo" type="text" placeholder="Senza titolo" autocomplete="off" spellcheck="true">
-        <span class="scrivi-stato" data-stato aria-live="polite"></span>
+        <div class="scrivi-info">
+          <span class="scrivi-stato" data-stato aria-live="polite"></span>
+          <button type="button" class="scrivi-manoscritto" data-comando="manoscritto" aria-pressed="false" title="Interlinea 1,5 · margini 2,3 cm · rientro 0,42 cm">Manoscritto</button>
+        </div>
       </div>
       <div class="scrivi-area" data-scrivi>
         <div class="scrivi-specchio" aria-hidden="true"></div>

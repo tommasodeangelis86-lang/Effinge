@@ -42,14 +42,55 @@
   var corrente = fogli.filter(function (f) { return f.id === leggi(CUR); })[0] || fogli[0];
 
   function parole(t) { var m = t.trim().match(/\S+/g); return m ? m.length : 0; }
+  // Battute: caratteri spazi inclusi, esclusi gli a capo. Cartella editoriale = 2000 battute.
+  function battute(t) { return Array.from(t.replace(/\r?\n/g, '')).length; }
+  var fmt = new Intl.NumberFormat('it-IT');
+  var fmt1 = new Intl.NumberFormat('it-IT', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
   function setStato(msg) { if (stato) stato.textContent = msg; }
-  function riepilogo() { var n = parole(ta.value); return n + (n === 1 ? ' parola' : ' parole'); }
+  /* Manoscritto: ogni paragrafo non vuoto comincia con una tabulazione larga 0,42 cm.
+     Il testo salvato, copiato e contato è sempre quello «canonico», senza queste tabulazioni. */
+  function manoscritto() { return root.classList.contains('manoscritto'); }
+  function canonico(v) { return v.replace(/^\t+/gm, ''); }
+  // Porta il testo alla forma richiesta e restituisce anche come spostare gli indici.
+  function normalizza(v, conRientro) {
+    var out = '', mappa = new Array(v.length + 1), i = 0;
+    while (i <= v.length) {
+      var fine = v.indexOf('\n', i); if (fine < 0) fine = v.length;
+      var j = i;
+      while (j < fine && v.charCodeAt(j) === 9) { mappa[j] = out.length + (conRientro && fine > j ? 1 : 0); j++; }
+      if (conRientro && j < fine) out += '\t';
+      for (var k = j; k < fine; k++) { mappa[k] = out.length; out += v[k]; }
+      mappa[fine] = out.length;
+      if (fine < v.length) out += '\n';
+      i = fine + 1;
+    }
+    return { testo: out, mappa: function (x) { return mappa[Math.max(0, Math.min(v.length, x))]; } };
+  }
+  function applicaRientro(conRientro) {
+    var n = normalizza(ta.value, conRientro);
+    if (n.testo === ta.value) return;
+    var a = n.mappa(ta.selectionStart), b = n.mappa(ta.selectionEnd);
+    recenti = recenti.map(function (r) { return { i: n.mappa(r.i), t: r.t }; });
+    ta.value = n.testo;
+    try { ta.setSelectionRange(a, b); } catch (e) {}
+    prev = ta.value;
+  }
+  function misuraRientro() {
+    // 0,42 cm con un corpo di 12 pt: il rientro vale 0,992 volte il corpo del testo.
+    // Sul foglio di 21 cm è esattamente 0,42 cm; sul telefono resta in proporzione alle lettere.
+    area.style.setProperty('--rientro', (parseFloat(getComputedStyle(ta).fontSize) * 0.9921).toFixed(2) + 'px');
+  }
+
+  function riepilogo() {
+    var t = canonico(ta.value), n = parole(t), c = battute(t), k = c / 2000;
+    return n + (n === 1 ? ' parola' : ' parole') + ' · ' + fmt.format(c) + ' battute · ' + fmt1.format(k) + (k === 1 ? ' cartella' : ' cartelle');
+  }
 
   var timerSalva = 0;
   function salva(subito) {
     clearTimeout(timerSalva);
     var go = function () {
-      corrente.testo = ta.value;
+      corrente.testo = canonico(ta.value);
       corrente.titolo = titolo.value.trim();
       corrente.aggiornato = Date.now();
       var ok = scrivi(KEY, JSON.stringify(fogli)) && scrivi(CUR, corrente.id);
@@ -137,6 +178,11 @@
     while (a < prev.length && a < cur.length && prev.charCodeAt(a) === cur.charCodeAt(a)) a++;
     var ep = prev.length, ec = cur.length;
     while (ep > a && ec > a && prev.charCodeAt(ep - 1) === cur.charCodeAt(ec - 1)) { ep--; ec--; }
+    // «Cancella» all'inizio di un paragrafo rientrato: unisce i paragrafi, come in un editor.
+    if (manoscritto() && ec === a && prev.slice(a, ep) === '\t' && (a === 0 || cur[a - 1] === '\n')) {
+      if (a > 0) { cur = cur.slice(0, a - 1) + cur.slice(a); ta.value = cur; a -= 1; ep += 0; try { ta.setSelectionRange(a, a); } catch (e) {} }
+      ec = a; ep = a + (prev.length - cur.length);
+    }
     var delta = (ec - a) - (ep - a);
     recenti = recenti.filter(function (r) { return r.i < a || r.i >= ep; }).map(function (r) { return r.i >= ep ? { i: r.i + delta, t: r.t } : r; });
     var inseriti = ec - a;
@@ -148,21 +194,28 @@
       }
     }
     prev = cur;
+    if (manoscritto()) applicaRientro(true);
     aggiorna(true);
     salva(false);
   });
-  document.addEventListener('selectionchange', function () { if (document.activeElement === ta) aggiorna(false); });
+  document.addEventListener('selectionchange', function () {
+    if (document.activeElement !== ta) return;
+    // il cursore non si ferma mai prima del rientro
+    var c = ta.selectionStart;
+    if (manoscritto() && c === ta.selectionEnd && ta.value.charCodeAt(c) === 9 && (c === 0 || ta.value.charCodeAt(c - 1) === 10)) { ta.setSelectionRange(c + 1, c + 1); return; }
+    aggiorna(false);
+  });
   ta.addEventListener('focus', function () { aggiorna(false); });
   titolo.addEventListener('input', function () { salva(false); });
   titolo.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); ta.focus(); } });
-  addEventListener('resize', function () { aggiorna(false); });
+  addEventListener('resize', function () { misuraRientro(); aggiorna(false); });
   addEventListener('pagehide', function () { salva(true); });
   document.addEventListener('visibilitychange', function () { if (document.hidden) salva(true); });
 
   function apri(f) {
     if (corrente && corrente !== f) salva(true);
     corrente = f;
-    ta.value = f.testo;
+    ta.value = manoscritto() ? normalizza(f.testo, true).testo : f.testo;
     titolo.value = f.titolo || '';
     prev = ta.value;
     recenti = [];
@@ -172,19 +225,26 @@
   }
 
   /* ——— Comandi ——— */
-  function preferenza(nome, classe, btn, predefinita) {
+  function preferenza(nome, classe, btn, predefinita, dopo) {
     var v = leggi(PREF + nome);
     var on = v == null ? predefinita : v === '1';
-    var set = function (x) { on = x; root.classList.toggle(classe, on); if (btn) btn.setAttribute('aria-pressed', String(on)); scrivi(PREF + nome, on ? '1' : '0'); };
+    var set = function (x) { on = x; root.classList.toggle(classe, on); if (btn) btn.setAttribute('aria-pressed', String(on)); scrivi(PREF + nome, on ? '1' : '0'); if (dopo) dopo(on); };
     set(on);
     if (btn) btn.addEventListener('click', function () { set(!on); ta.focus({ preventScroll: true }); });
   }
   preferenza('concentrazione', 'scrittura-concentrata', document.querySelector('[data-comando="concentrazione"]'), true);
   preferenza('lampada', 'scrittura-lampada', document.querySelector('[data-comando="lampada"]'), !reduce);
+  var avviato = false;
+  preferenza('manoscritto', 'manoscritto', document.querySelector('[data-comando="manoscritto"]'), false, function (on) {
+    misuraRientro();
+    if (!avviato) return;
+    applicaRientro(on);
+    requestAnimationFrame(function () { aggiorna(true); });
+  });
 
   var copia = document.querySelector('[data-comando="copia"]');
   if (copia) copia.addEventListener('click', function () {
-    var testo = (titolo.value.trim() ? titolo.value.trim() + '\n\n' : '') + ta.value;
+    var testo = (titolo.value.trim() ? titolo.value.trim() + '\n\n' : '') + canonico(ta.value);
     var fatto = function () { setStato('Copiato'); setTimeout(function () { setStato(riepilogo() + ' · salvato'); }, 1600); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(testo).then(fatto, function () { ta.focus(); ta.select(); setStato('Seleziona e copia'); });
     else { ta.focus(); ta.select(); setStato('Seleziona e copia'); }
@@ -255,6 +315,7 @@
   if (dialog) dialog.addEventListener('click', function (e) { if (e.target === dialog) dialog.close(); });
 
   apri(corrente);
+  avviato = true;
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { aggiorna(false); });
   if (!memoria) setStato('Attenzione: questo browser non permette di salvare i fogli');
 })();

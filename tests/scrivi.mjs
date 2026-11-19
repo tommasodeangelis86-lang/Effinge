@@ -58,3 +58,43 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
 }
 await b.close(); server.close();
 console.log(problems.length ? 'PROBLEMI:\n' + problems.join('\n') : 'Nessun problema rilevato.');
+// Manoscritto: misure e allineamento
+{
+  const b2 = await chromium.launch();
+  const server2 = createServer(async (req, res) => {
+    let p = decodeURIComponent(req.url.split('?')[0]); if (p.endsWith('/')) p += 'index.html';
+    try { const x = await readFile(join(root, '_site', p)); res.writeHead(200, { 'content-type': types[extname(p)] || 'application/octet-stream' }); res.end(x); } catch { res.writeHead(404); res.end(); }
+  }).listen(0);
+  const u = `http://localhost:${server2.address().port}/scrivi/`;
+  const probs = [];
+  for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
+    const ctx = await b2.newContext({ viewport: { width: w, height: h } });
+    const page = await ctx.newPage();
+    page.on('pageerror', e => probs.push(`${tag}: ${e.message}`));
+    await page.goto(u); await page.waitForTimeout(500);
+    await page.click('#testo-foglio');
+    await page.keyboard.type(testo + '\n' + 'Una frase lunga per riempire la riga e vedere il rientro di ogni paragrafo. '.repeat(3), { delay: 2 });
+    await page.click('[data-comando="manoscritto"]'); await page.waitForTimeout(1300);
+    const m = await page.evaluate(() => {
+      const f = document.querySelector('.scrivi-foglio'), c = f.querySelector('.contenuto'), ta = document.querySelector('#testo-foglio'), cs = getComputedStyle(c), ts = getComputedStyle(ta);
+      const cm = 96 / 2.54, lh = parseFloat(ts.lineHeight);
+      return { larghezza: (f.offsetWidth / cm).toFixed(2), margine: (parseFloat(cs.paddingLeft) / cm * 21 / (f.offsetWidth / cm)).toFixed(2), interlinea: (lh / parseFloat(ts.fontSize)).toFixed(2), rientro: (parseFloat(getComputedStyle(ta).tabSize) / cm * 21 / (f.offsetWidth / cm)).toFixed(2), tab: ta.value.split('\n').filter(Boolean).every(r => r.startsWith('\t')), salvatoSenzaTab: !JSON.parse(localStorage.getItem('effinge-fogli')).some(f => f.testo.includes('\t')), righeT: Math.round(ta.scrollHeight / lh), righeS: Math.round(document.querySelector('.scrivi-specchio').scrollHeight / lh), stato: document.querySelector('[data-stato]').textContent };
+    });
+    console.log(tag, JSON.stringify(m));
+    if (m.righeT !== m.righeS) probs.push(`${tag} manoscritto: testo ${m.righeT} righe, specchio ${m.righeS}`);
+    if (m.margine !== '2.30' || m.interlinea !== '1.50' || (tag === 'desk' && m.rientro !== '0.42') || !m.tab || !m.salvatoSenzaTab) probs.push(`${tag} manoscritto: misure ${JSON.stringify(m)}`);
+    await page.keyboard.press('Enter'); await page.keyboard.type('Nuovo', { delay: 20 });
+    const conTab = await page.evaluate(() => document.querySelector('#testo-foglio').value.endsWith('\n\tNuovo'));
+    for (let i = 0; i < 5; i++) await page.keyboard.press('ArrowLeft');
+    await page.keyboard.press('Backspace');
+    const unito = await page.evaluate(() => { const v = document.querySelector('#testo-foglio').value; return !v.includes('\n\tNuovo') && v.endsWith('Nuovo'); });
+    if (!conTab || !unito) probs.push(`${tag} manoscritto: rientro su nuovo paragrafo ${conTab}, unione con cancella ${unito}`);
+    await page.waitForTimeout(1200);
+    await page.screenshot({ path: join(out, `scrivi-${tag}-manoscritto.png`) });
+    await page.addStyleTag({ content: '.scrivi-testo{color:rgba(255,0,0,.55)!important;-webkit-text-fill-color:rgba(255,0,0,.55)!important}.lampada{display:none}' });
+    await page.screenshot({ path: join(out, `scrivi-${tag}-manoscritto-allineamento.png`) });
+    await ctx.close();
+  }
+  await b2.close(); server2.close();
+  console.log(probs.length ? 'PROBLEMI manoscritto:\n' + probs.join('\n') : 'Manoscritto: nessun problema.');
+}
