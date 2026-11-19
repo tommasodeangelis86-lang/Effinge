@@ -2,7 +2,7 @@
 titolo: "Un errore statistico"
 date: 2026-11-19
 categoria: "Quaderni"
-estratto: "In statistica, un errore non è un fallimento, ma una sfida. Nasce quando una variabile reale si colloca fuori dall’intervallo atteso, altera la distribuzione, rompe la simmetria. Non nega il modello: lo mette in crisi.…"
+estratto: "In statistica, un errore non è un fallimento, ma una sfida. Ho sempre diffidato delle eccezioni. Quando qualcosa non corrispondeva a ciò che mi aspettavo, preferivo pensare di aver osservato male."
 in_evidenza: true
 bozza: false
 ---
