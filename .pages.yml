@@ -4,7 +4,8 @@
 media:
   input: media
   output: /media
-  categories: [image]
+  # solo foto: niente SVG, che può contenere codice eseguibile
+  extensions: [jpg, jpeg, png, webp, gif, avif]
 
 content:
   - name: testi

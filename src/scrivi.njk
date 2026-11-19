@@ -149,10 +149,6 @@ eleventyExcludeFromCollections: true
 <div class="scrivi-guasto" id="scrivi-guasto" role="alert" hidden>
   <p><strong>La pagina non si è caricata del tutto.</strong> Ricaricala tenendo premuto Maiusc (sul computer: Ctrl + Maiusc + R, su Mac: Cmd + Maiusc + R). Se il problema resta, scrivimi.</p>
 </div>
-<script>
-  // controllo di sicurezza: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
-  setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);
-</script>
 
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>

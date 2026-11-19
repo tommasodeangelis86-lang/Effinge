@@ -3,7 +3,43 @@ const HEX = /^#[0-9a-fA-F]{6}$/;
 const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'];
 const isDraft = (data) => data && data.bozza === true;
 
+import { createHash } from 'node:crypto';
+
+// Regola di sicurezza (Content Security Policy) per ogni pagina: solo script del sito (gli inline
+// sono ammessi solo se identici a quelli generati qui, tramite il loro hash), connessioni solo al
+// sito e all'API di GitHub (per «Pubblica sul sito»), niente plugin, form o iframe esterni.
+function regolaDiSicurezza(html) {
+  const hash = new Set();
+  // solo gli script dell'intestazione, scritti nei modelli: mai quelli dentro i contenuti (<body>)
+  const testa = (html.match(/<head[^>]*>([\s\S]*?)<\/head>/i) || ['', ''])[1];
+  testa.replace(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/gi, (m, corpo) => {
+    hash.add("'sha256-" + createHash('sha256').update(corpo, 'utf8').digest('base64') + "'");
+    return m;
+  });
+  return [
+    "default-src 'self'",
+    "script-src 'self' " + [...hash].join(' '),
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self'",
+    "connect-src 'self' https://api.github.com",
+    "object-src 'none'",
+    "frame-src 'none'",
+    "base-uri 'self'",
+    "form-action 'none'",
+    'upgrade-insecure-requests',
+  ].join('; ');
+}
+
 export default function (config) {
+  config.addTransform('sicurezza', function (content) {
+    const out = this.page && this.page.outputPath;
+    if (!out || !String(out).endsWith('.html') || !/<meta charset="utf-8">/i.test(content)) return content;
+    const csp = regolaDiSicurezza(content).replace(/"/g, '&quot;');
+    return content.replace(/<meta charset="utf-8">/i, (m) => m +
+      '\n<meta http-equiv="Content-Security-Policy" content="' + csp + '">' +
+      '\n<meta name="referrer" content="strict-origin-when-cross-origin">');
+  });
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
 

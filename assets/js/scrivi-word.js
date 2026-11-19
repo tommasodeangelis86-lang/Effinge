@@ -127,7 +127,7 @@
     var testoCop = copertina.map(function (e) { return e.textContent; }).join('').trim();
     if (testoCop) {
       copertina.forEach(function (e) { if (e.tagName === 'P' && !e.classList.contains('destra')) e.className = 'centro'; });
-      out.push({ tipo: 'copertina', titolo: '', html: copertina.map(function (e) { return e.outerHTML; }).join('') });
+      out.push({ tipo: 'copertina', titolo: '', html: pulisci(copertina.map(function (e) { return e.outerHTML; }).join('')) });
     }
     sezioni.forEach(function (s) {
       var wrap = doc.createElement('div');

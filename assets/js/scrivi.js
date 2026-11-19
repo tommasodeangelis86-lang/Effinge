@@ -674,9 +674,9 @@
     var token = $('#chiave-autore').value.trim(), out = $('[data-esito-autore]');
     if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(token)) { esito(out, 'Questa non sembra una chiave GitHub: deve iniziare con github_pat_.', 'errore'); return; }
     esito(out, 'Verifico la chiave…');
-    var login;
+    var login, uid;
     gh('/user', { token: token }).then(function (u) {
-      login = u.login;
+      login = u.login; uid = u.id;
       return gh('/user/repos?per_page=100&sort=updated', { token: token });
     }).then(function (repos) {
       var r = (repos || []).filter(function (x) { return x.permissions && x.permissions.push; });
@@ -684,7 +684,7 @@
       if (!scelto) throw new Error('La chiave non dà accesso in scrittura al repository Effinge. Controlla di averla limitata a Effinge con il permesso «Contents: Read and write».');
       return gh('/repos/' + scelto.full_name + '/contents/.pages.yml?ref=' + encodeURIComponent(scelto.default_branch || 'main'), { token: token }).then(function () { return scelto; });
     }).then(function (rep) {
-      autore = { token: token, login: login, repo: rep.full_name, ramo: rep.default_branch || 'main' };
+      autore = { token: token, login: login, id: uid, repo: rep.full_name, ramo: rep.default_branch || 'main' };
       scriviPref(KEY_AUTORE, JSON.stringify(autore));
       $('#chiave-autore').value = '';
       mostraAutore();
@@ -798,7 +798,8 @@
     }
     function commit(tentativo) {
       var ref, base;
-      return gh(repo + '/git/ref/heads/' + encodeURIComponent(autore.ramo)).then(function (r) {
+      var conId = autore.id ? Promise.resolve() : gh('/user').then(function (u) { autore.id = u.id; scriviPref(KEY_AUTORE, JSON.stringify(autore)); }, function () {});
+      return conId.then(function () { return gh(repo + '/git/ref/heads/' + encodeURIComponent(autore.ramo)); }).then(function (r) {
         ref = r.object.sha;
         return gh(repo + '/git/commits/' + ref);
       }).then(function (c) {
@@ -808,7 +809,9 @@
         return gh(repo + '/git/trees', { method: 'POST', body: { base_tree: base, tree: voci } });
       }).then(function (t) {
         var azione = !vecchio ? 'Pubblica' : vecchio !== path ? 'Rinomina e aggiorna' : 'Aggiorna';
-        return gh(repo + '/git/commits', { method: 'POST', body: { message: azione + ' «' + tit + '» da Scrivi', tree: t.sha, parents: [ref] } });
+        // firma con l'indirizzo anonimo di GitHub: l'email personale non finisce nella cronologia pubblica
+        var firma = { name: autore.login, email: (autore.id ? autore.id + '+' : '') + autore.login + '@users.noreply.github.com', date: new Date().toISOString() };
+        return gh(repo + '/git/commits', { method: 'POST', body: { message: azione + ' «' + tit + '» da Scrivi', tree: t.sha, parents: [ref], author: firma, committer: firma } });
       }).then(function (c) {
         return gh(repo + '/git/refs/heads/' + encodeURIComponent(autore.ramo), { method: 'PATCH', body: { sha: c.sha, force: false } });
       }).catch(function (e) {

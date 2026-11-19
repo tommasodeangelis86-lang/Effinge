@@ -170,7 +170,7 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
       b.tree.forEach(v => { if (v.sha === null) delete nuovo[v.path]; else nuovo[v.path] = v.content; });
       const id = 't' + Object.keys(alberi).length; alberi['albero-' + id] = nuovo; return j(201, { sha: 'albero-' + id });
     }
-    if (u.pathname.endsWith('/git/commits') && m === 'POST') { const b = corpo(); const id = 'c' + Object.keys(alberi).length; alberi[id] = alberi[b.tree]; commitFatti.push({ id, parents: b.parents, message: b.message }); return j(201, { sha: id }); }
+    if (u.pathname.endsWith('/git/commits') && m === 'POST') { const b = corpo(); const id = 'c' + Object.keys(alberi).length; alberi[id] = alberi[b.tree]; commitFatti.push({ id, parents: b.parents, message: b.message, author: b.author }); return j(201, { sha: id }); }
     if (u.pathname.endsWith('/git/refs/heads/main') && m === 'PATCH') {
       const b = corpo(), c = commitFatti.find(x => x.id === b.sha);
       if (c.parents[0] !== ramo) return j(422, { message: 'Update is not a fast forward' });
@@ -201,6 +201,7 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.click('[data-conferma-pubblica]');
   await page.waitForSelector('[data-esito-pubblica].ok', { timeout: 5000 });
   ok(scritti.length === 1, `pubblicazioni su GitHub: ${scritti.length}`);
+  ok(commitFatti.length && commitFatti.every(c => c.author && /@users\.noreply\.github\.com$/.test(c.author.email)), 'i commit non usano l\'indirizzo anonimo di GitHub: ' + JSON.stringify(commitFatti.map(c => c.author)));
   const percorsi = () => Object.keys(scritti[scritti.length - 1].file).filter(p => p.startsWith('src/testi/'));
   if (scritti[0]) {
     const [percorso] = percorsi();

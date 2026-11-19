@@ -363,6 +363,8 @@
   /* ——— Avvio ——— */
   function init() {
     sfondi();
+    // Scrivi: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
+    if (document.querySelector('[data-scrivi-app]')) setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);
     var s;
     if ((s = document.querySelector('.apertura'))) scene.push(scenaApertura(s));
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
