@@ -1,0 +1,45 @@
+---
+layout: base.njk
+permalink: /scrivi/
+titolo: Scrivi
+noindex: true
+script: /assets/js/scrivi.js
+eleventyExcludeFromCollections: true
+---
+{#- Spazio di scrittura privato: non è nel menu né nella sitemap. I fogli restano nel browser di chi scrive. -#}
+<main id="contenuto" class="scrivi-pagina">
+  <div class="foglio scrivi-foglio">
+    <div class="contenuto">
+      <div class="scrivi-testa">
+        <label class="sr" for="titolo-foglio">Titolo del foglio</label>
+        <input id="titolo-foglio" class="scrivi-titolo" type="text" placeholder="Senza titolo" autocomplete="off" spellcheck="true">
+        <span class="scrivi-stato" data-stato aria-live="polite"></span>
+      </div>
+      <div class="scrivi-area" data-scrivi>
+        <div class="scrivi-specchio" aria-hidden="true"></div>
+        <label class="sr" for="testo-foglio">Testo</label>
+        <textarea id="testo-foglio" class="scrivi-testo" placeholder="Comincia a scrivere…" spellcheck="true" autocapitalize="sentences"></textarea>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="comandi scrivi-comandi" role="group" aria-label="Comandi di scrittura">
+  <button type="button" data-comando="fogli">Fogli</button>
+  <button type="button" data-comando="concentrazione" aria-pressed="true">Concentrazione</button>
+  <button type="button" data-comando="lampada" aria-pressed="true">Lampada</button>
+  <button type="button" data-comando="copia">Copia</button>
+</div>
+
+<dialog class="fogli" id="fogli" aria-labelledby="h-fogli">
+  <div class="fogli-testa">
+    <h2 id="h-fogli">I miei fogli</h2>
+    <button type="button" class="chiudi" data-chiudi-fogli aria-label="Chiudi">Chiudi</button>
+  </div>
+  <ul class="fogli-elenco" data-elenco-fogli></ul>
+  <div class="fogli-piede">
+    <button type="button" class="primario" data-nuovo-foglio>Nuovo foglio</button>
+    <button type="button" data-scarica>Scarica il foglio aperto (.txt)</button>
+  </div>
+  <p class="fogli-nota">I fogli sono salvati solo in questo browser, su questo dispositivo. Per conservarli altrove usa «Copia» o «Scarica».</p>
+</dialog>

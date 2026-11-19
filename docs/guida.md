@@ -124,6 +124,25 @@ Un testo può avere un’**Immagine** facoltativa: caricala dal campo o da **Med
 
 ---
 
+### Scrivere sul foglio (spazio privato)
+
+All’indirizzo **/scrivi/** del sito (per esempio `https://effinge.it/scrivi/`) c’è un foglio
+su cui scrivere davvero: ogni lettera si accende sotto la lampada, la lampada segue il cursore e
+il paragrafo su cui stai scrivendo resta acceso mentre gli altri si attenuano.
+
+- **Fogli**: elenco dei tuoi scritti; da qui ne crei uno nuovo, ne apri uno o lo elimini
+  (si tocca «Elimina» e poi «Conferma»). Puoi anche scaricare il foglio aperto in un file .txt.
+- **Concentrazione** e **Lampada** accendono o spengono i due effetti.
+- **Copia** copia titolo e testo, per incollarli nel pannello quando vuoi pubblicarli.
+
+Il salvataggio è automatico, ma **solo nel browser e sul dispositivo che stai usando**: quello che
+scrivi su iPhone non compare sul computer. Se cancelli i dati di Safari, i fogli si perdono:
+per i testi importanti usa «Copia» o «Scarica».
+
+La pagina non è nel menu e Google non la indicizza, ma chi conosce l’indirizzo può aprirla.
+Non vede però i tuoi fogli: ognuno vede solo quelli scritti nel proprio browser. Su iPhone
+puoi aggiungerla alla schermata Home (Condividi → Aggiungi alla schermata Home).
+
 ## Cosa richiede ancora me (o un tecnico)
 
 - cambiare l’impaginazione, i caratteri o il comportamento della lampada oltre le impostazioni;

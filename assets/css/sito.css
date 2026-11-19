@@ -206,3 +206,57 @@ html:not(.js) .righe li{opacity:1}
 .corpo h2,.corpo h3{font:400 1.6em/1.2 var(--display);margin:1.6em 0 .6em;text-indent:0}
 .corpo blockquote{margin:1.4em 0;padding:0 0 0 1.4em;font-style:italic;border-left:1px solid color-mix(in srgb,var(--inchiostro) 25%,transparent)}
 .corpo blockquote p{text-indent:0}
+
+/* ——— Scrivi: un foglio su cui scrivere davvero ——— */
+.scrivi-pagina{padding:calc(132px + env(safe-area-inset-top,0px)) 16px 40svh}
+.scrivi-foglio{max-width:48rem;margin:0 auto;min-height:calc(100svh - 190px)}
+.scrivi-foglio .contenuto{padding:clamp(40px,7vw,88px) clamp(24px,8vw,96px) clamp(80px,12vw,140px)}
+/* lampada più ampia: si scrive e si rilegge, non si legge e basta */
+.scrivi-foglio .lampada.buio{width:420cqw;height:420cqw}
+.scrivi-foglio .lampada.calore{width:150cqw;height:150cqw}
+html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transition:opacity .6s ease}
+.scrivi-testa{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-bottom:clamp(28px,5vw,48px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.scrivi-titolo{flex:1;min-width:0;border:0;background:transparent;padding:0;margin:0;font:300 clamp(2rem,5vw,3rem)/1.1 var(--display);color:var(--inchiostro);outline:none;caret-color:var(--inchiostro)}
+.scrivi-titolo::placeholder{color:color-mix(in srgb,var(--inchiostro) 38%,transparent)}
+.scrivi-stato{flex:none;font:450 .6875rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--inchiostro-2);font-variant-numeric:tabular-nums}
+/* testo vero e specchio hanno esattamente la stessa scatola, così vanno a capo negli stessi punti */
+.scrivi-area{display:grid;position:relative}
+.scrivi-specchio,.scrivi-testo{grid-area:1/1;margin:0;padding:0;border:0;font:400 clamp(1.1875rem,1.08rem + .4vw,1.3125rem)/1.75 var(--lettura);letter-spacing:0;word-spacing:0;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal;tab-size:4;hyphens:manual;text-indent:0;font-kerning:normal;font-variant-ligatures:common-ligatures}
+.scrivi-specchio{color:var(--inchiostro);pointer-events:none;min-height:50svh}
+.scrivi-specchio .p{transition:opacity .7s var(--ease)}
+.scrittura-concentrata .scrivi-specchio .p:not(.fuoco){opacity:.3}
+.scrivi-specchio .segno{display:inline;width:0}
+.scrivi-specchio .nuovo{animation:scrivi-luce 900ms cubic-bezier(.22,.61,.36,1) both}
+@keyframes scrivi-luce{
+  0%{opacity:0;color:color-mix(in srgb,var(--luce) 70%,#6b4a1c);text-shadow:0 0 .06em color-mix(in srgb,var(--luce) 90%,transparent),0 0 .3em color-mix(in srgb,var(--luce) 60%,transparent)}
+  12%{opacity:1;color:color-mix(in srgb,var(--luce) 70%,#6b4a1c);text-shadow:0 0 .06em color-mix(in srgb,var(--luce) 90%,transparent),0 0 .3em color-mix(in srgb,var(--luce) 60%,transparent)}
+  55%{color:var(--inchiostro);text-shadow:0 0 .04em color-mix(in srgb,var(--luce) 30%,transparent)}
+  100%{opacity:1;color:var(--inchiostro);text-shadow:none}}
+.scrivi-testo{display:block;width:100%;height:100%;resize:none;overflow:hidden;background:transparent;color:transparent;-webkit-text-fill-color:transparent;caret-color:var(--inchiostro);outline:none;position:relative;z-index:4}
+.scrivi-testo::placeholder{color:color-mix(in srgb,var(--inchiostro) 40%,transparent);-webkit-text-fill-color:color-mix(in srgb,var(--inchiostro) 40%,transparent);font-style:italic}
+.scrivi-testo::selection{background:color-mix(in srgb,var(--luce) 45%,transparent);color:transparent;-webkit-text-fill-color:transparent}
+.scrivi-titolo:focus-visible,.scrivi-testo:focus-visible{outline:none}
+/* i comandi stanno in alto: in basso c'è la tastiera del telefono */
+.scrivi-comandi{bottom:auto;top:calc(72px + env(safe-area-inset-top,0px));right:50%;transform:translateX(50%)}
+.scrivi-comandi button{white-space:nowrap}
+/* I miei fogli */
+.fogli{width:min(100% - 32px,34rem);max-height:min(80svh,40rem);padding:0;border:1px solid var(--filo);border-radius:14px;background:var(--stanza-2);color:var(--testo);box-shadow:0 30px 80px -20px rgba(0,0,0,.9)}
+.fogli::backdrop{background:rgba(5,5,4,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.fogli[open]{display:flex;flex-direction:column}
+.fogli-testa{display:flex;justify-content:space-between;align-items:center;padding:20px 22px 12px}
+.fogli-testa h2{margin:0;font:300 1.75rem/1 var(--display)}
+.fogli .chiudi,.fogli-piede button,.fogli .elimina{border:1px solid var(--filo);background:transparent;color:var(--testo-2);border-radius:999px;padding:9px 14px;font:500 .75rem/1 var(--ui);cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease)}
+.fogli button:active{transform:scale(.97)}
+.fogli .chiudi:hover,.fogli-piede button:hover,.fogli .elimina:hover{color:var(--testo);border-color:var(--testo-3)}
+.fogli-elenco{list-style:none;margin:0;padding:0 10px;overflow:auto;flex:1}
+.fogli-elenco li{display:flex;align-items:center;gap:8px;border-top:1px solid var(--filo)}
+.fogli-elenco .apri{flex:1;min-width:0;text-align:left;background:none;border:0;padding:14px 12px;border-radius:8px;cursor:pointer;color:var(--testo)}
+.fogli-elenco .apri:hover{background:color-mix(in srgb,var(--testo) 5%,transparent)}
+.fogli-elenco .t{display:block;font:400 1.25rem/1.2 var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fogli-elenco .m{display:block;margin-top:4px;font:450 .6875rem/1.4 var(--ui);letter-spacing:.04em;color:var(--testo-3)}
+.fogli-elenco .attuale .t::after{content:" · aperto";font:450 .6875rem var(--ui);color:var(--luce)}
+.fogli .elimina.armato{background:#7a2b1f;border-color:#7a2b1f;color:#fff}
+.fogli-piede{display:flex;flex-wrap:wrap;gap:8px;padding:14px 22px 6px;border-top:1px solid var(--filo)}
+.fogli-piede .primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
+.fogli-nota{margin:0;padding:6px 22px 20px;font:400 .75rem/1.5 var(--ui);color:var(--testo-3)}
+@media (max-width:760px){.scrivi-pagina{padding-top:calc(124px + env(safe-area-inset-top,0px));padding-left:10px;padding-right:10px}.scrivi-comandi button{padding:9px 10px}}

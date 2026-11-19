@@ -278,6 +278,9 @@
     if (start && buttons.some(function (b) { return b.getAttribute('data-filtro') === start; })) apply(start);
   }
 
+  // La lampada è usata anche dalla pagina «Scrivi» (assets/js/scrivi.js).
+  window.EffingeLampada = Lampada;
+
   /* ——— Avvio ——— */
   function init() {
     var s;

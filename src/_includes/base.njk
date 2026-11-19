@@ -48,5 +48,8 @@
   <span><a href="/archivio/">Archivio</a></span>
 </footer>
 <script src="/assets/js/sito.js" defer></script>
+{%- if script %}
+<script src="{{ script }}" defer></script>
+{%- endif %}
 </body>
 </html>
