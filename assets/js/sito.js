@@ -264,7 +264,26 @@
     if (focusBtn) focusBtn.addEventListener('click', function () { set('concentrazione', 'concentrazione', focusBtn, !root.classList.contains('concentrazione')); });
     if (lightBtn) lightBtn.addEventListener('click', function () { set('lampada', 'lampada-accesa', lightBtn, !root.classList.contains('lampada-accesa')); });
     var current = null;
+    // La lampada: con il mouse lo segue; altrimenti (telefono, tastiera) illumina il paragrafo che si legge.
+    var L = new Lampada(foglio);
+    L.lag = reduce ? 1 : 260; L.intensity = 1;
+    var ultimoMouse = null, modoMouse = false;
+    document.addEventListener('pointermove', function (e) {
+      if (e.pointerType !== 'mouse') return;
+      if (ultimoMouse && ultimoMouse.x === e.clientX && ultimoMouse.y === e.clientY) return;   // movimento fantasma
+      ultimoMouse = { x: e.clientX, y: e.clientY };
+      modoMouse = true;
+      var r = foglio.getBoundingClientRect();
+      L.to(e.clientX - r.left, e.clientY - r.top);
+    }, { passive: true });
+    var ultimoScroll = scrollY;
     return function () {
+      // scorrendo con la rotella il mouse resta fermo ma la pagina si sposta: la lampada resta sotto il puntatore
+      if (modoMouse && ultimoMouse) {
+        var rr = foglio.getBoundingClientRect();
+        L.to(ultimoMouse.x - rr.left, ultimoMouse.y - rr.top);
+      }
+      ultimoScroll = scrollY;
       var mid = innerHeight * .46, best = null, dist = Infinity;
       blocchi.forEach(function (b) {
         var r = b.getBoundingClientRect();
@@ -276,6 +295,7 @@
         if (best) best.classList.add('fuoco');
         current = best;
       }
+      if (!modoMouse && best) { var p = L.at(best, .45, .5); L.to(p.x, p.y); }
     };
   }
 
