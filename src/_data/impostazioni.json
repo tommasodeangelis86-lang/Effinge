@@ -31,7 +31,8 @@
     "carta": "#ECE7DC",
     "inchiostro": "#1A1916",
     "testo": "#E9E5DB",
-    "sfondo": "grafite"
+    "sfondo": "grafite",
+    "buio": 55
   },
   "progetto": {
     "mostra": true,

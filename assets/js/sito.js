@@ -319,13 +319,22 @@
       var b = e.target.closest('[data-scegli]'); if (!b) return;
       root.setAttribute('data-sfondo', b.dataset.scegli);
       store('effinge-sfondo', b.dataset.scegli);
-      segna(); chiudi(); tondino.focus();
+      segna();
     });
     scelta.addEventListener('keydown', function (e) {
       var i = bottoni.indexOf(document.activeElement);
+      if (i < 0) return;   // le frecce sul cursore muovono il cursore
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); bottoni[(i + 1) % bottoni.length].focus(); }
       if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); bottoni[(i - 1 + bottoni.length) % bottoni.length].focus(); }
     });
+    // cursore del buio: 0 = sfumato originale, 100 = nero assoluto
+    var cursore = scelta.querySelector('[data-buio]');
+    if (cursore) {
+      var attuale = parseFloat(getComputedStyle(root).getPropertyValue('--buio'));
+      cursore.value = Math.round((isFinite(attuale) ? attuale : .55) * 100);
+      cursore.addEventListener('input', function () { root.style.setProperty('--buio', String(cursore.value / 100)); });
+      cursore.addEventListener('change', function () { store('effinge-buio', String(cursore.value)); });
+    }
     document.addEventListener('click', function (e) { if (!scelta.hidden && !e.target.closest('.sfondi')) chiudi(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !scelta.hidden) { chiudi(); tondino.focus(); } });
     segna();

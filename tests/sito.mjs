@@ -45,6 +45,20 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   page.on('pageerror', e => problems.push(`${tag}: ${e.message}`));
   await page.goto(home);
   const sf0 = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage }));
+  // cursore del buio: parte scuro, arriva al nero assoluto
+  const velo0 = await page.evaluate(() => getComputedStyle(document.body, '::after').opacity);
+  if (velo0 !== '0.55') problems.push(`${tag}: buio di partenza ${velo0} invece di 0.55`);
+  if (tag === 'desk') {
+    await page.click('[data-apri-sfondi]');
+    await page.screenshot({ path: join(out, 'sfondi-pannello.png') });
+    await page.$eval('[data-buio]', el => { el.value = 100; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); });
+    const velo1 = await page.evaluate(() => getComputedStyle(document.body, '::after').opacity);
+    if (velo1 !== '1') problems.push(`desk: cursore al massimo, velo ${velo1} invece di 1`);
+    await page.reload(); await page.waitForTimeout(300);
+    const velo2 = await page.evaluate(() => getComputedStyle(document.body, '::after').opacity);
+    if (velo2 !== '1') problems.push(`desk: buio non ricordato dopo il ricaricamento (${velo2})`);
+    await page.evaluate(() => localStorage.removeItem('effinge-buio')); await page.reload(); await page.waitForTimeout(2600);
+  }
   if (sf0.attr !== 'grafite' || !/gradient/.test(sf0.bg)) problems.push(`${tag}: sfondo predefinito non applicato ` + JSON.stringify(sf0));
   await page.waitForTimeout(750); await page.screenshot({ path: join(out, `${tag}-01-scrittura.png`) });
   await page.waitForTimeout(2200); await page.screenshot({ path: join(out, `${tag}-02-scritta.png`) });

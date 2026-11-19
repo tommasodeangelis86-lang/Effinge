@@ -236,7 +236,7 @@ html:not(.js) .righe li{opacity:1}
 
 /* ——— Sfondo del sito: grafite (predefinito) e altri quattro sfumati di WebGradients ———
    Il predefinito si sceglie dal pannello; chi visita può cambiarlo con il tondino in alto. */
-:root{--sfondo:var(--stanza);--sfondo-blend:normal}
+:root{--sfondo:var(--stanza);--sfondo-blend:normal;--buio:.55}
 [data-sfondo="grafite"]{--sfondo:linear-gradient(to bottom,#323232 0%,#3f3f3f 40%,#1c1c1c 150%),linear-gradient(to top,rgba(255,255,255,.4) 0%,rgba(0,0,0,.25) 200%);--sfondo-blend:multiply}
 [data-sfondo="vicious-stance"]{--sfondo:linear-gradient(60deg,#29323c 0%,#485563 100%)}
 [data-sfondo="eternal-constance"]{--sfondo:linear-gradient(to top,#09203f 0%,#537895 100%)}
@@ -265,3 +265,16 @@ html[data-sfondo] .pill:not([aria-pressed="true"]):not(.primario),html[data-sfon
 .sfondi-scelta [data-scegli="solid-stone"]{background:linear-gradient(to right,#243949 0%,#517fa4 100%)}
 @media (prefers-reduced-motion:reduce){.sfondi-scelta{animation:none}}
 @media (max-width:760px){.barra nav{align-items:center}}
+/* Il cursore del buio: un velo nero uniforme sopra lo sfumato (0 = sfumato originale, 1 = nero assoluto) */
+html[data-sfondo] body::after{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:#000;opacity:var(--buio);pointer-events:none}
+.tondino{position:relative;overflow:hidden}
+.tondino::after{content:"";position:absolute;top:0;right:0;bottom:0;left:0;border-radius:50%;background:#000;opacity:calc(var(--buio) * .6)}
+.sfondi-scelta{flex-direction:column;align-items:stretch;gap:12px;padding:12px 14px;border-radius:18px}
+.sfondi-tondi{display:flex;gap:10px}
+.buio{display:flex;align-items:center;gap:10px;font:500 .6875rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-2);white-space:nowrap}
+.buio input{flex:1;min-width:110px;height:22px;margin:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+.buio input::-webkit-slider-runnable-track{height:6px;border-radius:6px;background:linear-gradient(to right,#4a4a4a,#000);border:1px solid rgba(255,255,255,.18)}
+.buio input::-moz-range-track{height:6px;border-radius:6px;background:linear-gradient(to right,#4a4a4a,#000);border:1px solid rgba(255,255,255,.18)}
+.buio input::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;background:var(--carta);border:0;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.buio input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--carta);border:0;box-shadow:0 2px 6px rgba(0,0,0,.6)}
+.buio input:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:6px}

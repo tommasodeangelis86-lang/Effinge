@@ -93,7 +93,7 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.screenshot({ path: join(out, 'scrivi-sfondi-scelta.png') });
   await page.click('#sfondi-scelta [data-scegli="midnight-bloom"]');
   const sf = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage, chiuso: document.getElementById('sfondi-scelta').hidden }));
-  ok(sf.attr === 'midnight-bloom' && /gradient/.test(sf.bg) && sf.chiuso, 'sfondo non applicato: ' + JSON.stringify(sf));
+  ok(sf.attr === 'midnight-bloom' && /gradient/.test(sf.bg), 'sfondo non applicato: ' + JSON.stringify(sf));
   await page.waitForTimeout(400);
   await page.screenshot({ path: join(out, 'scrivi-sfondo-midnight.png') });
   await page.reload(); await page.evaluate(() => window.EffingeScrivi.pronto);
