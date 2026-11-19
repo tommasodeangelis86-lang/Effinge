@@ -6,7 +6,7 @@ estratto: "In statistica, un errore non è un fallimento, ma una sfida. Nasce qu
 in_evidenza: true
 bozza: false
 ---
-> In statistica, un errore non è un fallimento, ma una sfida.
+> In statistica, non è un fallimento, ma una sfida.
 
 Nasce quando una variabile reale si colloca fuori dall’intervallo atteso, altera la distribuzione, rompe la simmetria. Non nega il modello: lo mette in crisi. Costringe a chiedersi se le assunzioni iniziali fossero corrette.
 
@@ -18,4 +18,6 @@ Ciò che non si colloca al centro della curva, non è il valore medio, né il ri
 
 Statisticamente trascurabile. Esistenzialmente assoluto.
 
-> Il vero amore non è il risultato più probabile. Non è nemmeno quello corretto. *È l’errore che costringe la normalità a rivedere se stessa.*
+> Non è il risultato più probabile. Non è nemmeno quello corretto.
+
+> *È l’errore che costringe la normalità a rivedere se stessa.*
