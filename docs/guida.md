@@ -10,6 +10,13 @@ ripubblica il sito da solo in circa un minuto.
 
 ## Parte 1 — Messa online (una volta sola)
 
+> **Aggiornamento.** Il sito ora è pubblicato gratis da **GitHub Pages**, non più da Netlify (i crediti
+> gratuiti di Netlify non bastavano). Ogni salvataggio dal pannello e ogni «Pubblica sul sito» compare in
+> GitHub → scheda **Actions** → «Pubblica il sito» e va online in circa un minuto. Su Aruba: quattro record
+> **A** per `@` (185.199.108.153, .109, .110, .111) e il **CNAME** `www` → `tommasodeangelis86-lang.github.io`.
+> Su GitHub: Settings → Pages → Source «GitHub Actions», Custom domain `www.effinge.it`, «Enforce HTTPS».
+> I passaggi su Netlify qui sotto restano solo come storia.
+
 Servono tre account gratuiti: **GitHub** (dove vive il sito, ce l’hai già), **Netlify**
 (che lo pubblica) e **Pages CMS** (il pannello, si entra con GitHub).
 
