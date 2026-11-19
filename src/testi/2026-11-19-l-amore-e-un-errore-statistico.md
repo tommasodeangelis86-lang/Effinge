@@ -12,14 +12,12 @@ Ho sempre diffidato delle eccezioni. Quando qualcosa non corrispondeva a ciò ch
 
 Con gli anni avevo imparato che anche le persone si ripetono. Cambiano i nomi, le abitudini, qualche volta le ragioni. La maggior parte dei legami nasce e finisce entro condizioni riconoscibili: attrazione, compatibilità sociale, prossimità geografica, convenienza emotiva. Si formano, si consumano, si dissolvono. Cambiano le storie, si ripetono le dinamiche. Mi ero convinto che conoscere una cosa significasse, in fondo, averla già incontrata.
 
-Poi accadde qualcosa che non seppi riconoscere.
+Poi accadde qualcosa. Nulla di eccezionale.
 
-Quando non c'era lei, veniva meno tutto il pattern.
-
-Non era accaduto nulla di eccezionale.
+*Non il risultato più probabile. Nemmeno quello corretto.*
 
 Un evento statisticamente trascurabile. Esistenzialmente assoluto.
 
-> Non il risultato più probabile. Nemmeno quello corretto. *Un errore che costringe la normalità a rivedere se stessa.*
+Quando non c'era lei, veniva meno tutto.
 
 > E credo che fosse amore.
