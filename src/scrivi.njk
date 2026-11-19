@@ -35,6 +35,7 @@ eleventyExcludeFromCollections: true
 </svg>
 {%- endmacro -%}
 
+<script>try{var f=localStorage.getItem('effinge-scrivi-sfondo');if(f)document.documentElement.setAttribute('data-sfondo',f)}catch(e){}</script>
 <main id="contenuto" class="scrivi-pagina" data-scrivi-app>
   <div class="scrivi-barra" role="toolbar" aria-label="Opera">
     <div class="barra-sx">
@@ -51,6 +52,16 @@ eleventyExcludeFromCollections: true
       <button type="button" class="pill pubblica" data-comando="pubblica" hidden>Pubblica sul sito</button>
       <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word">{{ icona('imp') }}<span>Importa da Word</span></button>
       <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word">{{ icona('esp') }}<span>Esporta in Word</span></button>
+      <div class="sfondi">
+        <button type="button" class="tondino" data-apri-sfondi aria-haspopup="true" aria-expanded="false" aria-controls="sfondi-scelta" aria-label="Sfondo dietro il foglio" title="Sfondo"></button>
+        <div class="sfondi-scelta" id="sfondi-scelta" role="radiogroup" aria-label="Sfondo dietro il foglio" hidden>
+          <button type="button" role="radio" data-sfondo="premium-dark" aria-label="Premium Dark" title="Premium Dark"></button>
+          <button type="button" role="radio" data-sfondo="vicious-stance" aria-label="Vicious Stance" title="Vicious Stance"></button>
+          <button type="button" role="radio" data-sfondo="eternal-constance" aria-label="Eternal Constance" title="Eternal Constance"></button>
+          <button type="button" role="radio" data-sfondo="midnight-bloom" aria-label="Midnight Bloom" title="Midnight Bloom"></button>
+          <button type="button" role="radio" data-sfondo="solid-stone" aria-label="Solid Stone" title="Solid Stone"></button>
+        </div>
+      </div>
       <input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden data-file-word>
     </div>
   </div>

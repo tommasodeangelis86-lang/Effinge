@@ -209,3 +209,30 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 .esito a{text-decoration:underline;text-underline-offset:3px}
 .finestra-corpo code{font-size:.85em;padding:1px 5px;border-radius:5px;background:var(--stanza)}
 @media (max-width:520px){.campi-due{grid-template-columns:1fr}}
+
+/* ——— Sfondo dietro il foglio: cinque sfumati (WebGradients #076, #100, #091, #103, #132) ——— */
+:root{--sfondo:var(--stanza)}
+[data-sfondo="premium-dark"]{--sfondo:linear-gradient(to right,#434343 0%,#000 100%)}
+[data-sfondo="vicious-stance"]{--sfondo:linear-gradient(60deg,#29323c 0%,#485563 100%)}
+[data-sfondo="eternal-constance"]{--sfondo:linear-gradient(to top,#09203f 0%,#537895 100%)}
+[data-sfondo="midnight-bloom"]{--sfondo:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
+[data-sfondo="solid-stone"]{--sfondo:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+html[data-sfondo] body{background:transparent}
+html[data-sfondo] body::before{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:var(--sfondo)}
+html[data-sfondo] .barra.piena,html[data-sfondo] .scrivi-barra{background:rgba(0,0,0,.16);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border-color:rgba(255,255,255,.08)}
+html[data-sfondo] .pill:not([aria-pressed="true"]):not(.primario),html[data-sfondo] .stili button,html[data-sfondo] .icone button,html[data-sfondo] .aggiungi button{border-color:rgba(255,255,255,.16)}
+.sfondi{position:relative;display:flex}
+.tondino{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.28);background:var(--sfondo);cursor:pointer;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25);transition:transform .16s var(--ease),border-color .2s ease}
+.tondino:hover{border-color:rgba(255,255,255,.6)}
+.tondino:active{transform:scale(.94)}
+.sfondi-scelta{position:absolute;top:calc(100% + 10px);right:0;z-index:50;display:flex;gap:10px;padding:10px;border-radius:999px;background:rgba(18,17,16,.82);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px -12px rgba(0,0,0,.7);transform-origin:top right;animation:sfondi-apri .22s var(--ease)}
+@keyframes sfondi-apri{from{opacity:0;transform:scale(.92) translateY(-4px)}to{opacity:1;transform:none}}
+.sfondi-scelta button{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.22);cursor:pointer;transition:transform .16s var(--ease),box-shadow .2s ease}
+.sfondi-scelta button:hover{transform:scale(1.08)}
+.sfondi-scelta button[aria-checked="true"]{box-shadow:0 0 0 2px rgba(18,17,16,.9),0 0 0 4px var(--carta)}
+.sfondi-scelta [data-sfondo="premium-dark"]{background:linear-gradient(to right,#434343 0%,#000 100%)}
+.sfondi-scelta [data-sfondo="vicious-stance"]{background:linear-gradient(60deg,#29323c 0%,#485563 100%)}
+.sfondi-scelta [data-sfondo="eternal-constance"]{background:linear-gradient(to top,#09203f 0%,#537895 100%)}
+.sfondi-scelta [data-sfondo="midnight-bloom"]{background:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
+.sfondi-scelta [data-sfondo="solid-stone"]{background:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+@media (prefers-reduced-motion:reduce){.sfondi-scelta{animation:none}}

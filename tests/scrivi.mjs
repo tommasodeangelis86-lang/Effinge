@@ -86,6 +86,19 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   });
   const inc = await page.evaluate(() => { const ed = document.querySelector('.scrivi-editor'); const st = [...ed.querySelectorAll('[style]')].map(e => e.getAttribute('style')).join('|'); const p = [...ed.querySelectorAll('p')].find(x => x.textContent.includes('incollato')); return { stili: st, font: p ? getComputedStyle(p).fontFamily : '' }; });
   ok(!/Arial|red|30px/.test(inc.stili) && /EB Garamond/.test(inc.font), 'incolla: stile esterno passato ' + JSON.stringify(inc));
+  // sfondo: un tondino con cinque sfumati, ricordato dopo il ricaricamento
+  await page.click('[data-apri-sfondi]');
+  const nScelte = await page.$$eval('#sfondi-scelta:not([hidden]) [data-sfondo]', l => l.length);
+  ok(nScelte === 5, `scelte di sfondo: ${nScelte} invece di 5`);
+  await page.screenshot({ path: join(out, 'scrivi-sfondi-scelta.png') });
+  await page.click('#sfondi-scelta [data-sfondo="midnight-bloom"]');
+  const sf = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage, chiuso: document.getElementById('sfondi-scelta').hidden }));
+  ok(sf.attr === 'midnight-bloom' && /gradient/.test(sf.bg) && sf.chiuso, 'sfondo non applicato: ' + JSON.stringify(sf));
+  await page.waitForTimeout(400);
+  await page.screenshot({ path: join(out, 'scrivi-sfondo-midnight.png') });
+  await page.reload(); await page.evaluate(() => window.EffingeScrivi.pronto);
+  ok((await page.evaluate(() => document.documentElement.getAttribute('data-sfondo'))) === 'midnight-bloom', 'sfondo non ricordato dopo il ricaricamento');
+  await page.click('.scrivi-editor'); await page.keyboard.press('Control+End');
   // capitoli
   await page.click('[data-nuova="capitolo"]'); await page.keyboard.type('Secondo capitolo.', { delay: 5 });
   await page.click('[data-nuova="parte"]'); await page.keyboard.type('Parte II');
