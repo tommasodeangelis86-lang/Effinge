@@ -3,7 +3,7 @@
     "nome": "Effinge",
     "descrizione": "Effinge, pubblicazione letteraria indipendente.",
     "indirizzo": "https://effinge.it",
-    "indicizza": false,
+    "indicizza": true,
     "piede": ""
   },
   "apertura": {
