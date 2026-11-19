@@ -761,7 +761,9 @@
     $('#pub-titolo').value = p.titolo || s.titolo || (s.tipo === 'capitolo' ? (opera.titolo || '') + ' — ' + etichettaDi(s.id).breve : opera.titolo || '');
     $('#pub-categoria').value = p.categoria || (s.tipo === 'capitolo' ? 'Capitolo' : '');
     $('#pub-data').value = p.data || oggi();
-    $('#pub-estratto').value = p.estratto || (testo.length > 220 ? testo.slice(0, 220).replace(/\s+\S*$/, '') + '…' : testo);
+    var auto = testo.length > 220 ? testo.slice(0, 220).replace(/\s+\S*$/, '') + '…' : testo;
+    $('#pub-estratto').value = p.estratto && p.estrattoAMano ? p.estratto : auto;
+    $('#pub-estratto').dataset.auto = auto;
     $('#pub-evidenza').checked = !!p.evidenza;
     esito($('[data-esito-pubblica]'), p.path ? 'Questo capitolo è già sul sito: pubblicandolo di nuovo lo aggiorni.' : '');
     $('[data-conferma-pubblica]').textContent = p.path ? 'Aggiorna sul sito' : 'Pubblica';
@@ -776,6 +778,7 @@
     if (!testoDi(s.html).trim()) { esito(out, 'Il capitolo è vuoto: non c’è niente da pubblicare.', 'errore'); return; }
     var bozza = (document.querySelector('input[name="pub-modo"]:checked') || {}).value === 'bozza';
     var info = { titolo: tit, categoria: $('#pub-categoria').value.trim(), data: data, estratto: $('#pub-estratto').value.trim(), evidenza: $('#pub-evidenza').checked };
+    info.estrattoAMano = info.estratto !== ($('#pub-estratto').dataset.auto || '').trim();
     var file = '---\n' +
       'titolo: ' + yaml(info.titolo) + '\n' +
       'date: ' + data + '\n' +
@@ -785,28 +788,39 @@
       'bozza: ' + bozza + '\n' +
       '---\n' + md(s.html);
     var vecchio = s.pubblicato && s.pubblicato.path;
-    var nome = data + '-' + slug(tit);
-    var path = vecchio || ('src/testi/' + nome + '.md');
-    var base = '/repos/' + autore.repo + '/contents/';
+    var path = 'src/testi/' + data + '-' + slug(tit) + '.md';
+    var repo = '/repos/' + autore.repo;
     var enc = function (x) { return x.split('/').map(encodeURIComponent).join('/'); };
     btn.disabled = true;
     esito(out, 'Pubblicazione in corso…');
-    // serve la versione attuale del file («sha») per sovrascriverlo; se nel frattempo è cambiato
-    // (es. modificato dal pannello), GitHub rifiuta: si rilegge la versione e si riprova, sovrascrivendo.
-    function versione() {
-      return gh(base + enc(path) + '?ref=' + encodeURIComponent(autore.ramo) + '&t=' + Date.now()).then(function (f) { return f && f.sha; }, function (e) { if (e.status === 404) return null; throw e; });
+    function esiste(p) {
+      return gh(repo + '/contents/' + enc(p) + '?ref=' + encodeURIComponent(autore.ramo)).then(function () { return true; }, function (e) { if (e.status === 404) return false; throw e; });
     }
-    function scriviFile(sha, tentativo) {
-      return gh(base + enc(path), { method: 'PUT', body: { message: (sha ? 'Aggiorna' : 'Pubblica') + ' «' + tit + '» da Scrivi', content: b64(file), branch: autore.ramo, sha: sha || undefined } })
-        .catch(function (e) {
-          var conflitto = e.status === 409 || e.status === 422 || /does not match|sha/i.test(e.message || '');
-          if (!conflitto || tentativo >= 2) throw e;
-          return versione().then(function (nuovo) { return scriviFile(nuovo, tentativo + 1); });
-        });
+    function commit(tentativo) {
+      var ref, base;
+      return gh(repo + '/git/ref/heads/' + encodeURIComponent(autore.ramo)).then(function (r) {
+        ref = r.object.sha;
+        return gh(repo + '/git/commits/' + ref);
+      }).then(function (c) {
+        base = c.tree.sha;
+        var voci = [{ path: path, mode: '100644', type: 'blob', content: file }];
+        if (vecchio && vecchio !== path) voci.push({ path: vecchio, mode: '100644', type: 'blob', sha: null });
+        return gh(repo + '/git/trees', { method: 'POST', body: { base_tree: base, tree: voci } });
+      }).then(function (t) {
+        var azione = !vecchio ? 'Pubblica' : vecchio !== path ? 'Rinomina e aggiorna' : 'Aggiorna';
+        return gh(repo + '/git/commits', { method: 'POST', body: { message: azione + ' «' + tit + '» da Scrivi', tree: t.sha, parents: [ref] } });
+      }).then(function (c) {
+        return gh(repo + '/git/refs/heads/' + encodeURIComponent(autore.ramo), { method: 'PATCH', body: { sha: c.sha, force: false } });
+      }).catch(function (e) {
+        // qualcuno ha modificato il ramo nel frattempo (es. il pannello): si riparte dall'ultima versione
+        if ((e.status === 409 || e.status === 422) && tentativo < 2) return commit(tentativo + 1);
+        throw e;
+      });
     }
-    versione().then(function (sha) {
-      if (sha && !vecchio) { path = 'src/testi/' + nome + '-' + Date.now().toString(36).slice(-4) + '.md'; sha = null; }
-      return scriviFile(sha, 0);
+    // se il nuovo indirizzo appartiene già a un altro testo, non lo si sovrascrive: si aggiunge un suffisso
+    (path !== vecchio ? esiste(path) : Promise.resolve(false)).then(function (occupato) {
+      if (occupato) path = path.replace(/\.md$/, '-' + Date.now().toString(36).slice(-4) + '.md');
+      return commit(0);
     }).then(function () {
       var fileSlug = path.replace(/^.*\//, '').replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
       var url = (bozza ? '/anteprima/' : '/testi/') + fileSlug + '/';
@@ -814,7 +828,7 @@
       s.pubblicato = info;
       salva(true);
       esito(out, '');
-      out.append(document.createTextNode((bozza ? 'Bozza salvata.' : 'Pubblicato.') + ' Sarà online tra circa un minuto: '));
+      out.append(document.createTextNode((bozza ? 'Bozza salvata.' : 'Pubblicato.') + ' Sarà online tra uno o due minuti: '));
       var a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = location.host + url; out.append(a);
       out.className = 'esito ok';
       btn.textContent = 'Aggiorna sul sito';

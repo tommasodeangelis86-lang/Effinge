@@ -2,6 +2,8 @@
 [build]
   command = "npm run build"
   publish = "_site"
+  # Pubblica solo il ramo main: gli altri rami non vengono costruiti (risparmia crediti e coda)
+  ignore = "[ \"$BRANCH\" != \"main\" ]"
 
 [build.environment]
   NODE_VERSION = "22"

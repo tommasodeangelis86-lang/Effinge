@@ -151,21 +151,30 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
   page.on('pageerror', e => problems.push('pubblica: ' + e.message));
-  const scritti = [], versioni = {};
+  const scritti = [], commitFatti = [];
+  // un piccolo repository finto: file per percorso, commit con albero
+  let ramo = 'c0';
+  const alberi = { c0: {} };
   await page.route('https://api.github.com/**', async route => {
     const u = new URL(route.request().url()), m = route.request().method();
     const j = (st, body) => route.fulfill({ status: st, contentType: 'application/json', body: JSON.stringify(body) });
+    const corpo = () => JSON.parse(route.request().postData() || '{}');
     if (u.pathname === '/user') return j(200, { login: 'autore-prova' });
     if (u.pathname === '/user/repos') return j(200, [{ full_name: 'autore-prova/Effinge', default_branch: 'main', permissions: { push: true } }]);
     if (u.pathname.endsWith('/contents/.pages.yml')) return j(200, { sha: 'x' });
-    const percorso = decodeURIComponent(u.pathname.split('/contents/')[1] || '');
-    if (m === 'GET') return versioni[percorso] ? j(200, { sha: versioni[percorso] }) : j(404, { message: 'Not Found' });
-    if (m === 'PUT') {
-      const body = JSON.parse(route.request().postData());
-      if (versioni[percorso] && body.sha !== versioni[percorso]) return j(409, { message: percorso + ' does not match ' + versioni[percorso] });
-      scritti.push({ path: percorso, ...body });
-      versioni[percorso] = 'v' + scritti.length;
-      return j(201, { content: { sha: versioni[percorso] } });
+    if (u.pathname.includes('/contents/')) { const p = decodeURIComponent(u.pathname.split('/contents/')[1]); return alberi[ramo][p] ? j(200, { sha: 'f' }) : j(404, { message: 'Not Found' }); }
+    if (u.pathname.endsWith('/git/ref/heads/main')) return j(200, { object: { sha: ramo } });
+    if (/\/git\/commits\/[^/]+$/.test(u.pathname) && m === 'GET') { const c = u.pathname.split('/').pop(); return j(200, { tree: { sha: 'albero-' + c } }); }
+    if (u.pathname.endsWith('/git/trees') && m === 'POST') {
+      const b = corpo(), da = b.base_tree.replace('albero-', ''), nuovo = { ...alberi[da] };
+      b.tree.forEach(v => { if (v.sha === null) delete nuovo[v.path]; else nuovo[v.path] = v.content; });
+      const id = 't' + Object.keys(alberi).length; alberi['albero-' + id] = nuovo; return j(201, { sha: 'albero-' + id });
+    }
+    if (u.pathname.endsWith('/git/commits') && m === 'POST') { const b = corpo(); const id = 'c' + Object.keys(alberi).length; alberi[id] = alberi[b.tree]; commitFatti.push({ id, parents: b.parents, message: b.message }); return j(201, { sha: id }); }
+    if (u.pathname.endsWith('/git/refs/heads/main') && m === 'PATCH') {
+      const b = corpo(), c = commitFatti.find(x => x.id === b.sha);
+      if (c.parents[0] !== ramo) return j(422, { message: 'Update is not a fast forward' });
+      ramo = b.sha; scritti.push({ ramo, file: alberi[ramo], message: c.message }); return j(200, { object: { sha: ramo } });
     }
     return j(404, {});
   });
@@ -191,23 +200,35 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.fill('#pub-categoria', 'Racconto');
   await page.click('[data-conferma-pubblica]');
   await page.waitForSelector('[data-esito-pubblica].ok', { timeout: 5000 });
-  ok(scritti.length === 1, `file scritti su GitHub: ${scritti.length}`);
+  ok(scritti.length === 1, `pubblicazioni su GitHub: ${scritti.length}`);
+  const percorsi = () => Object.keys(scritti[scritti.length - 1].file).filter(p => p.startsWith('src/testi/'));
   if (scritti[0]) {
-    const f = Buffer.from(scritti[0].content, 'base64').toString('utf8');
-    console.log('file pubblicato:', scritti[0].path, '\n' + f);
-    ok(/^src\/testi\/\d{4}-\d{2}-\d{2}-la-finestra-sul-canale\.md$/.test(scritti[0].path), 'percorso del file: ' + scritti[0].path);
+    const [percorso] = percorsi();
+    const f = scritti[0].file[percorso];
+    console.log('file pubblicato:', percorso, '\n' + f);
+    ok(/^src\/testi\/\d{4}-\d{2}-\d{2}-la-finestra-sul-canale\.md$/.test(percorso), 'percorso del file: ' + percorso);
     ok(/titolo: "La finestra sul canale"/.test(f) && /bozza: false/.test(f) && /categoria: "Racconto"/.test(f), 'intestazione del file');
     ok(/\*\*grassetto\*\*/.test(f) && /\*corsivo\*/.test(f) && /3\\\*4 \\\[nota\\\]/.test(f) && /\n\*\*\*\n/.test(f) && /<p class="centro">Fine centrata<\/p>/.test(f), 'contenuto Markdown del file');
     if (process.env.FILE_PUBBLICATO) (await import('node:fs')).writeFileSync(process.env.FILE_PUBBLICATO, f);
   }
-  // ripubblicare aggiorna lo stesso file
-  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(800);
-  ok(scritti.length === 2 && scritti[1].path === scritti[0].path, 'la ripubblicazione non aggiorna lo stesso file');
-  // il file è stato modificato altrove (es. dal pannello): ripubblicare lo sovrascrive lo stesso
-  versioni[scritti[0].path] = 'modificato-dal-pannello';
-  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(1000);
-  const esito3 = await page.textContent('[data-esito-pubblica]');
-  ok(scritti.length === 3 && scritti[2].path === scritti[0].path && /Pubblicato/.test(esito3), 'sovrascrittura dopo modifica esterna non riuscita: ' + esito3);
+  // modifico il testo e ripubblico: stesso file, estratto aggiornato
+  await page.click('#pubblica [data-chiudi]');
+  await page.click('.scrivi-editor'); await page.keyboard.press('Control+Home'); await page.keyboard.type('Nuovo inizio. ', { delay: 2 });
+  await page.waitForTimeout(700);
+  await page.click('[data-comando="pubblica"]');
+  ok(/^Nuovo inizio\./.test(await page.inputValue('#pub-estratto')), 'l\'estratto non segue il testo modificato');
+  await page.click('[data-conferma-pubblica]'); await page.waitForSelector('[data-esito-pubblica].ok', { timeout: 5000 });
+  ok(scritti.length === 2 && percorsi().length === 1 && /estratto: "Nuovo inizio\./.test(scritti[1].file[percorsi()[0]]), 'aggiornamento: ' + JSON.stringify(percorsi()));
+  // il ramo è cambiato altrove (es. dal pannello): si riparte dall'ultima versione e si sovrascrive
+  alberi['cX'] = { ...alberi[ramo], 'src/pagine/altro.md': 'dal pannello' }; ramo = 'cX';
+  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(1200);
+  ok(scritti.length === 3 && scritti[2].file['src/pagine/altro.md'] === 'dal pannello', 'pubblicazione dopo una modifica esterna non riuscita');
+  // cambio titolo: nuovo indirizzo, vecchio file tolto, una sola modifica
+  await page.fill('#pub-titolo', 'Il canale di notte');
+  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(1200);
+  const dopo = percorsi();
+  ok(scritti.length === 4 && dopo.length === 1 && /il-canale-di-notte\.md$/.test(dopo[0]), 'rinomina: ' + JSON.stringify(dopo));
+  ok(/\/testi\/il-canale-di-notte\//.test(await page.textContent('[data-esito-pubblica]')), 'il link dopo la rinomina non punta al nuovo indirizzo');
   await page.screenshot({ path: join(out, 'scrivi-pubblica.png') });
   await ctx.close();
 }
