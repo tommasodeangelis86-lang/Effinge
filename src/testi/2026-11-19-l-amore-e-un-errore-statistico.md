@@ -1,5 +1,5 @@
 ---
-titolo: "L'amore è un errore statistico"
+titolo: "Un errore statistico"
 date: 2026-11-19
 categoria: "Quaderni"
 estratto: "In statistica, un errore non è un fallimento, ma una sfida. Nasce quando una variabile reale si colloca fuori dall’intervallo atteso, altera la distribuzione, rompe la simmetria. Non nega il modello: lo mette in crisi.…"
