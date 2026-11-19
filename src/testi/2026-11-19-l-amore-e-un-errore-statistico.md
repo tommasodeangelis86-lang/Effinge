@@ -8,16 +8,18 @@ bozza: false
 ---
 > In statistica, non è un fallimento, ma una sfida.
 
-Nasce quando una variabile reale si colloca fuori dall’intervallo atteso, altera la distribuzione, rompe la simmetria. Non nega il modello: lo mette in crisi. Costringe a chiedersi se le assunzioni iniziali fossero corrette.
+Ho sempre diffidato delle eccezioni. Quando qualcosa non corrispondeva a ciò che mi aspettavo, preferivo pensare di aver osservato male. Tornavo sui miei passi, cercavo il particolare trascurato, una circostanza che non avevo considerato. Quasi sempre lo trovavo.
 
-Se osserviamo l’insieme delle relazioni umane come una popolazione statistica, emergono pattern chiari: attrazione, ripetizione dei comportamenti, compatibilità sociali, prossimità geografica, convenienza emotiva.
+Con gli anni avevo imparato che anche le persone si ripetono. Cambiano i nomi, le abitudini, qualche volta le ragioni. La maggior parte dei legami nasce e finisce entro condizioni riconoscibili: attrazione, compatibilità sociale, prossimità geografica, convenienza emotiva. Si formano, si consumano, si dissolvono. Cambiano le storie, si ripetono le dinamiche. Mi ero convinto che conoscere una cosa significasse, in fondo, averla già incontrata.
 
-La maggior parte dei legami rientra in curve prevedibili. Si formano, si consumano, si dissolvono secondo dinamiche ricorrenti. La distribuzione resta stabile.
+Poi accadde qualcosa che non seppi riconoscere.
 
-Ciò che non si colloca al centro della curva, non è il valore medio, né il risultato più probabile. È un outlier: un punto anomalo, rarissimo.
+Quando non c'era lei, veniva meno tutto il pattern.
 
-Statisticamente trascurabile. Esistenzialmente assoluto.
+Non era accaduto nulla di eccezionale.
 
-> Non è il risultato più probabile. Non è nemmeno quello corretto.
+Un evento statisticamente trascurabile. Esistenzialmente assoluto.
 
-> *È l’errore che costringe la normalità a rivedere se stessa.*
+> Non il risultato più probabile. Nemmeno quello corretto. *Un errore che costringe la normalità a rivedere se stessa.*
+
+> E credo che fosse amore.
