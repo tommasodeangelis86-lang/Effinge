@@ -46,6 +46,22 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   });
   ok(pos.testo === 'X' && pos.dx < 1.5 && pos.dy < 1.5, 'la luce non è sopra la lettera: ' + JSON.stringify(pos));
   await page.keyboard.press('Backspace');
+  // concentrazione: resta attiva con il mouse fermo o che trema, si spegne con un movimento vero
+  await page.keyboard.press('Enter'); await page.keyboard.type('Secondo paragrafo in scrittura', { delay: 15 });
+  await page.waitForTimeout(700);
+  const opac = () => page.evaluate(() => [...document.querySelectorAll('.scrivi-editor > *')].map(e => getComputedStyle(e).opacity));
+  const o1 = await opac();
+  ok(o1[0] === '0.3' && o1[o1.length - 1] === '1', 'concentrazione non attiva mentre si scrive: ' + o1);
+  const pos0 = await page.evaluate(() => null);
+  await page.mouse.move(700, 450); await page.mouse.move(700, 450); await page.mouse.move(712, 455); await page.waitForTimeout(700);
+  // per avere un'àncora: riscrivi dopo aver posato il mouse
+  await page.keyboard.type(' ancora', { delay: 15 }); await page.mouse.move(700, 450); await page.mouse.move(708, 452); await page.waitForTimeout(700);
+  const o2 = await opac();
+  ok(o2[0] === '0.3', 'concentrazione spenta da un movimento fantasma o da un tremolio: ' + o2);
+  await page.mouse.move(900, 650, { steps: 6 }); await page.waitForTimeout(700);
+  const o3 = await opac();
+  ok(o3.every(x => x === '1'), 'concentrazione non si spegne muovendo il mouse per leggere: ' + o3);
+  await page.keyboard.press('Backspace');
   // la lampada segue il mouse
   await page.mouse.move(700, 500); await page.mouse.move(900, 700, { steps: 8 }); await page.waitForTimeout(900);
   const lamp = await page.evaluate(() => { const r = document.querySelector('.scrivi-foglio .lampada.calore').getBoundingClientRect(); return { x: Math.round(r.left + r.width / 2), y: Math.round(r.top + r.height / 2) }; });

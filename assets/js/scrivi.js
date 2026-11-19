@@ -415,10 +415,19 @@
     var rc = rettangoloCursore(); if (!rc) return;
     lampadaA(rc.left + 6, rc.top + rc.height / 2, .85);
   }
-  function modoScrittura() { root.classList.add('sta-scrivendo'); }
+  // Mentre scrivi, Chrome segnala «movimenti» del mouse anche quando è fermo (la pagina si
+  // riorganizza sotto il puntatore). Si torna a leggere solo con un movimento vero.
+  var ultimoMouse = null, ancora = null, SOGLIA = 40;
+  function modoScrittura() { root.classList.add('sta-scrivendo'); ancora = ultimoMouse; }
   document.addEventListener('pointermove', function (e) {
     if (e.pointerType !== 'mouse') return;
-    root.classList.remove('sta-scrivendo');   // leggere: tutto torna acceso
+    var prima = ultimoMouse;
+    ultimoMouse = { x: e.clientX, y: e.clientY };
+    if (prima && prima.x === e.clientX && prima.y === e.clientY) return;            // movimento fantasma
+    if (root.classList.contains('sta-scrivendo')) {
+      if (ancora && Math.hypot(e.clientX - ancora.x, e.clientY - ancora.y) < SOGLIA) return;   // piccolo tremolio
+      root.classList.remove('sta-scrivendo');   // leggere: tutto torna acceso
+    }
     lampadaA(e.clientX, e.clientY, 1);
   }, { passive: true });
 
