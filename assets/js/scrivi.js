@@ -655,7 +655,7 @@
     opt = opt || {};
     var h = { 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'Authorization': 'Bearer ' + (opt.token || autore.token) };
     if (opt.body) h['Content-Type'] = 'application/json';
-    return fetch(API + path, { method: opt.method || 'GET', headers: h, body: opt.body ? JSON.stringify(opt.body) : undefined }).then(function (r) {
+    return fetch(API + path, { method: opt.method || 'GET', headers: h, cache: 'no-store', body: opt.body ? JSON.stringify(opt.body) : undefined }).then(function (r) {
       return r.text().then(function (t) { var j = null; try { j = t ? JSON.parse(t) : null; } catch (e) {} if (!r.ok) { var err = new Error((j && j.message) || ('HTTP ' + r.status)); err.status = r.status; throw err; } return j; });
     });
   }
@@ -791,10 +791,22 @@
     var enc = function (x) { return x.split('/').map(encodeURIComponent).join('/'); };
     btn.disabled = true;
     esito(out, 'Pubblicazione in corso…');
-    // se esiste già un file con quel nome (o è quello di prima), serve il suo «sha» per aggiornarlo
-    gh(base + enc(path) + '?ref=' + encodeURIComponent(autore.ramo)).then(function (f) { return f && f.sha; }, function (e) { if (e.status === 404) return null; throw e; }).then(function (sha) {
+    // serve la versione attuale del file («sha») per sovrascriverlo; se nel frattempo è cambiato
+    // (es. modificato dal pannello), GitHub rifiuta: si rilegge la versione e si riprova, sovrascrivendo.
+    function versione() {
+      return gh(base + enc(path) + '?ref=' + encodeURIComponent(autore.ramo) + '&t=' + Date.now()).then(function (f) { return f && f.sha; }, function (e) { if (e.status === 404) return null; throw e; });
+    }
+    function scriviFile(sha, tentativo) {
+      return gh(base + enc(path), { method: 'PUT', body: { message: (sha ? 'Aggiorna' : 'Pubblica') + ' «' + tit + '» da Scrivi', content: b64(file), branch: autore.ramo, sha: sha || undefined } })
+        .catch(function (e) {
+          var conflitto = e.status === 409 || e.status === 422 || /does not match|sha/i.test(e.message || '');
+          if (!conflitto || tentativo >= 2) throw e;
+          return versione().then(function (nuovo) { return scriviFile(nuovo, tentativo + 1); });
+        });
+    }
+    versione().then(function (sha) {
       if (sha && !vecchio) { path = 'src/testi/' + nome + '-' + Date.now().toString(36).slice(-4) + '.md'; sha = null; }
-      return gh(base + enc(path), { method: 'PUT', body: { message: (sha ? 'Aggiorna' : 'Pubblica') + ' «' + tit + '» da Scrivi', content: b64(file), branch: autore.ramo, sha: sha || undefined } });
+      return scriviFile(sha, 0);
     }).then(function () {
       var fileSlug = path.replace(/^.*\//, '').replace(/\.md$/, '').replace(/^\d{4}-\d{2}-\d{2}-/, '');
       var url = (bozza ? '/anteprima/' : '/testi/') + fileSlug + '/';

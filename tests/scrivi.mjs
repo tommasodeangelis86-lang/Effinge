@@ -151,15 +151,22 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   const ctx = await b.newContext({ viewport: { width: 1440, height: 900 } });
   const page = await ctx.newPage();
   page.on('pageerror', e => problems.push('pubblica: ' + e.message));
-  const scritti = [];
+  const scritti = [], versioni = {};
   await page.route('https://api.github.com/**', async route => {
     const u = new URL(route.request().url()), m = route.request().method();
     const j = (st, body) => route.fulfill({ status: st, contentType: 'application/json', body: JSON.stringify(body) });
     if (u.pathname === '/user') return j(200, { login: 'autore-prova' });
     if (u.pathname === '/user/repos') return j(200, [{ full_name: 'autore-prova/Effinge', default_branch: 'main', permissions: { push: true } }]);
     if (u.pathname.endsWith('/contents/.pages.yml')) return j(200, { sha: 'x' });
-    if (m === 'GET') return j(404, { message: 'Not Found' });
-    if (m === 'PUT') { const body = JSON.parse(route.request().postData()); scritti.push({ path: decodeURIComponent(u.pathname.split('/contents/')[1]), ...body }); return j(201, { content: { sha: 'nuovo' } }); }
+    const percorso = decodeURIComponent(u.pathname.split('/contents/')[1] || '');
+    if (m === 'GET') return versioni[percorso] ? j(200, { sha: versioni[percorso] }) : j(404, { message: 'Not Found' });
+    if (m === 'PUT') {
+      const body = JSON.parse(route.request().postData());
+      if (versioni[percorso] && body.sha !== versioni[percorso]) return j(409, { message: percorso + ' does not match ' + versioni[percorso] });
+      scritti.push({ path: percorso, ...body });
+      versioni[percorso] = 'v' + scritti.length;
+      return j(201, { content: { sha: versioni[percorso] } });
+    }
     return j(404, {});
   });
   await pronto(page);
@@ -196,6 +203,11 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   // ripubblicare aggiorna lo stesso file
   await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(800);
   ok(scritti.length === 2 && scritti[1].path === scritti[0].path, 'la ripubblicazione non aggiorna lo stesso file');
+  // il file è stato modificato altrove (es. dal pannello): ripubblicare lo sovrascrive lo stesso
+  versioni[scritti[0].path] = 'modificato-dal-pannello';
+  await page.click('[data-conferma-pubblica]'); await page.waitForTimeout(1000);
+  const esito3 = await page.textContent('[data-esito-pubblica]');
+  ok(scritti.length === 3 && scritti[2].path === scritti[0].path && /Pubblicato/.test(esito3), 'sovrascrittura dopo modifica esterna non riuscita: ' + esito3);
   await page.screenshot({ path: join(out, 'scrivi-pubblica.png') });
   await ctx.close();
 }
