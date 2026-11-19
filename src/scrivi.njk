@@ -4,45 +4,157 @@ permalink: /scrivi/
 titolo: Scrivi
 noindex: true
 script: /assets/js/scrivi.js
+stile: /assets/css/scrivi.css
 eleventyExcludeFromCollections: true
 ---
-{#- Spazio di scrittura: i fogli restano nel browser di chi scrive (nessun account, nessun invio). -#}
-<main id="contenuto" class="scrivi-pagina">
-  <div class="foglio scrivi-foglio">
-    <div class="contenuto">
-      <div class="scrivi-testa">
-        <label class="sr" for="titolo-foglio">Titolo del foglio</label>
-        <input id="titolo-foglio" class="scrivi-titolo" type="text" placeholder="Senza titolo" autocomplete="off" spellcheck="true">
-        <div class="scrivi-info">
-          <span class="scrivi-stato" data-stato aria-live="polite"></span>
-          <button type="button" class="scrivi-manoscritto" data-comando="manoscritto" aria-pressed="false" title="Interlinea 1,5 · margini 2,3 cm · rientro 0,42 cm">Manoscritto</button>
+{#- Spazio di scrittura. Opere e capitoli restano nel browser di chi scrive (IndexedDB): nessun account, nessun invio. -#}
+{%- macro icona(nome) -%}
+<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+{%- if nome == 'b' %}<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/>
+{%- elif nome == 'i' %}<path d="M10 5h8M6 19h8M14 5l-4 14"/>
+{%- elif nome == 'u' %}<path d="M7 4v7a5 5 0 0 0 10 0V4M5 20h14"/>
+{%- elif nome == 's' %}<path d="M16 7.5C15.4 5.9 13.9 5 12 5c-2.5 0-4 1.3-4 3 0 1.4 1 2.3 2.6 2.9M4 12h16M8 16.5c.6 1.6 2.2 2.5 4.2 2.5 2.6 0 4.1-1.3 4.1-3.1 0-.7-.2-1.3-.6-1.8"/>
+{%- elif nome == 'sx' %}<path d="M4 6h16M4 10h10M4 14h16M4 18h10"/>
+{%- elif nome == 'ce' %}<path d="M4 6h16M7 10h10M4 14h16M7 18h10"/>
+{%- elif nome == 'dx' %}<path d="M4 6h16M10 10h10M4 14h16M10 18h10"/>
+{%- elif nome == 'gi' %}<path d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+{%- elif nome == 'ul' %}<path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2"/><circle cx="4.5" cy="12" r="1.2"/><circle cx="4.5" cy="18" r="1.2"/>
+{%- elif nome == 'ol' %}<path d="M10 6h10M10 12h10M10 18h10M4 4.5h1.5V9M3.5 9h3.5M3.5 14.5c.4-.6 1-.9 1.7-.9.9 0 1.6.6 1.6 1.4 0 1.3-3.3 2.6-3.3 4h3.4"/>
+{%- elif nome == 'cit' %}<path d="M9 7H5v5h4v-5zm0 5c0 2.5-1.3 4-3.5 5M19 7h-4v5h4v-5zm0 5c0 2.5-1.3 4-3.5 5"/>
+{%- elif nome == 'st' %}<path d="M12 8.5v7M8.97 10.25l6.06 3.5M15.03 10.25l-6.06 3.5"/>
+{%- elif nome == 'un' %}<path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>
+{%- elif nome == 're' %}<path d="m15 14 5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>
+{%- elif nome == 'cl' %}<path d="M4 7V5h11v2M9.5 5l-3 14M5 19h5M14 14l6 6M20 14l-6 6"/>
+{%- elif nome == 'imp' %}<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
+{%- elif nome == 'esp' %}<path d="M12 15V3M7 8l5-5 5 5M5 21h14"/>
+{%- elif nome == 'cap' %}<rect x="4" y="3" width="7" height="8" rx="1.5"/><rect x="4" y="13" width="7" height="8" rx="1.5"/><path d="M14 6h6M14 9h4M14 16h6M14 19h4"/>
+{%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
+{%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
+{%- elif nome == 'x' %}<path d="M6 6l12 12M18 6 6 18"/>
+{%- endif %}
+</svg>
+{%- endmacro -%}
+
+<main id="contenuto" class="scrivi-pagina" data-scrivi-app>
+  <div class="scrivi-barra" role="toolbar" aria-label="Opera">
+    <div class="barra-sx">
+      <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false">{{ icona('cap') }}<span>Capitoli</span></button>
+      <button type="button" class="pill" data-comando="opere">Opere</button>
+      <label class="sr" for="nome-opera">Titolo dell’opera</label>
+      <input id="nome-opera" class="nome-opera" type="text" autocomplete="off" spellcheck="false">
+    </div>
+    <div class="barra-centro">
+      <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true">Concentrazione</button>
+      <button type="button" class="pill" data-comando="lampada" aria-pressed="true">Lampada</button>
+    </div>
+    <div class="barra-dx">
+      <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word">{{ icona('imp') }}<span>Importa da Word</span></button>
+      <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word">{{ icona('esp') }}<span>Esporta in Word</span></button>
+      <input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden data-file-word>
+    </div>
+  </div>
+
+  <div class="scrivi-app">
+    <!-- Sinistra: un’anteprima per ogni copertina, parte e capitolo, in ordine -->
+    <aside class="capitoli" id="capitoli" aria-label="Capitoli">
+      <div class="capitoli-testa">
+        <h2>Capitoli</h2>
+        <button type="button" class="chiudi-pannello solo-mobile" data-chiudi-capitoli aria-label="Chiudi i capitoli">{{ icona('x') }}</button>
+      </div>
+      <ol class="capitoli-elenco" data-capitoli></ol>
+      <div class="capitoli-piede">
+        <div class="aggiungi">
+          <button type="button" data-nuova="capitolo">+ Capitolo</button>
+          <button type="button" data-nuova="parte">+ Parte</button>
+          <button type="button" data-nuova="copertina">+ Copertina</button>
+        </div>
+        <p class="totali" data-totali></p>
+      </div>
+    </aside>
+
+    <!-- Centro: il foglio -->
+    <div class="centro-foglio">
+      <div class="foglio scrivi-foglio">
+        <div class="contenuto">
+          <div class="scrivi-testa">
+            <div class="scrivi-nome">
+              <span class="scrivi-etichetta" data-etichetta></span>
+              <label class="sr" for="titolo-sezione">Titolo</label>
+              <input id="titolo-sezione" class="scrivi-titolo" type="text" autocomplete="off" spellcheck="true">
+            </div>
+            <div class="scrivi-info">
+              <span class="scrivi-stato" data-stato aria-live="polite"></span>
+              <button type="button" class="scrivi-manoscritto" data-comando="manoscritto" aria-pressed="false" title="A4 · margini 2,3 cm · interlinea 1,5 · rientro 0,42 cm">Manoscritto</button>
+            </div>
+          </div>
+          <div class="scrivi-area">
+            <div class="scrivi-editor" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Testo" spellcheck="true" data-placeholder="Comincia a scrivere…"></div>
+            <div class="scrivi-luci" aria-hidden="true"></div>
+          </div>
         </div>
       </div>
-      <div class="scrivi-area" data-scrivi>
-        <div class="scrivi-specchio" aria-hidden="true"></div>
-        <label class="sr" for="testo-foglio">Testo</label>
-        <textarea id="testo-foglio" class="scrivi-testo" placeholder="Comincia a scrivere…" spellcheck="true" autocapitalize="sentences"></textarea>
-      </div>
     </div>
+
+    <!-- Destra: formattazione, come in Word -->
+    <aside class="formato" aria-label="Formattazione" role="toolbar" aria-orientation="vertical">
+      <div class="gruppo">
+        <h2>Stile</h2>
+        <div class="stili">
+          <button type="button" data-blocco="p">Normale</button>
+          <button type="button" data-blocco="h2">Sottotitolo</button>
+          <button type="button" data-blocco="h3">Titoletto</button>
+          <button type="button" data-blocco="blockquote">Citazione</button>
+        </div>
+      </div>
+      <div class="gruppo">
+        <h2>Carattere</h2>
+        <div class="icone">
+          <button type="button" data-cmd="bold" aria-label="Grassetto (Ctrl+B)" title="Grassetto">{{ icona('b') }}</button>
+          <button type="button" data-cmd="italic" aria-label="Corsivo (Ctrl+I)" title="Corsivo">{{ icona('i') }}</button>
+          <button type="button" data-cmd="underline" aria-label="Sottolineato (Ctrl+U)" title="Sottolineato">{{ icona('u') }}</button>
+          <button type="button" data-cmd="strikeThrough" aria-label="Barrato" title="Barrato">{{ icona('s') }}</button>
+        </div>
+      </div>
+      <div class="gruppo">
+        <h2>Paragrafo</h2>
+        <div class="icone">
+          <button type="button" data-cmd="justifyLeft" aria-label="Allinea a sinistra" title="Allinea a sinistra">{{ icona('sx') }}</button>
+          <button type="button" data-cmd="justifyCenter" aria-label="Centra" title="Centra">{{ icona('ce') }}</button>
+          <button type="button" data-cmd="justifyRight" aria-label="Allinea a destra" title="Allinea a destra">{{ icona('dx') }}</button>
+          <button type="button" data-cmd="justifyFull" aria-label="Giustifica" title="Giustifica">{{ icona('gi') }}</button>
+          <button type="button" data-cmd="insertUnorderedList" aria-label="Elenco puntato" title="Elenco puntato">{{ icona('ul') }}</button>
+          <button type="button" data-cmd="insertOrderedList" aria-label="Elenco numerato" title="Elenco numerato">{{ icona('ol') }}</button>
+        </div>
+      </div>
+      <div class="gruppo">
+        <h2>Inserisci</h2>
+        <div class="icone">
+          <button type="button" data-inserisci="stacco" aria-label="Stacco tra scene (*)" title="Stacco tra scene">{{ icona('st') }}</button>
+          <button type="button" data-blocco="blockquote" aria-label="Citazione" title="Citazione">{{ icona('cit') }}</button>
+        </div>
+      </div>
+      <div class="gruppo">
+        <h2>Modifica</h2>
+        <div class="icone">
+          <button type="button" data-cmd="undo" aria-label="Annulla (Ctrl+Z)" title="Annulla">{{ icona('un') }}</button>
+          <button type="button" data-cmd="redo" aria-label="Ripeti (Ctrl+Y)" title="Ripeti">{{ icona('re') }}</button>
+          <button type="button" data-cmd="pulisci" aria-label="Cancella formattazione" title="Cancella formattazione">{{ icona('cl') }}</button>
+        </div>
+      </div>
+    </aside>
   </div>
 </main>
 
-<div class="comandi scrivi-comandi" role="group" aria-label="Comandi di scrittura">
-  <button type="button" data-comando="fogli">Fogli</button>
-  <button type="button" data-comando="concentrazione" aria-pressed="true">Concentrazione</button>
-  <button type="button" data-comando="lampada" aria-pressed="true">Lampada</button>
-  <button type="button" data-comando="copia">Copia</button>
-</div>
+<dialog class="finestra" id="opere" aria-labelledby="h-opere">
+  <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <ul class="finestra-elenco" data-elenco-opere></ul>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button></div>
+  <p class="finestra-nota">Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».</p>
+</dialog>
 
-<dialog class="fogli" id="fogli" aria-labelledby="h-fogli">
-  <div class="fogli-testa">
-    <h2 id="h-fogli">I miei fogli</h2>
-    <button type="button" class="chiudi" data-chiudi-fogli aria-label="Chiudi">Chiudi</button>
-  </div>
-  <ul class="fogli-elenco" data-elenco-fogli></ul>
-  <div class="fogli-piede">
-    <button type="button" class="primario" data-nuovo-foglio>Nuovo foglio</button>
-    <button type="button" data-scarica>Scarica il foglio aperto (.txt)</button>
-  </div>
-  <p class="fogli-nota">I fogli sono salvati solo in questo browser, su questo dispositivo. Per conservarli altrove usa «Copia» o «Scarica».</p>
+<dialog class="finestra" id="importa" aria-labelledby="h-importa">
+  <div class="finestra-testa"><h2 id="h-importa">Importa da Word</h2><button type="button" class="pill" data-chiudi>Annulla</button></div>
+  <div class="finestra-corpo" data-riepilogo-import></div>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-conferma-import>Crea l’opera</button></div>
+  <p class="finestra-nota">Il file resta sul tuo dispositivo: viene letto dal browser e non viene inviato a nessuno.</p>
 </dialog>

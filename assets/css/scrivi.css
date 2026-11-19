@@ -1,0 +1,185 @@
+/* Effinge — Scrivi: capitoli a sinistra, il foglio al centro, la formattazione a destra. */
+.scrivi-pagina{padding:calc(76px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 30svh max(16px,env(safe-area-inset-left,0px))}
+.ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.ic circle{fill:currentColor;stroke:none}
+
+/* ——— Barra dell'opera ——— */
+.scrivi-barra{position:sticky;top:calc(64px + env(safe-area-inset-top,0px));z-index:35;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  max-width:1560px;margin:0 auto 24px;padding:10px 0;background:color-mix(in srgb,var(--stanza) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.barra-sx,.barra-centro,.barra-dx{display:flex;align-items:center;gap:6px;min-width:0}
+.barra-sx{flex:1 1 280px}
+.nome-opera{min-width:8ch;flex:0 1 auto;width:min(28rem,40vw);field-sizing:content;max-width:min(28rem,50vw);border:0;border-bottom:1px solid transparent;background:transparent;color:var(--testo);font:300 1.5rem/1.2 var(--display);padding:4px 2px;outline:none;transition:border-color .2s ease}
+.nome-opera:hover{border-color:var(--filo)}
+.nome-opera:focus{border-color:var(--testo-3)}
+.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--filo);background:transparent;border-radius:999px;padding:8px 13px;font:500 .75rem/1 var(--ui);letter-spacing:.01em;color:var(--testo-2);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .16s var(--ease)}
+.pill:hover{color:var(--testo);border-color:var(--testo-3)}
+.pill:active{transform:scale(.97)}
+.pill[aria-pressed="true"],.pill.primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
+.pill .ic{width:15px;height:15px}
+.solo-mobile{display:none}
+
+/* ——— Tre colonne ——— */
+.scrivi-app{display:grid;grid-template-columns:232px minmax(0,1fr) 196px;gap:clamp(20px,2.4vw,40px);max-width:1560px;margin:0 auto;align-items:start}
+.capitoli,.formato{position:sticky;top:calc(132px + env(safe-area-inset-top,0px));max-height:calc(100svh - 150px);display:flex;flex-direction:column}
+
+/* ——— Capitoli (riquadro di spostamento) ——— */
+.capitoli-testa{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.capitoli h2,.formato h2{margin:0;font:500 .6875rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--testo-3)}
+.capitoli-elenco{list-style:none;margin:0;padding:4px 6px 16px 2px;overflow-y:auto;flex:1;min-height:0;display:grid;align-content:start;gap:14px;scrollbar-width:thin;overscroll-behavior:contain}
+.capitoli-elenco li{position:relative}
+.capitoli-elenco li.trascina-sopra::before{content:"";position:absolute;left:0;right:0;top:-8px;height:2px;border-radius:2px;background:var(--luce)}
+.anteprima{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;width:100%;padding:6px;border:1px solid transparent;border-radius:14px;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:background-color .2s ease,border-color .2s ease}
+.anteprima:hover{background:color-mix(in srgb,var(--testo) 4%,transparent)}
+.anteprima[aria-current="true"]{border-color:color-mix(in srgb,var(--luce) 55%,transparent);background:color-mix(in srgb,var(--luce) 7%,transparent)}
+.miniatura{width:74px;aspect-ratio:1/1.414;border-radius:8px;overflow:hidden;background:var(--carta);box-shadow:0 6px 16px -6px rgba(0,0,0,.8);position:relative;container-type:inline-size}
+.mini-pagina{position:absolute;left:0;top:0;width:794px;transform-origin:0 0;transform:scale(calc(74 / 794));padding:88px;color:var(--inchiostro);font:400 16px/1.5 var(--lettura);pointer-events:none}
+.mini-pagina p{margin:0;text-indent:16px;text-align:justify}
+.mini-pagina h1{margin:180px 0 70px;text-align:center;font:italic 300 40px/1.1 var(--display)}
+.mini-pagina h2,.mini-pagina h3{margin:12px 0;text-align:center;font:400 22px var(--display)}
+.mini-pagina .centro,.mini-pagina .stacco{text-align:center;text-indent:0}
+.mini-pagina.parte h1{margin-top:420px;font-size:72px}
+.mini-pagina.copertina{padding-top:280px;text-align:center}
+.mini-pagina.copertina p{text-align:center;text-indent:0;font-size:22px;line-height:1.8}
+.anteprima .etichetta{display:flex;flex-direction:column;gap:4px;padding-top:4px;min-width:0}
+.anteprima .n{font:400 1.0625rem/1.15 var(--display);color:var(--testo);overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.anteprima .m{font:450 .6875rem/1.3 var(--ui);color:var(--testo-3);font-variant-numeric:tabular-nums}
+.anteprima.tipo-parte .n{font-style:italic}
+.azioni-cap{display:flex;gap:2px;margin-top:6px;opacity:0;transition:opacity .2s ease}
+li:hover .azioni-cap,li:focus-within .azioni-cap,.anteprima[aria-current="true"] + .azioni-cap{opacity:1}
+.azioni-cap{position:absolute;right:6px;bottom:6px}
+.azioni-cap button{display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--filo);border-radius:999px;background:var(--stanza-2);color:var(--testo-2);cursor:pointer;padding:0}
+.azioni-cap button:hover{color:var(--testo)}
+.azioni-cap button .ic{width:14px;height:14px}
+.azioni-cap .elimina.armato{width:auto;padding:0 10px;background:#7a2b1f;border-color:#7a2b1f;color:#fff;font:500 .6875rem var(--ui)}
+.capitoli-piede{padding-top:12px;border-top:1px solid var(--filo)}
+.aggiungi{display:flex;flex-wrap:wrap;gap:6px}
+.aggiungi button{flex:1 1 auto;border:1px dashed var(--filo);background:transparent;border-radius:10px;padding:9px 8px;font:500 .75rem/1 var(--ui);color:var(--testo-2);cursor:pointer;transition:color .2s ease,border-color .2s ease}
+.aggiungi button:hover{color:var(--testo);border-color:var(--testo-3)}
+.totali{margin:12px 0 0;font:450 .6875rem/1.5 var(--ui);color:var(--testo-3);font-variant-numeric:tabular-nums}
+
+/* ——— Formattazione ——— */
+.formato{gap:18px;overflow-y:auto}
+.formato .gruppo{display:grid;gap:9px}
+.stili{display:grid;gap:4px}
+.stili button,.icone button{border:1px solid var(--filo);background:transparent;color:var(--testo-2);cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .16s var(--ease)}
+.stili button{border-radius:9px;padding:8px 11px;text-align:left;font:400 .875rem/1.1 var(--ui)}
+.stili button[data-blocco="h2"]{font:400 1.125rem/1 var(--display)}
+.stili button[data-blocco="h3"]{font:600 .8125rem/1.1 var(--ui);letter-spacing:.02em}
+.stili button[data-blocco="blockquote"]{font:italic 400 1rem/1.1 var(--lettura)}
+.icone{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.icone button{display:grid;place-items:center;height:36px;border-radius:9px;padding:0}
+.stili button:hover,.icone button:hover{color:var(--testo);border-color:var(--testo-3)}
+.stili button:active,.icone button:active{transform:scale(.96)}
+.stili button[aria-pressed="true"],.icone button[aria-pressed="true"]{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
+
+/* ——— Il foglio ——— */
+.centro-foglio{min-width:0}
+.scrivi-foglio{max-width:48rem;margin:0 auto;min-height:calc(100svh - 170px)}
+.scrivi-foglio .contenuto{padding:clamp(36px,6vw,84px) clamp(22px,7vw,92px) clamp(80px,12vw,140px)}
+.scrivi-foglio .lampada.buio{width:420cqw;height:420cqw}
+.scrivi-foglio .lampada.calore{width:150cqw;height:150cqw}
+html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transition:opacity .6s ease}
+.scrivi-testa{display:grid;gap:14px;margin-bottom:clamp(26px,5vw,44px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.scrivi-nome{flex:1;min-width:0;display:grid;gap:6px}
+.scrivi-etichetta{font:500 .6875rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--inchiostro-2)}
+.scrivi-titolo{width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font:300 clamp(1.875rem,4.5vw,2.75rem)/1.1 var(--display);color:var(--inchiostro);outline:none;caret-color:var(--inchiostro)}
+.scrivi-titolo::placeholder{color:color-mix(in srgb,var(--inchiostro) 38%,transparent)}
+.scrivi-info{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
+.scrivi-stato{font:450 .6875rem/1.4 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--inchiostro-2);font-variant-numeric:tabular-nums}
+.scrivi-manoscritto{border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);background:transparent;color:var(--inchiostro-2);border-radius:999px;padding:7px 12px;font:500 .6875rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease)}
+.scrivi-manoscritto:hover{color:var(--inchiostro)}
+.scrivi-manoscritto:active{transform:scale(.97)}
+.scrivi-manoscritto[aria-pressed="true"]{background:var(--inchiostro);border-color:var(--inchiostro);color:var(--carta)}
+
+/* ——— L'editor ——— */
+.scrivi-area{position:relative}
+.scrivi-editor{min-height:50svh;outline:none;color:var(--inchiostro);caret-color:var(--inchiostro);font:400 clamp(1.1875rem,1.08rem + .4vw,1.3125rem)/1.75 var(--lettura);hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word;position:relative;z-index:1}
+.scrivi-editor:empty::before,.scrivi-editor.vuoto::before{content:attr(data-placeholder);position:absolute;color:color-mix(in srgb,var(--inchiostro) 40%,transparent);font-style:italic;pointer-events:none}
+.scrivi-editor > *{transition:opacity .6s var(--ease)}
+.scrivi-editor p{margin:0}
+.scrivi-editor p + p{text-indent:1.5em}
+.scrivi-editor h2{margin:1.4em 0 .6em;text-align:center;font:400 1.45em/1.2 var(--display);text-indent:0}
+.scrivi-editor h3{margin:1.4em 0 .5em;font:600 .82em/1.3 var(--ui);letter-spacing:.06em;text-transform:uppercase;text-indent:0}
+.scrivi-editor h1{margin:1em 0;text-align:center;font:300 1.9em/1.1 var(--display)}
+.scrivi-editor blockquote{margin:1em 0 1em 1.5em;padding-left:1em;border-left:1px solid color-mix(in srgb,var(--inchiostro) 25%,transparent);font-style:italic}
+.scrivi-editor blockquote p{text-indent:0}
+.scrivi-editor ul,.scrivi-editor ol{margin:.6em 0;padding-left:1.6em}
+.scrivi-editor hr{border:0;height:1px;width:3em;margin:1.4em auto;background:color-mix(in srgb,var(--inchiostro) 30%,transparent)}
+.scrivi-editor .stacco{text-align:center;text-indent:0!important;margin:.6em 0;letter-spacing:.3em}
+.scrivi-editor .centro{text-align:center;text-indent:0}
+.scrivi-editor .destra{text-align:right;text-indent:0}
+.scrivi-editor .giustificato{text-align:justify}
+.scrivi-editor .sinistra{text-align:left}
+.scrivi-editor .note{margin-top:2.5em;padding-top:1em;border-top:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);font-size:.85em}
+.scrivi-editor .note p{text-indent:0}
+.scrivi-editor ::selection{background:color-mix(in srgb,var(--luce) 45%,transparent)}
+/* concentrazione: la regola che attenua gli altri blocchi è scritta da scrivi.js */
+
+/* La copertina: tutto centrato */
+.tipo-copertina .scrivi-editor{text-align:center}
+.tipo-copertina .scrivi-editor p{text-indent:0;text-align:center}
+.tipo-parte .scrivi-editor{min-height:20svh}
+
+/* Luce sulle lettere appena scritte: un riflesso sopra l'inchiostro, nello stesso punto */
+.scrivi-luci{position:absolute;inset:0;pointer-events:none;z-index:2;overflow:visible}
+.luce-lettera{position:absolute;white-space:pre;color:color-mix(in srgb,var(--luce) 72%,#6b4a1c);animation:luce-lettera 950ms cubic-bezier(.22,.61,.36,1) both;
+  text-shadow:0 0 .05em color-mix(in srgb,var(--luce) 95%,transparent),0 0 .32em color-mix(in srgb,var(--luce) 65%,transparent)}
+@keyframes luce-lettera{0%{opacity:0}8%{opacity:1}35%{opacity:1}100%{opacity:0}}
+
+/* ——— Manoscritto: A4, margini 2,3 cm, interlinea 1,5, rientro 0,42 cm ——— */
+.manoscritto .scrivi-foglio{max-width:21cm}
+.manoscritto .scrivi-foglio .contenuto{padding:10.952cqw}
+.manoscritto .scrivi-editor{font-size:max(1rem,2.0155cqw);line-height:1.5}
+.manoscritto .scrivi-editor p{text-indent:.9921em}
+.manoscritto .scrivi-editor p.centro,.manoscritto .scrivi-editor p.destra,.manoscritto .tipo-copertina .scrivi-editor p{text-indent:0}
+
+/* ——— Finestre ——— */
+.finestra{width:min(100% - 32px,36rem);max-height:min(84svh,44rem);padding:0;border:1px solid var(--filo);border-radius:16px;background:var(--stanza-2);color:var(--testo);box-shadow:0 30px 80px -20px rgba(0,0,0,.9)}
+.finestra::backdrop{background:rgba(5,5,4,.6);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.finestra[open]{display:flex;flex-direction:column}
+.finestra-testa{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px 12px}
+.finestra-testa h2{margin:0;font:300 1.75rem/1 var(--display)}
+.finestra-corpo{padding:4px 22px 12px;overflow:auto;font:400 .9375rem/1.6 var(--ui);color:var(--testo-2)}
+.finestra-corpo strong{color:var(--testo);font-weight:500}
+.finestra-corpo ul{margin:10px 0;padding-left:1.2em}
+.finestra-elenco{list-style:none;margin:0;padding:0 10px;overflow:auto;flex:1}
+.finestra-elenco li{display:flex;align-items:center;gap:8px;border-top:1px solid var(--filo)}
+.finestra-elenco .apri{flex:1;min-width:0;text-align:left;background:none;border:0;padding:14px 12px;border-radius:8px;cursor:pointer;color:var(--testo)}
+.finestra-elenco .apri:hover{background:color-mix(in srgb,var(--testo) 5%,transparent)}
+.finestra-elenco .t{display:block;font:400 1.25rem/1.2 var(--display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.finestra-elenco .m{display:block;margin-top:4px;font:450 .6875rem/1.4 var(--ui);color:var(--testo-3)}
+.finestra-elenco .attuale .t::after{content:" · aperta";font:450 .6875rem var(--ui);color:var(--luce)}
+.finestra-elenco .elimina.armato{background:#7a2b1f;border-color:#7a2b1f;color:#fff}
+.finestra-piede{display:flex;flex-wrap:wrap;gap:8px;padding:14px 22px 6px;border-top:1px solid var(--filo)}
+.finestra-nota{margin:0;padding:6px 22px 20px;font:400 .75rem/1.5 var(--ui);color:var(--testo-3)}
+.avviso{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:60;padding:11px 16px;border-radius:999px;background:var(--carta);color:var(--inchiostro);font:500 .8125rem/1 var(--ui);box-shadow:0 10px 30px -10px rgba(0,0,0,.8)}
+
+/* ——— Schermi medi: la formattazione diventa una riga sopra il foglio ——— */
+@media (max-width:1180px){
+  .scrivi-app{grid-template-columns:220px minmax(0,1fr)}
+  .formato{grid-column:2;grid-row:1;position:sticky;top:calc(128px + env(safe-area-inset-top,0px));z-index:30;max-height:none;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:8px;border:1px solid var(--filo);border-radius:14px;background:color-mix(in srgb,var(--stanza-2) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);scrollbar-width:none}
+  .formato h2{display:none}
+  .formato .gruppo,.stili,.icone{display:flex;gap:4px}
+  .formato .gruppo + .gruppo{padding-left:6px;border-left:1px solid var(--filo)}
+  .icone button{width:36px}
+  .stili button{white-space:nowrap}
+  .centro-foglio{grid-column:2;grid-row:2}
+  .capitoli{grid-row:1 / span 2}
+}
+/* ——— Telefono: i capitoli diventano un pannello che si apre ——— */
+@media (max-width:820px){
+  .scrivi-pagina{padding-left:8px;padding-right:8px}
+  .solo-mobile{display:inline-flex}
+  .scrivi-barra{gap:8px}
+  .barra-centro{order:3}
+  .barra-dx .pill span{display:none}
+  .nome-opera{font-size:1.25rem}
+  .scrivi-app{grid-template-columns:minmax(0,1fr);gap:12px}
+  .formato{grid-column:1;top:calc(118px + env(safe-area-inset-top,0px))}
+  .centro-foglio{grid-column:1}
+  .capitoli{position:fixed;inset:0 auto 0 0;z-index:70;width:min(86vw,320px);max-height:none;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:var(--stanza-2);border-right:1px solid var(--filo);transform:translateX(-102%);transition:transform .35s var(--ease);box-shadow:20px 0 60px rgba(0,0,0,.6)}
+  .capitoli.aperto{transform:none}
+  .chiudi-pannello{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--filo);border-radius:999px;background:transparent;color:var(--testo-2)}
+  .azioni-cap{opacity:1}
+}
+@media (prefers-reduced-motion:reduce){.luce-lettera{display:none}}

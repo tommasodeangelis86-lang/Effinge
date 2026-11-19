@@ -28,6 +28,9 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="stylesheet" href="/assets/css/fonts.css">
 <link rel="stylesheet" href="/assets/css/sito.css">
+{%- if stile %}
+<link rel="stylesheet" href="{{ stile }}">
+{%- endif %}
 <style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
 </head>
 <body>

@@ -124,34 +124,45 @@ Un testo può avere un’**Immagine** facoltativa: caricala dal campo o da **Med
 
 ---
 
-### Scrivere sul foglio
+### Scrivere: la pagina Scrivi
 
-La pagina **Scrivi** (nel menu in alto, e nella sezione «Scrivi» della homepage prima di
-«Ultimo testo») è un foglio su cui scrivere davvero: ogni lettera si accende sotto la lampada,
-la lampada segue il cursore e il paragrafo su cui stai scrivendo resta acceso mentre gli altri si
-attenuano.
+La pagina **Scrivi** (nel menu in alto e nella sezione «Scrivi» della homepage) è un piccolo
+programma di scrittura per libri, sotto la lampada.
 
-Titolo, testo e pulsante della sezione in homepage, la frase che si scrive sul foglietto e la
-presenza della voce nel menu si cambiano in **Impostazioni del sito → Homepage → Scrivi**.
+- **Al centro il foglio.** Ogni lettera che scrivi si accende di luce dorata e torna inchiostro.
+  La **lampada segue il mouse**: per rileggere basta muovere il mouse sul punto che ti interessa.
+  Mentre scrivi, invece, segue il cursore. Con **Concentrazione** attiva, mentre scrivi il
+  paragrafo corrente resta acceso e gli altri si attenuano; quando muovi il mouse torna tutto acceso.
+- **A sinistra i capitoli**, come il riquadro di spostamento di Word: un’anteprima per ogni
+  copertina, parte e capitolo, in ordine, con il numero di parole. Tocca un’anteprima per aprirla.
+  Con le frecce la sposti su o giù (sul computer puoi anche trascinarla); con la × la elimini
+  (tocca di nuovo «Conferma»). In fondo: **+ Capitolo**, **+ Parte**, **+ Copertina** e il
+  totale dell’opera in parole, battute e cartelle. Sul telefono il pannello si apre con «Capitoli».
+- **A destra la formattazione**, come in Word: stili (Normale, Sottotitolo, Titoletto,
+  Citazione), grassetto, corsivo, sottolineato, barrato, allineamenti, elenchi, stacco tra scene
+  (*), annulla, ripeti e cancella formattazione. Funzionano anche Ctrl/Cmd + B, I, U, Z.
+- **In alto**: il titolo dell’opera (si modifica toccandolo), **Opere** per passare da un’opera
+  all’altra o crearne una nuova, **Importa da Word** ed **Esporta in Word**.
+- Sotto il titolo di ogni capitolo: parole, battute e cartelle (2000 battute spazi inclusi) e il
+  pulsante **Manoscritto** (A4, margini 2,3 cm, interlinea 1,5, rientro 0,42 cm).
 
-- **Fogli**: elenco dei tuoi scritti; da qui ne crei uno nuovo, ne apri uno o lo elimini
-  (si tocca «Elimina» e poi «Conferma»). Puoi anche scaricare il foglio aperto in un file .txt.
-- **Concentrazione** e **Lampada** accendono o spengono i due effetti.
-- **Copia** copia titolo e testo, per incollarli nel pannello quando vuoi pubblicarli.
-- Sotto il titolo vedi **parole, battute e cartelle** (cartella editoriale = 2000 battute, spazi
-  inclusi, a capo esclusi).
-- **Manoscritto** porta il foglio all’impaginazione di un manoscritto reale: foglio A4 (21 cm),
-  margini di 2,3 cm su tutti i lati, interlinea 1,5 e rientro di 0,42 cm a ogni paragrafo. Sul
-  telefono il foglio è più stretto di 21 cm: margini e rientro restano in proporzione. Il rientro
-  è automatico; quando copi o scarichi il testo non viene incluso.
+**Importa da Word.** Scegli un file .docx: il programma ti mostra cosa ha trovato (copertina, parti,
+capitoli, parole) e, se confermi, crea una nuova opera senza toccare quella aperta. Ogni paragrafo
+con uno stile di titolo apre un capitolo: funzionano «Titolo», «Sottotitolo», «Titolo 1», «Titolo 2»
+e anche stili personalizzati con «titolo» nel nome (come il tuo «TA titolo capitolo»). I titoli
+«Parte …» diventano parti; quello che sta prima del primo titolo diventa la copertina; i titoli
+numerati in automatico da Word diventano capitoli numerati; gli asterischi tra le scene diventano
+stacchi; le note a piè di pagina vanno in fondo al loro capitolo.
 
-Il salvataggio è automatico, ma **solo nel browser e sul dispositivo che stai usando**: quello che
-scrivi su iPhone non compare sul computer. Se cancelli i dati di Safari, i fogli si perdono:
-per i testi importanti usa «Copia» o «Scarica».
+**Esporta in Word.** Crea un .docx in formato manoscritto (A4, margini 2,3 cm, interlinea 1,5,
+rientro 0,42 cm, Times New Roman 12, numeri di pagina): copertina, poi ogni parte e capitolo su una
+pagina nuova con lo stile «Titolo 1». Il file si può reimportare con la stessa struttura. Le note
+a piè di pagina diventano note in fondo al capitolo, non note di Word.
 
-Chiunque visiti il sito può usarla, ma nessuno vede i fogli degli altri: ognuno vede solo quelli
-scritti nel proprio browser, e niente viene inviato a te o al sito. Su iPhone
-puoi aggiungerla alla schermata Home (Condividi → Aggiungi alla schermata Home).
+**Dove finisce quello che scrivi.** Tutto resta **nel browser del dispositivo che usi**: quello che
+scrivi su iPhone non compare sul computer, e niente viene inviato a te o al sito. Se cancelli i dati
+del browser, le opere si perdono: esporta in Word regolarmente come copia di sicurezza.
+Chiunque visiti il sito può usare Scrivi, ma ognuno vede solo le proprie opere.
 
 ## Cosa richiede ancora me (o un tecnico)
 
