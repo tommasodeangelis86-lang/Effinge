@@ -183,3 +183,7 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
   .azioni-cap{opacity:1}
 }
 @media (prefers-reduced-motion:reduce){.luce-lettera{display:none}}
+
+.scrivi-guasto{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;width:min(100% - 32px,34rem);padding:16px 18px;border-radius:14px;background:var(--carta);color:var(--inchiostro);font:400 .9375rem/1.5 var(--ui);box-shadow:0 20px 50px -15px rgba(0,0,0,.9)}
+.scrivi-guasto p{margin:0}
+.scrivi-guasto[hidden]{display:none}

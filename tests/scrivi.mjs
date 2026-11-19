@@ -60,6 +60,16 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.waitForTimeout(700);
   const salvato = await page.evaluate(() => window.EffingeScrivi.sezioni()[0].html);
   ok(/<strong>/.test(salvato) && /class="centro"/.test(salvato), 'formattazione non salvata: ' + salvato.slice(0, 120));
+  // incolla da un sito: il carattere e i colori del sito d'origine non devono passare
+  await page.click('.scrivi-editor');
+  await page.evaluate(() => {
+    const dt = new DataTransfer();
+    dt.setData('text/html', '<div style="font-family:Arial;color:red;font-size:30px"><p style="font-family:Arial">Testo <b>incollato</b> da un sito.</p><p>Secondo paragrafo.</p></div>');
+    dt.setData('text/plain', 'Testo incollato da un sito.\nSecondo paragrafo.');
+    document.querySelector('.scrivi-editor').dispatchEvent(new ClipboardEvent('paste', { clipboardData: dt, bubbles: true, cancelable: true }));
+  });
+  const inc = await page.evaluate(() => { const ed = document.querySelector('.scrivi-editor'); const st = [...ed.querySelectorAll('[style]')].map(e => e.getAttribute('style')).join('|'); const p = [...ed.querySelectorAll('p')].find(x => x.textContent.includes('incollato')); return { stili: st, font: p ? getComputedStyle(p).fontFamily : '' }; });
+  ok(!/Arial|red|30px/.test(inc.stili) && /EB Garamond/.test(inc.font), 'incolla: stile esterno passato ' + JSON.stringify(inc));
   // capitoli
   await page.click('[data-nuova="capitolo"]'); await page.keyboard.type('Secondo capitolo.', { delay: 5 });
   await page.click('[data-nuova="parte"]'); await page.keyboard.type('Parte II');

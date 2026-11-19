@@ -15,6 +15,7 @@
   var root = document.documentElement;
   var app = document.querySelector('[data-scrivi-app]');
   if (!app) return;
+  var versione = (document.currentScript && /[?&]v=([^&]+)/.exec(document.currentScript.src) || [])[1] || '';
 
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
@@ -584,7 +585,7 @@
     if (window.EffingeWord) return Promise.resolve(window.EffingeWord);
     return new Promise(function (ok, ko) {
       var s = document.createElement('script');
-      s.src = '/assets/js/scrivi-word.js';
+      s.src = '/assets/js/scrivi-word.js' + (versione ? '?v=' + versione : '');
       s.onload = function () { ok(window.EffingeWord); };
       s.onerror = function () { ko(new Error('Impossibile caricare il modulo Word')); };
       document.head.appendChild(s);
