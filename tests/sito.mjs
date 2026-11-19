@@ -22,7 +22,6 @@ const server = createServer(async (req, res) => {
 }).listen(0);
 const base = `http://localhost:${server.address().port}`;
 const home = base + '/';
-const read = base + '/testi/titolo-del-testo-piu-recente/';
 const arch = base + '/archivio/';
 const problems = [];
 const b = await chromium.launch();
@@ -53,12 +52,22 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   await page.screenshot({ path: join(out, `${tag}-05-scrivi-mentre.png`) });
   await page.waitForTimeout(2600);
   await page.screenshot({ path: join(out, `${tag}-05-scrivi.png`) });
-  await page.evaluate(() => document.querySelector('#ultimo').scrollIntoView()); await page.waitForTimeout(1400);
-  await page.screenshot({ path: join(out, `${tag}-05-ultimo.png`) });
-  await page.evaluate(() => document.querySelector('#archivio').scrollIntoView()); await page.waitForTimeout(1400);
-  await page.screenshot({ path: join(out, `${tag}-06-archivio.png`) });
+  // «Ultimo testo» e «Dall'archivio» esistono solo quando ci sono testi pubblicati
+  const ciSonoTesti = await page.evaluate(() => !!document.querySelector('#ultimo'));
+  const segnaposto = await page.evaluate(() => /Qui comparirà|segnaposto|canali da scegliere/i.test(document.body.innerText));
+  if (segnaposto) problems.push(`${tag}: testo segnaposto visibile sul sito pubblico`);
+  if (ciSonoTesti) {
+    await page.evaluate(() => document.querySelector('#ultimo').scrollIntoView()); await page.waitForTimeout(1400);
+    await page.screenshot({ path: join(out, `${tag}-05-ultimo.png`) });
+  }
+  if (await page.evaluate(() => !!document.querySelector('#archivio'))) {
+    await page.evaluate(() => document.querySelector('#archivio').scrollIntoView()); await page.waitForTimeout(1400);
+    await page.screenshot({ path: join(out, `${tag}-06-archivio.png`) });
+  }
   await noSideScroll(page, tag + ' home');
-  await page.goto(read); await page.waitForTimeout(500);
+  const primo = await page.evaluate(() => { const a = document.querySelector('a[href^="/testi/"]'); return a && a.getAttribute('href'); });
+  if (!primo) { await ctx.close(); continue; }
+  await page.goto(base + primo); await page.waitForTimeout(500);
   await page.evaluate(() => scrollTo(0, innerHeight * .9)); await page.waitForTimeout(900);
   await page.screenshot({ path: join(out, `${tag}-07-lettura.png`) });
   await noSideScroll(page, tag + ' lettura');
@@ -79,10 +88,13 @@ for (const [label, opts] of [['nojs', { javaScriptEnabled: false }], ['ridotto',
   page.on('pageerror', e => problems.push(`archivio: ${e.message}`));
   await page.goto(arch); await page.waitForTimeout(500);
   await page.screenshot({ path: join(out, 'archivio.png') });
-  await page.click('[data-filtro="frammento"]'); await page.waitForTimeout(300);
-  const visibili = await page.$$eval('[data-elenco] li:not([hidden])', l => l.length);
-  if (visibili !== 1) problems.push(`archivio: filtro Frammento mostra ${visibili} testi invece di 1`);
-  await page.screenshot({ path: join(out, 'archivio-filtro.png') });
+  const filtri = await page.$$eval('[data-filtro]', b => b.map(x => x.getAttribute('data-filtro')).filter(Boolean));
+  if (filtri.length) {
+    await page.click(`[data-filtro="${filtri[0]}"]`); await page.waitForTimeout(300);
+    const errati = await page.$$eval('[data-elenco] li:not([hidden])', (l, f) => l.filter(x => x.dataset.categoria !== f).length, filtri[0]);
+    if (errati) problems.push(`archivio: il filtro mostra ${errati} testi di altre categorie`);
+    await page.screenshot({ path: join(out, 'archivio-filtro.png') });
+  }
   await ctx.close();
 }
 await b.close();

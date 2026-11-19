@@ -6,7 +6,7 @@ seo_descrizione: Tutti i testi pubblicati su Effinge, dal più recente.
 ---
 {%- set cats = collections.testi | categorie -%}
 <main id="contenuto" class="archivio-pagina">
-  <header class="sezione-testa"><h1>Archivio</h1><span class="meta">{{ collections.testi.length }} {{ 'testo' if collections.testi.length == 1 else 'testi' }}</span></header>
+  <header class="sezione-testa"><h1>Archivio</h1>{% if collections.testi.length %}<span class="meta">{{ collections.testi.length }} {{ 'testo' if collections.testi.length == 1 else 'testi' }}</span>{% endif %}</header>
   {%- if cats.length > 1 %}
   <div class="filtri" role="group" aria-label="Filtra per categoria" hidden data-filtri>
     <button type="button" aria-pressed="true" data-filtro="">Tutti</button>
@@ -20,7 +20,7 @@ seo_descrizione: Tutti i testi pubblicati su Effinge, dal più recente.
     {%- for t in collections.testi %}
     <li data-categoria="{{ t.data.categoria | slugify }}"><a href="{{ t.url }}"><span class="t">{{ t.data.titolo }}</span><span class="c">{{ t.data.categoria }}</span><span class="d">{{ t.date | dataBreve }}</span></a></li>
     {%- else %}
-    <li class="vuoto">Ancora nessun testo pubblicato.</li>
+    <li class="vuoto">I primi testi arriveranno presto.</li>
     {%- endfor %}
   </ul>
 </main>

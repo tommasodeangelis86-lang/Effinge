@@ -50,7 +50,7 @@
 {{ content | safe }}
 <footer class="piede" id="contatti">
   <span>{{ s.sito.nome }} © {{ build.anno }}</span>
-  <span>{{ s.sito.piede }}</span>
+  {%- if s.sito.piede %}<span>{{ s.sito.piede }}</span>{% endif %}
   <span><a href="/archivio/">Archivio</a></span>
 </footer>
 <script src="/assets/js/sito.js?v={{ build.versione }}" defer></script>

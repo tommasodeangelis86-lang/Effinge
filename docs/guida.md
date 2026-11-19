@@ -78,7 +78,7 @@ Se tutto torna, colleghi il dominio.
 **Togliere** un testo dal sito: rimetti la spunta **Bozza**, oppure eliminalo (*Delete*).
 **Metterlo in evidenza** in homepage: spunta **In evidenza in homepage**.
 
-I quattro testi presenti ora sono **segnaposto**: eliminali quando pubblichi i tuoi.
+All’inizio non ci sono testi pubblicati: le sezioni «Ultimo testo» e «Dall’archivio» della homepage compaiono da sole con il primo testo. Le pagine «Il progetto» e «Contatti» sono in bozza: scrivile e togli la spunta «Bozza» per farle comparire nel menu.
 
 ### Creare una nuova pagina
 
