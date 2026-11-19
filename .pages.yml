@@ -174,6 +174,17 @@ content:
         label: Colori
         type: object
         fields:
+          - name: sfondo
+            label: Sfondo del sito (predefinito)
+            description: Quello che vede chi arriva. Ogni visitatore può cambiarlo con il tondino in alto a destra.
+            type: select
+            options:
+              values:
+                - { value: grafite, label: "Grafite (grigio, predefinito)" }
+                - { value: vicious-stance, label: "Vicious Stance (ardesia)" }
+                - { value: eternal-constance, label: "Eternal Constance (blu notte)" }
+                - { value: midnight-bloom, label: "Midnight Bloom (viola e petrolio)" }
+                - { value: solid-stone, label: "Solid Stone (blu e azzurro)" }
           - name: stanza
             label: Colore della stanza (sfondo)
             type: string

@@ -302,8 +302,38 @@
   // La lampada è usata anche dalla pagina «Scrivi» (assets/js/scrivi.js).
   window.EffingeLampada = Lampada;
 
+  /* ——— Sfondo: un tondino in alto, cinque sfumati; la scelta resta in questo browser ——— */
+  function sfondi() {
+    var tondino = document.querySelector('[data-apri-sfondi]'), scelta = document.getElementById('sfondi-scelta');
+    if (!tondino || !scelta) return;
+    var bottoni = Array.prototype.slice.call(scelta.querySelectorAll('[data-scegli]'));
+    function segna() { var att = root.getAttribute('data-sfondo'); bottoni.forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.scegli === att)); }); }
+    function chiudi() { scelta.hidden = true; tondino.setAttribute('aria-expanded', 'false'); }
+    tondino.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var apri = scelta.hidden;
+      scelta.hidden = !apri; tondino.setAttribute('aria-expanded', String(apri));
+      if (apri) { segna(); (scelta.querySelector('[aria-checked="true"]') || bottoni[0]).focus(); }
+    });
+    scelta.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-scegli]'); if (!b) return;
+      root.setAttribute('data-sfondo', b.dataset.scegli);
+      store('effinge-sfondo', b.dataset.scegli);
+      segna(); chiudi(); tondino.focus();
+    });
+    scelta.addEventListener('keydown', function (e) {
+      var i = bottoni.indexOf(document.activeElement);
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); bottoni[(i + 1) % bottoni.length].focus(); }
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); bottoni[(i - 1 + bottoni.length) % bottoni.length].focus(); }
+    });
+    document.addEventListener('click', function (e) { if (!scelta.hidden && !e.target.closest('.sfondi')) chiudi(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !scelta.hidden) { chiudi(); tondino.focus(); } });
+    segna();
+  }
+
   /* ——— Avvio ——— */
   function init() {
+    sfondi();
     var s;
     if ((s = document.querySelector('.apertura'))) scene.push(scenaApertura(s));
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));

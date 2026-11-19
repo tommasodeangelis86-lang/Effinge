@@ -233,3 +233,35 @@ html:not(.js) .righe li{opacity:1}
 .corpo .destra{text-align:right;text-indent:0}
 .corpo .note{margin-top:2.5em;padding-top:1em;border-top:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);font-size:.85em}
 .corpo .note p{text-indent:0}
+
+/* ——— Sfondo del sito: grafite (predefinito) e altri quattro sfumati di WebGradients ———
+   Il predefinito si sceglie dal pannello; chi visita può cambiarlo con il tondino in alto. */
+:root{--sfondo:var(--stanza);--sfondo-blend:normal}
+[data-sfondo="grafite"]{--sfondo:linear-gradient(to bottom,#323232 0%,#3f3f3f 40%,#1c1c1c 150%),linear-gradient(to top,rgba(255,255,255,.4) 0%,rgba(0,0,0,.25) 200%);--sfondo-blend:multiply}
+[data-sfondo="vicious-stance"]{--sfondo:linear-gradient(60deg,#29323c 0%,#485563 100%)}
+[data-sfondo="eternal-constance"]{--sfondo:linear-gradient(to top,#09203f 0%,#537895 100%)}
+[data-sfondo="midnight-bloom"]{--sfondo:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
+[data-sfondo="solid-stone"]{--sfondo:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+html[data-sfondo] body{background:transparent}
+html[data-sfondo] body::before{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:var(--sfondo);background-blend-mode:var(--sfondo-blend)}
+html[data-sfondo] .barra.piena,html[data-sfondo] .scrivi-barra{background:rgba(0,0,0,.18);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border-color:rgba(255,255,255,.08)}
+html[data-sfondo] .apertura .palco{background:radial-gradient(60% 55% at 50% 42%,rgba(255,236,200,.05) 0%,transparent 70%)}
+html[data-sfondo] .progetto .palco{background:transparent}
+html[data-sfondo] .piede,html[data-sfondo] .archivio,html[data-sfondo] .archivio li{border-color:rgba(255,255,255,.1)}
+html[data-sfondo] .pill:not([aria-pressed="true"]):not(.primario),html[data-sfondo] .stili button,html[data-sfondo] .icone button,html[data-sfondo] .aggiungi button,html[data-sfondo] .filtri button:not([aria-pressed="true"]){border-color:rgba(255,255,255,.16)}
+.sfondi{position:relative;display:flex;align-items:center}
+.tondino{width:26px;height:26px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:var(--sfondo);background-blend-mode:var(--sfondo-blend);cursor:pointer;box-shadow:inset 0 0 0 2px rgba(0,0,0,.25);transition:transform .16s var(--ease),border-color .2s ease}
+.tondino:hover{border-color:rgba(255,255,255,.65)}
+.tondino:active{transform:scale(.94)}
+.sfondi-scelta{position:absolute;top:calc(100% + 12px);right:0;z-index:50;display:flex;gap:10px;padding:10px;border-radius:999px;background:rgba(18,17,16,.84);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);box-shadow:0 18px 40px -12px rgba(0,0,0,.7);transform-origin:top right;animation:sfondi-apri .22s var(--ease)}
+@keyframes sfondi-apri{from{opacity:0;transform:scale(.92) translateY(-4px)}to{opacity:1;transform:none}}
+.sfondi-scelta button{width:30px;height:30px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.22);cursor:pointer;transition:transform .16s var(--ease),box-shadow .2s ease}
+.sfondi-scelta button:hover{transform:scale(1.08)}
+.sfondi-scelta button[aria-checked="true"]{box-shadow:0 0 0 2px rgba(18,17,16,.9),0 0 0 4px var(--carta)}
+.sfondi-scelta [data-scegli="grafite"]{background:linear-gradient(to bottom,#323232 0%,#3f3f3f 40%,#1c1c1c 150%),linear-gradient(to top,rgba(255,255,255,.4) 0%,rgba(0,0,0,.25) 200%);background-blend-mode:multiply}
+.sfondi-scelta [data-scegli="vicious-stance"]{background:linear-gradient(60deg,#29323c 0%,#485563 100%)}
+.sfondi-scelta [data-scegli="eternal-constance"]{background:linear-gradient(to top,#09203f 0%,#537895 100%)}
+.sfondi-scelta [data-scegli="midnight-bloom"]{background:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
+.sfondi-scelta [data-scegli="solid-stone"]{background:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+@media (prefers-reduced-motion:reduce){.sfondi-scelta{animation:none}}
+@media (max-width:760px){.barra nav{align-items:center}}

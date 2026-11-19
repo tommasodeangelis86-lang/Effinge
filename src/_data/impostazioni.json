@@ -30,7 +30,8 @@
     "stanza": "#0A0A09",
     "carta": "#ECE7DC",
     "inchiostro": "#1A1916",
-    "testo": "#E9E5DB"
+    "testo": "#E9E5DB",
+    "sfondo": "grafite"
   },
   "progetto": {
     "mostra": true,

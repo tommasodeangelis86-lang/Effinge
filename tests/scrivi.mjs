@@ -88,10 +88,10 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   ok(!/Arial|red|30px/.test(inc.stili) && /EB Garamond/.test(inc.font), 'incolla: stile esterno passato ' + JSON.stringify(inc));
   // sfondo: un tondino con cinque sfumati, ricordato dopo il ricaricamento
   await page.click('[data-apri-sfondi]');
-  const nScelte = await page.$$eval('#sfondi-scelta:not([hidden]) [data-sfondo]', l => l.length);
+  const nScelte = await page.$$eval('#sfondi-scelta:not([hidden]) [data-scegli]', l => l.length);
   ok(nScelte === 5, `scelte di sfondo: ${nScelte} invece di 5`);
   await page.screenshot({ path: join(out, 'scrivi-sfondi-scelta.png') });
-  await page.click('#sfondi-scelta [data-sfondo="midnight-bloom"]');
+  await page.click('#sfondi-scelta [data-scegli="midnight-bloom"]');
   const sf = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage, chiuso: document.getElementById('sfondi-scelta').hidden }));
   ok(sf.attr === 'midnight-bloom' && /gradient/.test(sf.bg) && sf.chiuso, 'sfondo non applicato: ' + JSON.stringify(sf));
   await page.waitForTimeout(400);

@@ -44,6 +44,8 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   const page = await ctx.newPage();
   page.on('pageerror', e => problems.push(`${tag}: ${e.message}`));
   await page.goto(home);
+  const sf0 = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage }));
+  if (sf0.attr !== 'grafite' || !/gradient/.test(sf0.bg)) problems.push(`${tag}: sfondo predefinito non applicato ` + JSON.stringify(sf0));
   await page.waitForTimeout(750); await page.screenshot({ path: join(out, `${tag}-01-scrittura.png`) });
   await page.waitForTimeout(2200); await page.screenshot({ path: join(out, `${tag}-02-scritta.png`) });
   for (const p of [.35, .8]) { await scrollTo(page, '.apertura', p); await page.screenshot({ path: join(out, `${tag}-03-apertura-${p}.png`) }); }

@@ -814,34 +814,6 @@
   });
   mostraAutore();
 
-  /* ——— Sfondo dietro il foglio: un tondino, cinque sfumati ——— */
-  var tondino = $('[data-apri-sfondi]'), scelta = $('#sfondi-scelta'), KEY_SFONDO = 'effinge-scrivi-sfondo';
-  function segnaSfondo() {
-    var att = root.getAttribute('data-sfondo') || '';
-    $$('[data-sfondo]', scelta).forEach(function (b) { b.setAttribute('aria-checked', String(b.dataset.sfondo === att)); });
-  }
-  function chiudiSfondi() { scelta.hidden = true; tondino.setAttribute('aria-expanded', 'false'); }
-  tondino.addEventListener('click', function (e) {
-    e.stopPropagation();
-    var apri = scelta.hidden;
-    scelta.hidden = !apri; tondino.setAttribute('aria-expanded', String(apri));
-    if (apri) { segnaSfondo(); var sel = $('[aria-checked="true"]', scelta) || $('button', scelta); sel.focus(); }
-  });
-  scelta.addEventListener('click', function (e) {
-    var b = e.target.closest('[data-sfondo]'); if (!b) return;
-    root.setAttribute('data-sfondo', b.dataset.sfondo);
-    scriviPref(KEY_SFONDO, b.dataset.sfondo);
-    segnaSfondo(); chiudiSfondi(); tondino.focus();
-  });
-  scelta.addEventListener('keydown', function (e) {
-    var bs = $$('button', scelta), i = bs.indexOf(document.activeElement);
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); bs[(i + 1) % bs.length].focus(); }
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); bs[(i - 1 + bs.length) % bs.length].focus(); }
-  });
-  document.addEventListener('click', function (e) { if (!scelta.hidden && !e.target.closest('.sfondi')) chiudiSfondi(); });
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !scelta.hidden) { chiudiSfondi(); tondino.focus(); } });
-  segnaSfondo();
-
   // usato dal modulo Word e dai test
   window.EffingeScrivi = {
     pulisci: pulisci,
