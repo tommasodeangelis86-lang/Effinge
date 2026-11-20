@@ -129,7 +129,8 @@ content:
         type: object
         fields:
           - { name: nome, label: Nome del sito, type: string, required: true }
-          - { name: descrizione, label: Descrizione per Google, type: text }
+          - { name: titolo_home, label: Titolo della homepage su Google, type: string, description: "Compare come titolo blu nei risultati di Google (circa 60 caratteri)." }
+          - { name: descrizione, label: Descrizione della homepage su Google, type: text, description: "Compare sotto il titolo nei risultati di Google (circa 155 caratteri)." }
           - { name: indirizzo, label: Indirizzo del sito, type: string, description: "Per esempio https://effinge.it" }
           - { name: indicizza, label: "Visibile su Google", type: boolean, description: "Attivalo solo quando il sito è pronto e collegato a effinge.it." }
           - { name: piede, label: Testo a piè di pagina, type: string }

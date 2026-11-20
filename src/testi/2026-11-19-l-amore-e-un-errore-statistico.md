@@ -5,6 +5,7 @@ categoria: "Quaderni"
 estratto: "In statistica, un errore non è un fallimento, ma una sfida. Ho sempre diffidato delle eccezioni. Quando qualcosa non corrispondeva a ciò che mi aspettavo, preferivo pensare di aver osservato male."
 in_evidenza: true
 bozza: false
+seo_descrizione: "In statistica, un errore non è un fallimento, ma una sfida. Una riflessione sulle eccezioni, lo sguardo e l'osservazione. Leggi il testo su Effinge."
 ---
 > In statistica, non è un fallimento, ma una sfida.
 

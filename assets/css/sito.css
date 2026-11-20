@@ -288,3 +288,4 @@ html[data-sfondo] body::after{content:"";position:fixed;top:0;right:0;bottom:0;l
 html:not(.lampada-accesa) .lettura-pagina .foglio .lampada{opacity:0!important;transition:opacity .6s ease}
 .lampada-accesa .vignetta{opacity:0}
 .comandi{right:auto;left:max(16px,env(safe-area-inset-left,0px))}
+.intestazione-h{margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}

@@ -765,6 +765,7 @@
     $('#pub-estratto').value = p.estratto && p.estrattoAMano ? p.estratto : auto;
     $('#pub-estratto').dataset.auto = auto;
     $('#pub-evidenza').checked = !!p.evidenza;
+    $('#pub-seo').value = p.seo_descrizione || '';
     esito($('[data-esito-pubblica]'), p.path ? 'Questo capitolo è già sul sito: pubblicandolo di nuovo lo aggiorni.' : '');
     $('[data-conferma-pubblica]').textContent = p.path ? 'Aggiorna sul sito' : 'Pubblica';
     $('[data-conferma-pubblica]').disabled = false;
@@ -779,6 +780,7 @@
     var bozza = (document.querySelector('input[name="pub-modo"]:checked') || {}).value === 'bozza';
     var info = { titolo: tit, categoria: $('#pub-categoria').value.trim(), data: data, estratto: $('#pub-estratto').value.trim(), evidenza: $('#pub-evidenza').checked };
     info.estrattoAMano = info.estratto !== ($('#pub-estratto').dataset.auto || '').trim();
+    info.seo_descrizione = $('#pub-seo').value.trim();
     var file = '---\n' +
       'titolo: ' + yaml(info.titolo) + '\n' +
       'date: ' + data + '\n' +
@@ -786,6 +788,7 @@
       (info.estratto ? 'estratto: ' + yaml(info.estratto) + '\n' : '') +
       'in_evidenza: ' + info.evidenza + '\n' +
       'bozza: ' + bozza + '\n' +
+      (info.seo_descrizione ? 'seo_descrizione: ' + yaml(info.seo_descrizione) + '\n' : '') +
       '---\n' + md(s.html);
     var vecchio = s.pubblicato && s.pubblicato.path;
     var path = 'src/testi/' + data + '-' + slug(tit) + '.md';
@@ -820,8 +823,20 @@
         throw e;
       });
     }
+    var CONSERVA = /^(seo_titolo|seo_descrizione|immagine|immagine_alt|colore_carta|noindex):/;
+    function campiDelPannello() {
+      if (!vecchio) return Promise.resolve();
+      return gh(repo + '/contents/' + enc(vecchio) + '?ref=' + encodeURIComponent(autore.ramo)).then(function (f) {
+        var bin = atob(String(f.content || '').replace(/\s/g, '')), bytes = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+        var testa = (/^---\r?\n([\s\S]*?)\r?\n---/.exec(new TextDecoder().decode(bytes)) || ['', ''])[1];
+        var extra = testa.split(/\r?\n/).filter(function (r) { return CONSERVA.test(r) && !(info.seo_descrizione && /^seo_descrizione:/.test(r)); });
+        if (!info.seo_descrizione) { var d = extra.filter(function (r) { return /^seo_descrizione:/.test(r); })[0]; if (d) { try { info.seo_descrizione = JSON.parse(d.replace(/^seo_descrizione:\s*/, '')); } catch (e) {} } }
+        if (extra.length) file = file.replace(/\n---\n/, '\n' + extra.join('\n') + '\n---\n');
+      }, function () {});
+    }
     // se il nuovo indirizzo appartiene già a un altro testo, non lo si sovrascrive: si aggiunge un suffisso
-    (path !== vecchio ? esiste(path) : Promise.resolve(false)).then(function (occupato) {
+    campiDelPannello().then(function () { return path !== vecchio ? esiste(path) : false; }).then(function (occupato) {
       if (occupato) path = path.replace(/\.md$/, '-' + Date.now().toString(36).slice(-4) + '.md');
       return commit(0);
     }).then(function () {

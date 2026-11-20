@@ -1,6 +1,13 @@
 {%- set s = impostazioni -%}
 {%- set titoloPagina = (seo_titolo or titolo or title) -%}
 {%- set descr = seo_descrizione or estratto or s.sito.descrizione -%}
+{#- Titolo per Google: homepage dal pannello; testi «Titolo — Categoria | Effinge»; altre pagine «Titolo | Effinge» -#}
+{%- if titolo_completo -%}{%- set titoloGoogle = titolo_completo -%}
+{%- elif page.url == '/' -%}{%- set titoloGoogle = s.sito.titolo_home or s.sito.nome -%}
+{%- elif layout == 'testo.njk' -%}{%- set titoloGoogle = titoloPagina + (' — ' + categoria if categoria else '') + ' | ' + s.sito.nome -%}
+{%- elif titoloPagina -%}{%- set titoloGoogle = titoloPagina + ' | ' + s.sito.nome -%}
+{%- else -%}{%- set titoloGoogle = s.sito.nome -%}{%- endif -%}
+{%- set immagineSocial = (immagine or '/assets/effinge-anteprima.png') | assoluto(s.sito.indirizzo) -%}
 <!doctype html>
 <html lang="it" data-sfondo="{{ impostazioni.colori.sfondo or 'grafite' }}" style="--buio:{{ ((impostazioni.colori.buio if impostazioni.colori.buio is number else 55) / 100) }}">
 <head>
@@ -11,16 +18,24 @@
 {%- if noindex or not s.sito.indicizza %}
 <meta name="robots" content="noindex">
 {%- endif %}
-<title>{% if titoloPagina and page.url != '/' %}{{ titoloPagina }} — {% endif %}{{ s.sito.nome }}</title>
+<title>{{ titoloGoogle }}</title>
 <meta name="description" content="{{ descr }}">
 <link rel="canonical" href="{{ page.url | assoluto(s.sito.indirizzo) }}">
 <meta property="og:type" content="{{ 'article' if layout == 'testo.njk' else 'website' }}">
 <meta property="og:site_name" content="{{ s.sito.nome }}">
-<meta property="og:title" content="{{ titoloPagina or s.sito.nome }}">
+<meta property="og:title" content="{{ (titoloPagina if page.url != '/' else titoloGoogle) or s.sito.nome }}">
+<meta property="og:locale" content="it_IT">
 <meta property="og:description" content="{{ descr }}">
 <meta property="og:url" content="{{ page.url | assoluto(s.sito.indirizzo) }}">
-{%- if immagine %}
-<meta property="og:image" content="{{ immagine | assoluto(s.sito.indirizzo) }}">
+<meta property="og:image" content="{{ immagineSocial }}">
+{%- if not immagine %}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Il foglio di Effinge nel buio, sotto una lampada">
+{%- endif %}
+<meta name="twitter:card" content="summary_large_image">
+{%- if not noindex %}
+<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo } | jsonld(page, impostazioni) | safe }}</script>
 {%- endif %}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A09'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' text-anchor='middle' fill='%23ECE7DC'%3EE%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>

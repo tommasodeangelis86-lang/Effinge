@@ -2,7 +2,8 @@
 layout: base.njk
 permalink: /scrivi/
 titolo: Scrivi
-noindex: true
+titolo_completo: Foglio Effinge — Editor di scrittura senza distrazioni online
+seo_descrizione: Scrivi al buio con una lampada che segue la penna. Un editor minimalista e gratuito online per concentrarti solo sulle parole, senza distrazioni.
 script: /assets/js/scrivi.js
 stile: /assets/css/scrivi.css
 eleventyExcludeFromCollections: true
@@ -42,6 +43,7 @@ eleventyExcludeFromCollections: true
 {%- endmacro -%}
 
 <main id="contenuto" class="scrivi-pagina" data-scrivi-app>
+  <h1 class="sr">Foglio Effinge — editor di scrittura senza distrazioni</h1>
   <div class="scrivi-barra" role="toolbar" aria-label="Opera">
     <div class="barra-sx">
       <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false" aria-label="Capitoli" title="Capitoli">{{ icona('cap') }}<span>Capitoli</span></button>
@@ -157,6 +159,8 @@ eleventyExcludeFromCollections: true
   <p><strong>La pagina non si è caricata del tutto.</strong> Ricaricala tenendo premuto Maiusc (sul computer: Ctrl + Maiusc + R, su Mac: Cmd + Maiusc + R). Se il problema resta, scrivimi.</p>
 </div>
 
+<p class="scrivi-nota">Foglio Effinge è uno strumento gratuito di scrittura immersiva online: ogni lettera si illumina mentre digiti, aiutandoti a superare il blocco dello scrittore. Quello che scrivi resta nel tuo browser.</p>
+
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <ul class="finestra-elenco" data-elenco-opere></ul>
@@ -194,6 +198,7 @@ eleventyExcludeFromCollections: true
     </div>
     <datalist id="pub-categorie"><option value="Racconto"><option value="Capitolo"><option value="Frammento"><option value="Prosa breve"><option value="Nota"><option value="Poesia"></datalist>
     <label class="campo"><span>Estratto <small>(per la homepage e le anteprime sui social)</small></span><textarea id="pub-estratto" rows="3"></textarea></label>
+    <label class="campo"><span>Descrizione per Google <small>(facoltativa, circa 155 caratteri: di cosa parla il testo)</small></span><textarea id="pub-seo" rows="2" maxlength="300"></textarea></label>
     <label class="spunta"><input type="checkbox" id="pub-evidenza"> In evidenza in homepage</label>
     <fieldset class="scelta">
       <legend>Come</legend>

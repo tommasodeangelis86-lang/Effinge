@@ -44,6 +44,9 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   const page = await ctx.newPage();
   page.on('pageerror', e => problems.push(`${tag}: ${e.message}`));
   await page.goto(home);
+  // SEO: titolo, descrizione, immagine di anteprima e dati strutturati leggibili
+  const seo = await page.evaluate(() => { let jsonOk = true; document.querySelectorAll('script[type="application/ld+json"]').forEach(x => { try { JSON.parse(x.textContent); } catch (e) { jsonOk = false; } }); return { t: document.title, d: (document.querySelector('meta[name=description]') || {}).content || '', og: (document.querySelector('meta[property="og:image"]') || {}).content || '', jsonOk, h2: !!document.querySelector('.apertura h2') }; });
+  if (!/Rivista letteraria/.test(seo.t) || seo.d.length < 80 || !/effinge-anteprima\.png$/.test(seo.og) || !seo.jsonOk || !seo.h2) problems.push(`${tag}: SEO homepage ` + JSON.stringify(seo));
   const sf0 = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage }));
   // cursore del buio: parte scuro, arriva al nero assoluto
   const velo0 = await page.evaluate(() => getComputedStyle(document.body, '::after').opacity);

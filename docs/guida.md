@@ -187,6 +187,18 @@ scrivi su iPhone non compare sul computer, e niente viene inviato a te o al sito
 del browser, le opere si perdono: esporta in Word regolarmente come copia di sicurezza.
 Chiunque visiti il sito può usare Scrivi, ma ognuno vede solo le proprie opere.
 
+### Farsi trovare su Google
+
+- **Homepage**: titolo e descrizione per Google si cambiano in **Impostazioni del sito → Sito**
+  («Titolo della homepage su Google», «Descrizione della homepage su Google»).
+- **Ogni testo**: il titolo per Google si compone da solo («Titolo — Categoria | Effinge»). La
+  descrizione si scrive nel campo **Descrizione per Google** del pannello oppure nella finestra
+  «Pubblica sul sito» di Scrivi; se resta vuota si usa l’estratto. Conviene spiegare in una frase
+  **di cosa parla** il testo, perché i titoli letterari non contengono le parole che le persone cercano.
+- La **sitemap** (`https://www.effinge.it/sitemap.xml`) si aggiorna da sola a ogni pubblicazione.
+- Quando condividi un link, compare l’immagine del foglio sotto la lampada; un testo con la sua
+  **Immagine** usa quella.
+
 ## Cosa richiede ancora me (o un tecnico)
 
 - cambiare l’impaginazione, i caratteri o il comportamento della lampada oltre le impostazioni;

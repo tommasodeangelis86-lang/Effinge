@@ -9,7 +9,7 @@ permalink: /
     <div class="palco">
       <div class="foglio">
         <div class="contenuto">
-          <div class="intestazione" aria-hidden="true"><span>{{ s.apertura.intestazione_sinistra }}</span><span>{{ s.apertura.intestazione_destra }}</span></div>
+          <div class="intestazione"><span aria-hidden="true">{{ s.apertura.intestazione_sinistra }}</span><h2 class="intestazione-h">{{ s.apertura.intestazione_destra }}</h2></div>
           <h1 class="titolo" data-scrittura data-enabled="{{ 'true' if a.attiva else 'false' }}" data-speed="{{ a.velocita }}" data-delay="{{ a.ritardo }}" data-fade="{{ a.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if a.cursore else 'false' }}" data-repeat="{{ a.ripetizione or 'sempre' }}">{{ s.apertura.scritta }}</h1>
           {%- if s.apertura.sottotitolo %}
           <p class="sottotitolo">{{ s.apertura.sottotitolo }}</p>

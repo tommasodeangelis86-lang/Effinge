@@ -1,10 +1,11 @@
 {
   "sito": {
     "nome": "Effinge",
-    "descrizione": "Effinge, pubblicazione letteraria indipendente.",
+    "descrizione": "Un atlante delle cose invisibili. Effinge è una pubblicazione letteraria indipendente nata nel 2026 con un editor immersivo per scrivere nel buio.",
     "indirizzo": "https://www.effinge.it",
     "indicizza": true,
-    "piede": ""
+    "piede": "",
+    "titolo_home": "Effinge — Rivista letteraria indipendente e spazio di scrittura"
   },
   "apertura": {
     "scritta": "Effinge",

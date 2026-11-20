@@ -40,7 +40,7 @@ export default function (config) {
       '\n<meta http-equiv="Content-Security-Policy" content="' + csp + '">' +
       '\n<meta name="referrer" content="strict-origin-when-cross-origin">');
   });
-  config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', media: 'media' });
+  config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
 
   // Testi pubblicati, dal più recente
@@ -61,6 +61,34 @@ export default function (config) {
   config.addFilter('limita', (arr, n) => (arr || []).slice(0, n));
   config.addFilter('assoluto', (path, base) => new URL(path, base || 'https://effinge.it').href);
   config.addFilter('json', (v) => JSON.stringify(v));
+  // Dati strutturati schema.org: rivista (homepage), articolo (testi), applicazione (Scrivi), raccolta (archivio)
+  config.addFilter('jsonld', function (d, page, s) {
+    d = d || {};
+    const base = (s.sito.indirizzo || 'https://www.effinge.it').replace(/\/$/, '');
+    const url = base + page.url;
+    const editore = { '@type': 'Organization', name: s.sito.nome, url: base + '/' };
+    let dati;
+    if (page.url === '/') {
+      dati = [
+        { '@type': 'WebSite', name: s.sito.nome, url: base + '/', inLanguage: 'it-IT', description: s.sito.descrizione },
+        { '@type': 'Periodical', name: s.sito.nome, url: base + '/', inLanguage: 'it-IT', description: s.sito.descrizione, publisher: editore },
+      ];
+    } else if (d.layout === 'testo.njk') {
+      dati = { '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || d.estratto || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
+        inLanguage: 'it-IT', articleSection: d.categoria || undefined, url, mainEntityOfPage: url, publisher: editore, isPartOf: { '@type': 'Periodical', name: s.sito.nome, url: base + '/' },
+        image: d.immagine ? base + d.immagine : base + '/assets/effinge-anteprima.png' };
+    } else if (page.url === '/scrivi/') {
+      dati = { '@type': 'WebApplication', name: 'Foglio Effinge', url, applicationCategory: 'ProductivityApplication', operatingSystem: 'Web', inLanguage: 'it-IT',
+        description: d.seo_descrizione, isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' }, publisher: editore };
+    } else if (page.url === '/archivio/') {
+      dati = { '@type': 'CollectionPage', name: d.titolo_completo || d.titolo, url, inLanguage: 'it-IT', description: d.seo_descrizione, isPartOf: { '@type': 'WebSite', name: s.sito.nome, url: base + '/' } };
+    } else {
+      dati = { '@type': 'WebPage', name: d.titolo, url, inLanguage: 'it-IT', isPartOf: { '@type': 'WebSite', name: s.sito.nome, url: base + '/' } };
+    }
+    const grafo = { '@context': 'https://schema.org', '@graph': [].concat(dati) };
+    // niente «</script>» possibile nel testo: si rende innocuo il carattere «<»
+    return JSON.stringify(grafo).replace(/</g, '\\u003c');
+  });
 
   return {
     dir: { input: 'src', includes: '_includes', data: '_data', output: '_site' },
