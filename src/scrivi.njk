@@ -31,6 +31,12 @@ eleventyExcludeFromCollections: true
 {%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
 {%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
 {%- elif nome == 'x' %}<path d="M6 6l12 12M18 6 6 18"/>
+{%- elif nome == 'opere' %}<path d="M5 4h4v16H5zM10 4h4v16h-4zM15.5 4.6l3.8-1 3.7 15.5-3.8.9z"/>
+{%- elif nome == 'conc' %}<path d="M12 4a8 8 0 1 0 0 16 8 8 0 1 0 0-16zM12 8.8a3.2 3.2 0 1 0 0 6.4 3.2 3.2 0 1 0 0-6.4z"/>
+{%- elif nome == 'lamp' %}<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2V16h5v-.2c.1-.8.5-1.5 1.1-2A6 6 0 0 0 12 3z"/>
+{%- elif nome == 'pub' %}<path d="M4 12 20 4l-4 16-4-7-8-1z"/><path d="m12 13 8-9"/>
+{%- elif nome == 'focus' %}<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>
+{%- elif nome == 'esci' %}<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>
 {%- endif %}
 </svg>
 {%- endmacro -%}
@@ -38,19 +44,20 @@ eleventyExcludeFromCollections: true
 <main id="contenuto" class="scrivi-pagina" data-scrivi-app>
   <div class="scrivi-barra" role="toolbar" aria-label="Opera">
     <div class="barra-sx">
-      <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false">{{ icona('cap') }}<span>Capitoli</span></button>
-      <button type="button" class="pill" data-comando="opere">Opere</button>
+      <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false" aria-label="Capitoli" title="Capitoli">{{ icona('cap') }}<span>Capitoli</span></button>
+      <button type="button" class="pill" data-comando="opere" aria-label="Opere" title="Opere">{{ icona('opere') }}<span>Opere</span></button>
       <label class="sr" for="nome-opera">Titolo dell’opera</label>
       <input id="nome-opera" class="nome-opera" type="text" autocomplete="off" spellcheck="false">
     </div>
     <div class="barra-centro">
-      <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true">Concentrazione</button>
-      <button type="button" class="pill" data-comando="lampada" aria-pressed="true">Lampada</button>
+      <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}<span>Concentrazione</span></button>
+      <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}<span>Lampada</span></button>
     </div>
     <div class="barra-dx">
-      <button type="button" class="pill pubblica" data-comando="pubblica" hidden>Pubblica sul sito</button>
+      <button type="button" class="pill pubblica" data-comando="pubblica" aria-label="Pubblica sul sito" title="Pubblica sul sito" hidden>{{ icona('pub') }}<span>Pubblica sul sito</span></button>
       <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word">{{ icona('imp') }}<span>Importa da Word</span></button>
       <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word">{{ icona('esp') }}<span>Esporta in Word</span></button>
+      <button type="button" class="pill focus" data-comando="focus" aria-pressed="false" aria-label="Focus: solo la pagina (Esc per uscire)" title="Focus: solo la pagina (Esc per uscire)"><span class="ic-entra">{{ icona('focus') }}</span><span class="ic-esci">{{ icona('esci') }}</span><span>Focus</span></button>
       <input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden data-file-word>
     </div>
   </div>
@@ -101,10 +108,10 @@ eleventyExcludeFromCollections: true
       <div class="gruppo">
         <h2>Stile</h2>
         <div class="stili">
-          <button type="button" data-blocco="p">Normale</button>
-          <button type="button" data-blocco="h2">Sottotitolo</button>
-          <button type="button" data-blocco="h3">Titoletto</button>
-          <button type="button" data-blocco="blockquote">Citazione</button>
+          <button type="button" data-blocco="p" title="Normale" aria-label="Normale"><span class="breve" aria-hidden="true">¶</span><span class="lungo">Normale</span></button>
+          <button type="button" data-blocco="h2" title="Sottotitolo" aria-label="Sottotitolo"><span class="breve" aria-hidden="true">Aa</span><span class="lungo">Sottotitolo</span></button>
+          <button type="button" data-blocco="h3" title="Titoletto" aria-label="Titoletto"><span class="breve" aria-hidden="true">TT</span><span class="lungo">Titoletto</span></button>
+          <button type="button" data-blocco="blockquote" title="Citazione" aria-label="Citazione"><span class="breve" aria-hidden="true">{{ icona('cit') }}</span><span class="lungo">Citazione</span></button>
         </div>
       </div>
       <div class="gruppo">

@@ -99,6 +99,15 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.reload(); await page.evaluate(() => window.EffingeScrivi.pronto);
   ok((await page.evaluate(() => document.documentElement.getAttribute('data-sfondo'))) === 'midnight-bloom', 'sfondo non ricordato dopo il ricaricamento');
   await page.click('.scrivi-editor'); await page.keyboard.press('Control+End');
+  // focus totale: solo la pagina, comandi a icone che si dissolvono scrivendo, Esc per uscire
+  await page.click('[data-comando="focus"]'); await page.waitForTimeout(500);
+  const f1 = await page.evaluate(() => ({ on: document.documentElement.classList.contains('focus-totale'), barraSito: getComputedStyle(document.querySelector('.barra')).opacity, larghezzaFormato: Math.round(document.querySelector('.formato').getBoundingClientRect().width) }));
+  ok(f1.on && f1.barraSito === '0' && f1.larghezzaFormato <= 64, 'focus: ' + JSON.stringify(f1));
+  await page.click('.scrivi-editor'); await page.keyboard.type(' focus', { delay: 20 }); await page.waitForTimeout(300);
+  ok(await page.evaluate(() => document.documentElement.classList.contains('focus-quiete')), 'focus: i comandi non si dissolvono mentre si scrive');
+  await page.screenshot({ path: join(out, 'scrivi-focus.png') });
+  await page.keyboard.press('Escape'); await page.waitForTimeout(300);
+  ok(!(await page.evaluate(() => document.documentElement.classList.contains('focus-totale'))), 'focus: Esc non fa uscire');
   // capitoli
   await page.click('[data-nuova="capitolo"]'); await page.keyboard.type('Secondo capitolo.', { delay: 5 });
   await page.click('[data-nuova="parte"]'); await page.keyboard.type('Parte II');

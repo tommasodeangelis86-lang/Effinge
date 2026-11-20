@@ -55,6 +55,8 @@ button{font:inherit;color:inherit}
 .lampada{position:absolute;left:0;top:0;width:260cqw;height:260cqw;pointer-events:none;z-index:3;border-radius:50%;will-change:transform,opacity;
   transform:translate3d(var(--lx,50cqw),var(--ly,30cqw),0) translate(-50%,-50%)}
 .lampada.buio{background:radial-gradient(closest-side,rgba(9,8,7,0) 0%,rgba(9,8,7,.12) 9%,rgba(9,8,7,.5) 24%,rgba(9,8,7,.82) 44%,rgba(9,8,7,.95) 100%);opacity:var(--buio,.94)}
+/* oltre il cerchio il buio continua (fogli molto alti, telefono): un'ombra dello stesso colore del bordo */
+.lampada.buio{border-radius:0;box-shadow:0 0 0 300vmax rgba(9,8,7,.95)}
 .lampada.calore{width:110cqw;height:110cqw;mix-blend-mode:multiply;opacity:var(--calore,.9);
   background:radial-gradient(closest-side,color-mix(in srgb,var(--luce) 42%,#fff),color-mix(in srgb,var(--luce) 22%,#fff) 40%,rgba(255,255,255,0) 75%)}
 .foglio > .contenuto{position:relative;z-index:1}

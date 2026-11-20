@@ -268,10 +268,14 @@
     var L = new Lampada(foglio);
     L.lag = reduce ? 1 : 260; L.intensity = 1;
     var ultimoMouse = null, modoMouse = false;
+    // solo dove c'è davvero un mouse (sui telefoni arrivano falsi segnali «mouse» in 0,0)
+    var conMouse = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
     document.addEventListener('pointermove', function (e) {
-      if (e.pointerType !== 'mouse') return;
+      if (e.pointerType !== 'mouse' || !conMouse) return;
       if (ultimoMouse && ultimoMouse.x === e.clientX && ultimoMouse.y === e.clientY) return;   // movimento fantasma
+      var primo = !ultimoMouse;
       ultimoMouse = { x: e.clientX, y: e.clientY };
+      if (primo) return;   // il primo segnale registra solo la posizione: serve un movimento vero
       modoMouse = true;
       var r = foglio.getBoundingClientRect();
       L.to(e.clientX - r.left, e.clientY - r.top);

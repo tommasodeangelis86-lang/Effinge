@@ -843,6 +843,50 @@
   });
   mostraAutore();
 
+  /* ——— Focus totale: solo la pagina; schermo intero dove si può; Esc per uscire ——— */
+  var btnFocus = $('[data-comando="focus"]'), schermoIntero = false, ancoraQuiete = null;
+  function focus(on) {
+    root.classList.toggle('focus-totale', on);
+    root.classList.remove('focus-quiete');
+    btnFocus.setAttribute('aria-pressed', String(on));
+    if (on) {
+      var de = document.documentElement;
+      if (de.requestFullscreen && document.fullscreenEnabled && !document.fullscreenElement) {
+        de.requestFullscreen().then(function () { schermoIntero = true; }, function () { schermoIntero = false; });
+      }
+    } else {
+      chiudiPannello();
+      if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+      schermoIntero = false;
+    }
+    requestAnimationFrame(function () { if (L) lampadaSulCursore(); });
+  }
+  btnFocus.addEventListener('click', function () { focus(!root.classList.contains('focus-totale')); });
+  // uscendo dallo schermo intero (con Esc il browser lo chiude da sé) si esce anche dal focus
+  document.addEventListener('fullscreenchange', function () {
+    if (!document.fullscreenElement && schermoIntero && root.classList.contains('focus-totale')) focus(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !root.classList.contains('focus-totale')) return;
+    if (document.querySelector('dialog[open]') || pannelloCap.classList.contains('aperto')) return;
+    var sf = document.getElementById('sfondi-scelta'); if (sf && !sf.hidden) return;
+    focus(false);
+  });
+  // mentre si scrive i comandi si dissolvono; tornano con un movimento vero del mouse o un tocco fuori dal foglio
+  editor.addEventListener('beforeinput', function () {
+    if (!root.classList.contains('focus-totale')) return;
+    root.classList.add('focus-quiete');
+    ancoraQuiete = ultimoMouse;
+  });
+  document.addEventListener('pointermove', function (e) {
+    if (e.pointerType !== 'mouse' || !root.classList.contains('focus-quiete')) return;
+    if (ancoraQuiete && Math.hypot(e.clientX - ancoraQuiete.x, e.clientY - ancoraQuiete.y) < 40) return;
+    root.classList.remove('focus-quiete');
+  }, { passive: true });
+  document.addEventListener('touchstart', function (e) {
+    if (root.classList.contains('focus-quiete') && !editor.contains(e.target)) root.classList.remove('focus-quiete');
+  }, { passive: true });
+
   // usato dal modulo Word e dai test
   window.EffingeScrivi = {
     pulisci: pulisci,

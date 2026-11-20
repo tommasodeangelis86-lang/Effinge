@@ -209,3 +209,53 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 .esito a{text-decoration:underline;text-underline-offset:3px}
 .finestra-corpo code{font-size:.85em;padding:1px 5px;border-radius:5px;background:var(--stanza)}
 @media (max-width:520px){.campi-due{grid-template-columns:1fr}}
+
+/* ——— Focus totale: solo la pagina; i comandi diventano icone che si dissolvono mentre si scrive ——— */
+.pill .ic-esci,.stili .breve{display:none}
+.pill.focus[aria-pressed="true"] .ic-entra{display:none}
+.pill.focus[aria-pressed="true"] .ic-esci{display:inline-flex}
+.pill > span:not([class]),.pill .ic-entra,.pill .ic-esci{display:inline-flex;align-items:center}
+html.focus-totale .barra{transform:translateY(-110%);opacity:0;pointer-events:none;transition:transform .5s var(--ease),opacity .4s ease}
+html.focus-totale .scrivi-pagina{padding-top:calc(78px + env(safe-area-inset-top,0px))}
+html.focus-totale .scrivi-barra{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:45;width:auto;max-width:calc(100vw - 24px);margin:0;padding:5px;gap:2px;flex-wrap:nowrap;border-radius:999px;background:rgba(14,13,12,.55);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 30px -12px rgba(0,0,0,.6)}
+html.focus-totale .barra-sx,html.focus-totale .barra-centro,html.focus-totale .barra-dx{flex:none;gap:2px;order:initial}
+html.focus-totale .barra-centro{padding:0 4px;margin:0 2px;border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1)}
+html.focus-totale .nome-opera{display:none}
+html.focus-totale .scrivi-barra .pill{width:34px;height:34px;padding:0;justify-content:center;border-color:transparent}
+html.focus-totale .scrivi-barra .pill > span:not([class]){display:none}
+html.focus-totale .scrivi-barra .pill .ic{width:17px;height:17px}
+html.focus-totale .scrivi-barra .pill[aria-pressed="true"]:not(.focus){background:color-mix(in srgb,var(--carta) 18%,transparent);color:var(--testo);border-color:transparent}
+html.focus-totale .scrivi-barra .pill.focus{background:var(--carta);color:var(--inchiostro)}
+html.focus-totale .solo-mobile{display:inline-flex}
+html.focus-totale .scrivi-app{grid-template-columns:minmax(0,1fr);max-width:none;gap:0}
+html.focus-totale .centro-foglio{grid-column:1;grid-row:1}
+/* capitoli: dietro un'icona, si aprono come un pannello */
+html.focus-totale .capitoli{position:fixed;inset:0 auto 0 0;z-index:70;width:min(86vw,320px);max-height:none;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:var(--stanza-2);border-right:1px solid var(--filo);transform:translateX(-102%);transition:transform .35s var(--ease);box-shadow:20px 0 60px rgba(0,0,0,.6)}
+html.focus-totale .capitoli.aperto{transform:none}
+html.focus-totale .chiudi-pannello{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--filo);border-radius:999px;background:transparent;color:var(--testo-2)}
+/* formattazione: una colonna stretta di icone, come in Narrator */
+html.focus-totale .formato{position:fixed;top:50%;right:max(14px,env(safe-area-inset-right,0px));left:auto;bottom:auto;transform:translateY(-50%);z-index:44;width:58px;max-height:calc(100svh - 120px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;gap:0;padding:10px 0;border-radius:18px;background:rgba(14,13,12,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 30px -12px rgba(0,0,0,.6);grid-column:auto;grid-row:auto;scrollbar-width:none}
+html.focus-totale .formato .gruppo{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;padding:8px 0;border:0;border-top:1px solid rgba(255,255,255,.07)}
+html.focus-totale .formato .gruppo:first-child{border-top:0;padding-top:2px}
+html.focus-totale .formato h2{display:block;margin:0 0 3px;font:600 7.5px/1 var(--ui);letter-spacing:.12em;color:var(--testo-3)}
+html.focus-totale .stili,html.focus-totale .icone{display:flex;flex-direction:column;align-items:center;gap:3px}
+html.focus-totale .stili button,html.focus-totale .icone button{width:34px;height:28px;padding:0;border-radius:8px;display:grid;place-items:center;border-color:transparent;font:500 .75rem/1 var(--ui)}
+html.focus-totale .stili .lungo{display:none}
+html.focus-totale .stili .breve{display:inline-flex;align-items:center}
+html.focus-totale .stili [data-blocco="h2"] .breve{font:400 .9375rem/1 var(--display)}
+html.focus-totale .stili [data-blocco="h3"] .breve{font:700 .625rem/1 var(--ui);letter-spacing:.06em}
+html.focus-totale .stili button .ic,html.focus-totale .icone button .ic{width:15px;height:15px}
+html.focus-totale .stili button[aria-pressed="true"],html.focus-totale .icone button[aria-pressed="true"]{background:color-mix(in srgb,var(--carta) 20%,transparent);color:var(--testo);border-color:transparent}
+/* il foglio, protagonista */
+html.focus-totale .scrivi-foglio{box-shadow:0 2px 0 rgba(255,255,255,.03),0 50px 120px -30px rgba(0,0,0,.9),0 18px 40px -18px rgba(0,0,0,.75)}
+/* mentre si scrive i comandi quasi scompaiono; muovendo il mouse o passandoci sopra tornano */
+html.focus-totale .scrivi-barra,html.focus-totale .formato{transition:opacity .9s ease,transform .5s var(--ease)}
+html.focus-totale.focus-quiete .scrivi-barra,html.focus-totale.focus-quiete .formato{opacity:.06}
+html.focus-totale.focus-quiete .scrivi-barra:hover,html.focus-totale.focus-quiete .formato:hover,html.focus-totale.focus-quiete .scrivi-barra:focus-within{opacity:1;transition-duration:.2s}
+/* telefono: niente colonna di formattazione, solo la fila di icone in alto */
+@media (max-width:820px){
+  html.focus-totale .formato{display:none}
+  html.focus-totale .scrivi-pagina{padding-left:6px;padding-right:6px}
+  html.focus-totale.focus-quiete .scrivi-barra{pointer-events:none}
+}
+@media (prefers-reduced-motion:reduce){html.focus-totale .barra,html.focus-totale .scrivi-barra,html.focus-totale .formato{transition:none}}
