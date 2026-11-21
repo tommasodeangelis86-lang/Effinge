@@ -7,6 +7,10 @@ eleventyExcludeFromCollections: true
   <url><loc>{{ '/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
   <url><loc>{{ '/archivio/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
   <url><loc>{{ '/scrivi/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  <url><loc>{{ '/guide/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  {%- for g in collections.guide %}
+  <url><loc>{{ g.url | assoluto(impostazioni.sito.indirizzo) }}</loc><lastmod>{{ g.date | dataIso }}</lastmod></url>
+  {%- endfor %}
   {%- for p in collections.pagine %}
   <url><loc>{{ p.url | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
   {%- endfor %}

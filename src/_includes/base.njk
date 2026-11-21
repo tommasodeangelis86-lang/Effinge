@@ -35,7 +35,7 @@
 {%- endif %}
 <meta name="twitter:card" content="summary_large_image">
 {%- if not noindex %}
-<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo } | jsonld(page, impostazioni) | safe }}</script>
+<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo, faq: faq } | jsonld(page, impostazioni) | safe }}</script>
 {%- endif %}
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230A0A09'/%3E%3Ctext x='16' y='24' font-family='Georgia,serif' font-size='22' text-anchor='middle' fill='%23ECE7DC'%3EE%3C/text%3E%3C/svg%3E">
 <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -79,7 +79,7 @@
 <footer class="piede" id="contatti">
   <span>{{ s.sito.nome }} © {{ build.anno }}</span>
   {%- if s.sito.piede %}<span>{{ s.sito.piede }}</span>{% endif %}
-  <span><a href="/archivio/">Archivio</a></span>
+  <span><a href="/guide/">Guide per chi scrive</a> · <a href="/archivio/">Archivio</a></span>
 </footer>
 <script src="/assets/js/sito.js?v={{ build.versione }}" defer></script>
 {%- if script %}

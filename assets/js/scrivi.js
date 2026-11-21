@@ -104,8 +104,9 @@
     var m = text.trim().match(/\S+/g);
     return { parole: m ? m.length : 0, battute: Array.from(text.replace(/\r?\n/g, '')).length };
   }
+  function cartella() { return leggi('effinge-scrivi-cartella') === '1800' ? 1800 : 2000; }
   function riassunto(c) {
-    var k = c.battute / 2000;
+    var k = c.battute / cartella();
     return fmt.format(c.parole) + (c.parole === 1 ? ' parola' : ' parole') + ' · ' + fmt.format(c.battute) + ' battute · ' + fmt1.format(k) + (k === 1 ? ' cartella' : ' cartelle');
   }
   function escape(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -577,6 +578,14 @@
   preferenza('concentrazione', 'scrittura-concentrata', $('[data-comando="concentrazione"]'), true);
   preferenza('lampada', 'scrittura-lampada', $('[data-comando="lampada"]'), !reduce);
   preferenza('manoscritto', 'manoscritto', $('[data-comando="manoscritto"]'), false);
+  // cartella editoriale da 2000 (scelta iniziale) o da 1800 battute (la più diffusa)
+  var btnCartella = $('[data-comando="cartella"]');
+  function segnaCartella() { btnCartella.textContent = 'Cartella ' + cartella(); }
+  btnCartella.addEventListener('click', function () {
+    scriviPref('effinge-scrivi-cartella', cartella() === 2000 ? '1800' : '2000');
+    segnaCartella(); aggiornaConteggioVivo(); totali();
+  });
+  segnaCartella();
 
   /* ——— Pulsanti ——— */
   var btnCap = $('[data-apri-capitoli]');

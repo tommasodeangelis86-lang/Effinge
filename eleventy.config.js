@@ -46,6 +46,9 @@ export default function (config) {
   // Testi pubblicati, dal più recente
   config.addCollection('testi', (api) =>
     api.getFilteredByGlob('src/testi/*.md').filter((p) => !isDraft(p.data)).sort((a, b) => b.date - a.date));
+  config.addCollection('guide', (api) =>
+    api.getFilteredByGlob('src/guide/*.md').sort((a, b) => (a.data.ordine || 0) - (b.data.ordine || 0)));
+  config.addFilter('escludi', (arr, url) => (arr || []).filter((x) => x.url !== url));
   config.addCollection('pagine', (api) =>
     api.getFilteredByGlob('src/pagine/*.md').filter((p) => !isDraft(p.data)).sort((a, b) => (a.data.ordine || 0) - (b.data.ordine || 0)));
 
@@ -77,6 +80,10 @@ export default function (config) {
       dati = { '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || d.estratto || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
         inLanguage: 'it-IT', articleSection: d.categoria || undefined, url, mainEntityOfPage: url, publisher: editore, isPartOf: { '@type': 'Periodical', name: s.sito.nome, url: base + '/' },
         image: d.immagine ? base + d.immagine : base + '/assets/effinge-anteprima.png' };
+    } else if (d.layout === 'guida.njk') {
+      dati = [{ '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
+        inLanguage: 'it-IT', url, mainEntityOfPage: url, publisher: editore, image: base + '/assets/effinge-anteprima.png' }];
+      if (d.faq && d.faq.length) dati.push({ '@type': 'FAQPage', mainEntity: d.faq.map((q) => ({ '@type': 'Question', name: q.d, acceptedAnswer: { '@type': 'Answer', text: q.r } })) });
     } else if (page.url === '/scrivi/') {
       dati = { '@type': 'WebApplication', name: 'Foglio Effinge', url, applicationCategory: 'ProductivityApplication', operatingSystem: 'Web', inLanguage: 'it-IT',
         description: d.seo_descrizione, isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' }, publisher: editore };

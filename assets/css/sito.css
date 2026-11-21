@@ -289,3 +289,39 @@ html:not(.lampada-accesa) .lettura-pagina .foglio .lampada{opacity:0!important;t
 .lampada-accesa .vignetta{opacity:0}
 .comandi{right:auto;left:max(16px,env(safe-area-inset-left,0px))}
 .intestazione-h{margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}
+/* ——— Guide per chi scrive ——— */
+.guida .lettura-testa .meta a{text-decoration:none}
+.guida .corpo p + p{text-indent:0;margin-top:.9em}
+.guida .corpo h2{margin:2em 0 .6em;font:400 1.6em/1.2 var(--display);text-indent:0}
+.guida .corpo ul{margin:.8em 0;padding-left:1.2em}
+.guida .corpo li{margin:.35em 0}
+.guida .corpo li::marker{color:color-mix(in srgb,var(--inchiostro) 45%,transparent)}
+.guida .corpo strong{font-weight:600}
+.guida .corpo em{font-style:italic}
+.guida .corpo a{color:var(--inchiostro)}
+.calcolatore{margin:1.4em 0 1.8em;padding:20px;border:1px solid color-mix(in srgb,var(--inchiostro) 16%,transparent);border-radius:12px;background:color-mix(in srgb,var(--inchiostro) 3%,transparent)}
+.calcolatore-campo{display:block;margin-bottom:8px;font:500 .75rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--inchiostro-2)}
+.calcolatore textarea{width:100%;min-height:9em;resize:vertical;border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);border-radius:8px;background:color-mix(in srgb,#fff 35%,transparent);color:var(--inchiostro);padding:12px;font:400 1rem/1.5 var(--lettura);outline:none}
+.calcolatore textarea:focus{border-color:var(--inchiostro-2)}
+.calcolatore-risultati{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px;margin:16px 0 0}
+.calcolatore-risultati div{min-width:0}
+.calcolatore-risultati dt{font:500 .6875rem/1.3 var(--ui);letter-spacing:.04em;text-transform:uppercase;color:var(--inchiostro-2)}
+.calcolatore-risultati dd{margin:4px 0 0;font:400 1.5rem/1.1 var(--display);font-variant-numeric:tabular-nums}
+.faq{max-width:34em;margin:clamp(48px,7vw,72px) auto 0}
+.faq h2{margin:0 0 14px;font:400 1.6rem/1.2 var(--display)}
+.faq details{border-top:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.faq details:last-child{border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.faq summary{cursor:pointer;padding:14px 0;font:500 1rem/1.4 var(--ui);list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font:300 1.3rem/1 var(--ui);color:var(--inchiostro-2)}
+.faq details[open] summary::after{content:"–"}
+.faq details p{margin:0 0 16px;font:400 1.0625rem/1.65 var(--lettura);color:var(--inchiostro)}
+.invito-scrivi{max-width:34em;margin:clamp(48px,7vw,72px) auto 0;padding:24px;border-radius:14px;background:var(--inchiostro);color:var(--carta)}
+.invito-scrivi .invito-titolo{margin:0 0 8px;font:300 1.6rem/1.15 var(--display)}
+.invito-scrivi p{margin:0 0 18px;font:400 1rem/1.55 var(--ui);color:color-mix(in srgb,var(--carta) 82%,transparent)}
+.invito-scrivi .pulsante{background:var(--carta);color:var(--inchiostro)}
+.altre-guide{max-width:34em;margin:32px auto 0;display:flex;flex-wrap:wrap;gap:8px 18px;font:400 .9375rem/1.4 var(--ui)}
+.altre-guide span{width:100%;font:500 .6875rem/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--inchiostro-2)}
+.altre-guide a{text-decoration:underline;text-underline-offset:3px}
+.scrivi-nota a{text-decoration:underline;text-underline-offset:3px;color:var(--testo-2)}
+@media (max-width:560px){.calcolatore-risultati{grid-template-columns:repeat(2,minmax(0,1fr))}}

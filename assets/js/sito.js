@@ -364,9 +364,25 @@
     segna();
   }
 
+  /* ——— Calcolatore di cartelle (guida): tutto nel browser ——— */
+  function calcolatore(box) {
+    var ta = box.querySelector('textarea');
+    var it = new Intl.NumberFormat('it-IT'), it1 = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 1 });
+    function out(k, v) { var el = box.querySelector('[data-r="' + k + '"]'); if (el) el.textContent = v; }
+    function conta() {
+      var t = ta.value, battute = Array.from(t.replace(/\r?\n/g, '')).length, senza = Array.from(t.replace(/\s/g, '')).length;
+      var m = t.trim().match(/\S+/g);
+      out('battute', it.format(battute)); out('senza', it.format(senza)); out('parole', it.format(m ? m.length : 0));
+      out('c1800', it1.format(battute / 1800)); out('c2000', it1.format(battute / 2000)); out('c1500', it1.format(battute / 1500));
+    }
+    ta.addEventListener('input', conta);
+    conta();
+  }
+
   /* ——— Avvio ——— */
   function init() {
     sfondi();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-calcolatore]'), calcolatore);
     // Scrivi: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
     if (document.querySelector('[data-scrivi-app]')) setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);
     var s;
