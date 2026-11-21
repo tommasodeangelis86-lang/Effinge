@@ -3,8 +3,8 @@
  *
  * 1. Lampada: un cono di luce fioca che si muove su un foglio con uno smorzamento morbido.
  * 2. Scrittura: la scritta d'apertura compare lettera per lettera; ogni lettera si
- *    accende sotto la lampada e poi torna inchiostro (come il focus di Alhora).
- * 3. Scene: l'apertura e il progetto sono legati allo scorrimento, in stile Apple.
+ *    accende sotto la lampada e poi torna inchiostro.
+ * 3. Scene: l'apertura e il progetto reagiscono allo scorrimento della pagina.
  * 4. Lettura: il paragrafo che si sta leggendo resta acceso, gli altri si attenuano.
  *
  * Impostazioni della scritta (collegabili al CMS) come attributi sull'<h1 data-scrittura>:

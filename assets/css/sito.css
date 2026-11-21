@@ -84,7 +84,7 @@ html:not(.js) .lampada.buio{opacity:.35}
 .riaccendi{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));background:none;border:0;padding:8px 0;font:450 .75rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-3);cursor:pointer;transition:color .2s ease}
 .riaccendi:hover{color:var(--testo)}
 
-/* Lettere che si accendono, come in Alhora */
+/* Accensione delle lettere durante la scrittura */
 .glifo{display:inline-block;white-space:pre}
 .scrivendo .glifo:not(.acceso){opacity:0}
 .cursore{display:inline-block;width:.035em;height:.72em;margin-left:.04em;background:var(--inchiostro);vertical-align:-.02em;opacity:0}

@@ -4,8 +4,8 @@ Sito di Effinge, spazio per la scrittura immersiva (effinge.it).
 
 ## Il sito: «La pagina e la lampada»
 
-Un foglio di carta in una stanza buia, una lampada fioca che scorre sulla scrittura, righe che
-si accendono mentre si scorre (come il focus di Alhora), scene a scorrimento.
+Un foglio di carta in una stanza buia. Una lampada fioca accompagna le lettere mentre compaiono
+e illumina le righe man mano che scorri.
 
 **Per gestirlo leggi la [guida](docs/guida.md)**: pubblicare testi, creare pagine, cambiare
 colori e animazione, mettere il sito online e collegare effinge.it.
