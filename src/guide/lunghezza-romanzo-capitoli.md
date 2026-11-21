@@ -1,12 +1,12 @@
 ---
 titolo: "Quanto deve essere lungo un romanzo?"
 titolo_completo: "Quanto deve essere lungo un romanzo e quanto un capitolo? | Effinge"
-seo_descrizione: "Come misurare la lunghezza di un romanzo in battute e cartelle, valutare il ritmo dei capitoli e controllare i limiti prima di inviare un manoscritto."
+seo_descrizione: "Lunghezza del romanzo breve, del romance, dello storico e degli altri generi in battute e cartelle. Come misurare il manoscritto e i capitoli."
 date: 2026-11-21
 ordine: 3
 faq:
   - d: "Quante cartelle deve avere un romanzo?"
-    r: "La lunghezza varia con la storia e con la collana a cui ti rivolgi. Se un editore o un concorso indica un minimo o un massimo, usa quel limite e l’unità di misura richiesta."
+    r: "Come riferimento, un romanzo breve di 120.000–240.000 battute occupa circa 67–133 cartelle da 1800. Un romanzo di media lunghezza di 250.000–600.000 battute ne occupa circa 139–333. Per un invio, usa il limite e l’unità di misura richiesti dalla collana o dal bando."
   - d: "Come si passa dalle battute alle cartelle?"
     r: "Dividi le battute spazi inclusi per le battute di una cartella. Un romanzo di 360.000 battute misura 200 cartelle da 1800 o 180 cartelle da 2000."
   - d: "Quanto deve essere lungo un capitolo?"
@@ -25,16 +25,30 @@ Parti dalle **battute spazi inclusi**. Il numero di pagine cambia appena tocchi 
 
 Un manoscritto di **360.000 battute** occupa **200 cartelle da 1800** oppure **180 cartelle da 2000**. Prima di fare il conto, controlla che cosa chiede chi riceverà il file. Se il limite è espresso in parole, usa direttamente il conteggio delle parole.
 
-## Quanto spazio richiede la storia
+## Lunghezza per formato
 
-Un racconto può reggersi su un solo episodio. Un romanzo breve può seguire poche vicende intrecciate e dare comunque spazio alle conseguenze di una scelta. In un romanzo lungo, tornano più volte personaggi, luoghi e conflitti. In revisione, chiediti quanto cambia la storia ogni volta che ci torni.
+Queste fasce servono a orientarti sulla misura del **manoscritto intero**. Le battute sono **spazi inclusi** e le cartelle sono arrotondate, contando 1800 battute per cartella.
 
-- **Narrativa letteraria e romanzi di formazione.** Una scena può servire a far sentire un cambiamento nella voce o nel modo in cui il personaggio vede gli altri. Controlla quanto ci mette quel cambiamento ad arrivare sulla pagina.
-- **Romance.** Guarda come evolve il rapporto tra i personaggi. Una scena in più può dare il tempo a una scelta di maturare, oppure ripetere una tensione che il lettore ha già capito.
-- **Giallo e thriller.** Fai spazio agli indizi e alle loro conseguenze. La lunghezza utile dipende da quanto il lettore deve sapere prima della rivelazione.
-- **Storico, fantasy e fantascienza.** Le pagine dedicate all’ambientazione sono utili quando cambiano le possibilità dei personaggi. Puoi distribuire queste informazioni nelle scene in cui diventano necessarie.
+- **Racconto** · 5.000–45.000 battute, circa 3–25 cartelle.
+- **Romanzo breve o novella** · 120.000–240.000 battute, circa 67–133 cartelle.
+- **Romanzo di media lunghezza** · 250.000–600.000 battute, circa 139–333 cartelle.
+- **Romanzo lungo** · oltre 600.000 battute, più di 333 cartelle.
 
-Se stai scegliendo dove inviare il testo, guarda le richieste della **singola collana**. È il riferimento più concreto per capire se la lunghezza va bene per quell’invio.
+## Lunghezza per genere
+
+Per i generi, i valori partono dalle stime in parole dell’ex agente letterario Nathan Bransford per il mercato anglofono. Le abbiamo convertite usando circa **6 battute per parola, spazio compreso**. La proporzione varia con la lingua e con il testo. [Le stime di Nathan Bransford](https://nathanbransford.com/blog/2018/04/all-about-novel-word-counts)
+
+- **Narrativa generalista** · 450.000–600.000 battute, circa 250–333 cartelle.
+- **Narrativa letteraria, anche di formazione** · 300.000–720.000 battute, circa 167–400 cartelle.
+- **Romance** · 300.000–540.000 battute, circa 167–300 cartelle.
+- **Young adult** · 360.000–480.000 battute, circa 200–267 cartelle.
+- **Giallo** · 450.000–540.000 battute, circa 250–300 cartelle.
+- **Thriller** · 480.000–600.000 battute, circa 267–333 cartelle.
+- **Romanzo storico** · 480.000–720.000 battute, circa 267–400 cartelle.
+- **Fantasy** · 480.000–720.000 battute, circa 267–400 cartelle.
+- **Fantascienza** · 540.000–720.000 battute, circa 300–400 cartelle.
+
+Per un invio conta il limite della **singola collana o del bando**. Coda di Volpe indica un massimo di 260.000 battute per il romanzo breve. Pleasure Edizioni indica un minimo di 400.000 battute per romance e fantasy. Il bando InediTO 2027 fissa a 36.000 battute il massimo per un racconto. [Coda di Volpe](https://www.codadivolpe.it/contatti/pubblicare-con-noi/) · [Pleasure Edizioni](https://www.pleasureedizioni.com/inviomanoscritto) · [Bando InediTO](https://www.premioinedito.it/bando-2027/)
 
 ## Dove chiudere un capitolo
 
