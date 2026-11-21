@@ -220,7 +220,7 @@ content:
         label: Homepage
         type: object
         fields:
-          - { name: mostra_ultimo, label: Mostra «Ultimo testo», type: boolean }
+          - { name: mostra_ultimo, label: Mostra «Quaderni», type: boolean }
           - { name: mostra_archivio, label: Mostra «Dall’archivio», type: boolean }
           - { name: quanti_in_archivio, label: Quanti testi in «Dall’archivio», type: number, options: { min: 1, max: 12 } }
           - { name: congedo, label: Frase finale, type: string }

@@ -4,6 +4,9 @@ permalink: /
 ---
 {%- set s = impostazioni -%}
 {%- set a = s.animazione -%}
+{%- macro scritturaAllaVista() -%}
+data-scrittura-alla-vista data-enabled="{{ 'true' if a.attiva else 'false' }}" data-speed="{{ a.velocita }}" data-delay="{{ a.ritardo }}" data-fade="{{ a.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if a.cursore else 'false' }}"
+{%- endmacro -%}
 <main id="contenuto">
   <section class="scena apertura" aria-label="Apertura">
     <div class="palco">
@@ -46,10 +49,12 @@ permalink: /
   {%- if sc.mostra %}
   <section class="sezione scrivi-invito" id="scrivi" aria-labelledby="h-scrivi">
     <div class="scrivi-invito-griglia">
-      <div class="scrivi-invito-testo sale">
-        <h2 id="h-scrivi">{{ sc.titolo }}</h2>
-        {%- if sc.testo %}<p>{{ sc.testo }}</p>{% endif %}
-        <a class="pulsante" href="/scrivi/">{{ sc.pulsante }} <span aria-hidden="true">→</span></a>
+      <div class="scrivi-invito-testo">
+        <h2 id="h-scrivi" {{ scritturaAllaVista() }}>{{ sc.titolo }}</h2>
+        <div class="sale">
+          {%- if sc.testo %}<p>{{ sc.testo }}</p>{% endif %}
+          <a class="pulsante" href="/scrivi/">{{ sc.pulsante }} <span aria-hidden="true">→</span></a>
+        </div>
       </div>
       <a class="foglio scrivi-anteprima sale" href="/scrivi/" data-scrittura-al-passaggio aria-label="{{ sc.pulsante }}">
         <div class="contenuto">
@@ -67,7 +72,7 @@ permalink: /
   {%- set altreGuide = collections.guide.length > limiteGuide %}
   <section class="sezione guide-invito" id="guide" aria-labelledby="h-guide">
     <div class="sezione-testa">
-      <h2 id="h-guide">Guide per chi scrive</h2>
+      <h2 id="h-guide" {{ scritturaAllaVista() }}>Guide per chi scrive</h2>
       {%- if not altreGuide %}
       <a href="/guide/">Tutte le guide <span aria-hidden="true">→</span></a>
       {%- endif %}
@@ -92,7 +97,7 @@ permalink: /
 
   {%- if s.home.mostra_ultimo and ultimo %}
   <section class="sezione" id="ultimo" aria-labelledby="h-ultimo">
-    <div class="sezione-testa sale"><h2 id="h-ultimo">Ultimo testo</h2></div>
+    <div class="sezione-testa"><h2 id="h-ultimo" {{ scritturaAllaVista() }}>Quaderni</h2></div>
     <article class="ultimo sale">
       <a class="foglio" href="{{ ultimo.url }}" data-lampada-puntatore{% if ultimo.data.colore_carta | colore(false) %} style="--carta:{{ ultimo.data.colore_carta }}"{% endif %}>
         <div class="contenuto">
