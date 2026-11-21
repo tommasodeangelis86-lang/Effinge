@@ -23,7 +23,6 @@ Tipografia: Newsreader per titoli e prosa, IBM Plex Sans per la navigazione, IBM
 L’apertura è dominata dalla scritta EFFINGE, con ampio spazio negativo. Le lettere emergono progressivamente dal buio; su ciascuna compare un bagliore localizzato che si attenua lasciando il carattere perfettamente nitido. Sotto il titolo può apparire un sottotitolo editoriale, modificabile dall’autore. Il resto del sito resta accessibile senza attendere la fine dell’animazione. Le sezioni successive presentano l’ultimo testo, una selezione dell’archivio e il progetto editoriale.
 
 ## 4. Animazione «Illuminated Type Reveal»
-Deve richiamare la sensazione del Typewriter Focus di Alhora senza copiarne l’interfaccia.
 - Rivelazione progressiva dei caratteri, circa 80 ms ciascuno.
 - Ritardo iniziale di circa 250 ms.
 - Alone luminoso morbido, localizzato e caldo.
