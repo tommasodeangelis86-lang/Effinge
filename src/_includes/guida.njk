@@ -4,15 +4,15 @@ layout: base.njk
 <main id="contenuto" class="lettura-pagina guida">
   <article class="foglio">
     <div class="contenuto">
-      <header class="lettura-testa">
+      <header class="lettura-testa" data-lettura>
         <div class="meta"><a href="/guide/">Guide per chi scrive</a></div>
         <h1>{{ titolo }}</h1>
       </header>
-      <div class="corpo">
+      <div class="corpo" data-lettura>
 {{ content | safe }}
       </div>
       {%- if faq and faq.length %}
-      <section class="faq" aria-labelledby="h-faq">
+      <section class="faq" aria-labelledby="h-faq" data-lettura>
         <h2 id="h-faq">Domande frequenti</h2>
         {%- for q in faq %}
         <details>
@@ -22,14 +22,14 @@ layout: base.njk
         {%- endfor %}
       </section>
       {%- endif %}
-      <aside class="invito-scrivi" aria-label="Foglio Effinge">
+      <aside class="invito-scrivi" aria-label="Foglio Effinge" data-lettura>
         <p class="invito-titolo">Scrivi al buio, sotto una lampada</p>
         <p>Foglio Effinge è un editor gratuito e senza distrazioni: conta parole, battute e cartelle mentre scrivi, impagina il manoscritto ed esporta in Word. Quello che scrivi resta nel tuo browser.</p>
         <a class="pulsante" href="/scrivi/">Prova Foglio Effinge <span aria-hidden="true">→</span></a>
       </aside>
       {%- set altre = collections.guide | escludi(page.url) %}
       {%- if altre.length %}
-      <nav class="altre-guide" aria-label="Altre guide">
+      <nav class="altre-guide" aria-label="Altre guide" data-lettura>
         <span>Altre guide</span>
         {%- for g in altre %}<a href="{{ g.url }}">{{ g.data.titolo }}</a>{% endfor %}
       </nav>
@@ -37,3 +37,6 @@ layout: base.njk
     </div>
   </article>
 </main>
+<div class="comandi" role="group" aria-label="Impostazioni di lettura">
+  <button type="button" data-comando="lampada" aria-pressed="true">Lampada</button>
+</div>
