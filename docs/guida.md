@@ -79,13 +79,13 @@ Se tutto torna, colleghi il dominio.
 5. Per vederlo prima di pubblicarlo apri `https://il-tuo-sito/anteprima/nome-del-testo/`
    (il nome del file senza la data: lo vedi nell’elenco dei testi).
 6. Quando è pronto, togli la spunta **Bozza** e salva. Dopo circa un minuto è online: in
-   homepage come «Ultimo testo», nell’archivio e con la sua pagina di lettura.
+   homepage nella sezione «Quaderni», nell’archivio e con la sua pagina di lettura.
 
 **Modificare** un testo: aprilo dall’elenco, cambia e salva.
 **Togliere** un testo dal sito: rimetti la spunta **Bozza**, oppure eliminalo (*Delete*).
 **Metterlo in evidenza** in homepage: spunta **In evidenza in homepage**.
 
-All’inizio non ci sono testi pubblicati: le sezioni «Ultimo testo» e «Dall’archivio» della homepage compaiono da sole con il primo testo. Le pagine «Il progetto» e «Contatti» sono in bozza: scrivile e togli la spunta «Bozza» per farle comparire nel menu.
+La sezione «Quaderni» della homepage compare con il primo testo pubblicato. «Dall’archivio» compare dal secondo. Le pagine «Il progetto» e «Contatti» sono in bozza: scrivile e togli la spunta «Bozza» per farle comparire nel menu.
 
 ### Creare una nuova pagina
 
@@ -114,9 +114,10 @@ Un singolo testo o una singola pagina può avere una carta diversa: compila il s
 Pannello → **Impostazioni del sito**:
 
 - **Apertura della homepage**: la scritta animata, il sottotitolo e le piccole scritte del foglio.
-- **Animazione della scritta**: attiva o disattiva; velocità (millisecondi per lettera, più basso
-  = più veloce); attesa iniziale; durata della luce su ogni lettera; cursore; se ripeterla a ogni
-  visita o una volta sola.
+- **Animazione della scritta**: puoi attivarla o disattivarla e regolare la velocità in millisecondi
+  per lettera, l’attesa iniziale, la durata della luce e la visibilità del cursore. In homepage,
+  i titoli «Scrivi», «Guide per chi scrive» e «Quaderni» si animano la prima volta che entrano nello
+  schermo. La scelta sulla ripetizione tra visite riguarda la scritta d’apertura.
 - **Lampada**: colore della luce e intensità (più basso = più fioca).
 - **Il progetto**: le righe che si accendono scorrendo (aggiungi, togli, riordina).
 - **Homepage**: quali sezioni mostrare, quanti testi in «Dall’archivio», la frase finale.

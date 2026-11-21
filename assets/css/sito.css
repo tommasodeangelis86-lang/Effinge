@@ -89,6 +89,9 @@ html:not(.js) .lampada.buio{opacity:.35}
 .scrivendo .glifo:not(.acceso){opacity:0}
 .cursore{display:inline-block;width:.035em;height:.72em;margin-left:.04em;background:var(--inchiostro);vertical-align:-.02em;opacity:0}
 .scrivendo .cursore{opacity:.85}
+[data-scrittura-alla-vista] .glifo{display:inline;white-space:normal}
+[data-scrittura-alla-vista] .cursore{position:absolute;margin-top:.12em;background:var(--luce)}
+@media (prefers-reduced-motion:no-preference){.scrittura-attesa{opacity:0}}
 
 /* ——— Scena 2: il progetto, riga per riga ——— */
 .progetto{height:360svh}

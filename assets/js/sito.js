@@ -78,6 +78,8 @@
 
   function Scrittura(h1, lampada) {
     this.el = h1; this.lampada = lampada; this.timers = [];
+    this.allaVista = h1.hasAttribute('data-scrittura-alla-vista');
+    var spazio = this.allaVista ? ' ' : ' ';
     var text = h1.textContent.replace(/\s+/g, ' ').trim();
     h1.setAttribute('aria-label', text);
     h1.textContent = '';
@@ -85,7 +87,7 @@
     this.glifi = chars.map(function (c) {
       var s = document.createElement('span');
       s.className = 'glifo'; s.setAttribute('aria-hidden', 'true');
-      s.textContent = c === ' ' ? ' ' : c;
+      s.textContent = c === ' ' ? spazio : c;
       h1.appendChild(s); return s;
     });
     this.cursore = document.createElement('span');
@@ -111,13 +113,17 @@
     this.stop();
     root.style.setProperty('--luce', o.color);
     if (L) L.intensity = o.intensity;
-    var seen = store(KEY) === '1';
-    if (!o.enabled || reduce || (!force && o.repeat === 'sessione' && seen)) { if (done) done(); return; }
+    if (!o.enabled || reduce || (!force && o.repeat === 'sessione' && store(KEY) === '1')) { if (done) done(); return; }
+    this.glifi.forEach(function (g) {
+      g.classList.remove('acceso');
+      if (g.getAnimations) g.getAnimations().forEach(function (a) { a.cancel(); });
+    });
     this.cursore.style.display = o.cursor ? '' : 'none';
+    if (this.glifi.length) this.glifi[0].before(this.cursore);
     this.el.classList.add('scrivendo');
     var ink = getComputedStyle(this.el).color;
     var peak = '0 0 .05em ' + rgba(o.color, (.9 * o.intensity).toFixed(2)) + ', 0 0 .22em ' + rgba(o.color, (.55 * o.intensity).toFixed(2));
-    if (L) { var p = L.at(this.glifi[0], -.4, .55); L.lag = Math.max(90, o.speed * 1.3); L.to(p.x, p.y); }
+    if (L && this.glifi.length) { var p = L.at(this.glifi[0], -.4, .55); L.lag = Math.max(90, o.speed * 1.3); L.to(p.x, p.y); }
     this.glifi.forEach(function (g, i) {
       self.timers.push(setTimeout(function () {
         g.classList.add('acceso');
@@ -137,11 +143,30 @@
     this.timers.push(setTimeout(function () {
       self.el.classList.remove('scrivendo');
       self.el.appendChild(self.cursore);
-      store(KEY, '1');
+      if (!self.allaVista) store(KEY, '1');
       if (L) L.lag = 900;
       if (done) done();
     }, o.delay + this.glifi.length * o.speed + o.fade));
   };
+
+  function scritturaAllaVista() {
+    var titoli = document.querySelectorAll('[data-scrittura-alla-vista]');
+    if (!titoli.length || reduce || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var titolo = entry.target;
+        io.unobserve(titolo);
+        titolo.classList.remove('scrittura-attesa');
+        new Scrittura(titolo).play(true);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: .25 });
+    Array.prototype.forEach.call(titoli, function (titolo) {
+      if (!bool(titolo.dataset.enabled, true) || !titolo.textContent.trim()) return;
+      titolo.classList.add('scrittura-attesa');
+      io.observe(titolo);
+    });
+  }
 
   /* ——— 3. Scene a scorrimento ——— */
   var scene = [];
@@ -393,6 +418,7 @@
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
     Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-puntatore]'), lampadaAlPuntatore);
     Array.prototype.forEach.call(document.querySelectorAll('[data-scrittura-al-passaggio]'), fogliettoScrivi);
+    scritturaAllaVista();
     Array.prototype.forEach.call(document.querySelectorAll('.archivio'), archivio);
     Array.prototype.forEach.call(document.querySelectorAll('[data-filtri]'), filtri);
     var c = document.querySelector('[data-lettura]');
