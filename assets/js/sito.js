@@ -248,9 +248,9 @@
   }
 
   /* ——— 4. Lettura ——— */
-  function lettura(corpo) {
-    var blocchi = Array.prototype.slice.call(corpo.children);
-    var foglio = corpo.closest('.foglio');
+  function lettura(area) {
+    var foglio = area.closest('.foglio');
+    var blocchi = Array.prototype.slice.call(foglio.querySelectorAll('[data-lettura] > *'));
     var focusBtn = document.querySelector('[data-comando="concentrazione"]');
     var lightBtn = document.querySelector('[data-comando="lampada"]');
     function set(name, cls, btn, on) {
@@ -258,10 +258,13 @@
       if (btn) btn.setAttribute('aria-pressed', String(on));
       store('effinge-' + name, on ? '1' : '0');
     }
-    var f = store('effinge-concentrazione'), l = store('effinge-lampada');
-    set('concentrazione', 'concentrazione', focusBtn, f == null ? true : f === '1');
+    if (focusBtn) {
+      var f = store('effinge-concentrazione');
+      set('concentrazione', 'concentrazione', focusBtn, f == null ? true : f === '1');
+      focusBtn.addEventListener('click', function () { set('concentrazione', 'concentrazione', focusBtn, !root.classList.contains('concentrazione')); });
+    }
+    var l = store('effinge-lampada');
     set('lampada', 'lampada-accesa', lightBtn, l == null ? true : l === '1');
-    if (focusBtn) focusBtn.addEventListener('click', function () { set('concentrazione', 'concentrazione', focusBtn, !root.classList.contains('concentrazione')); });
     if (lightBtn) lightBtn.addEventListener('click', function () { set('lampada', 'lampada-accesa', lightBtn, !root.classList.contains('lampada-accesa')); });
     var current = null;
     // La lampada: con il mouse lo segue; altrimenti (telefono, tastiera) illumina il paragrafo che si legge.

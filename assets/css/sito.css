@@ -303,6 +303,8 @@ html:not(.lampada-accesa) .lettura-pagina .foglio .lampada{opacity:0!important;t
   .guide-invito .sezione-testa{flex-wrap:wrap;gap:12px 24px}
 }
 .guida .lettura-testa .meta a{text-decoration:none}
+.guida .corpo{font-size:clamp(1.1rem,1rem + .4vw,1.225rem)}
+html:not(.js) .guida + .comandi{display:none}
 .guida .corpo p + p{text-indent:0;margin-top:.9em}
 .guida .corpo h2{margin:2em 0 .6em;font:400 1.6em/1.2 var(--display);text-indent:0}
 .guida .corpo ul{margin:.8em 0;padding-left:1.2em}
