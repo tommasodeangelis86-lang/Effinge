@@ -63,21 +63,30 @@ permalink: /
   {%- endif %}
 
   {%- if collections.guide.length %}
+  {%- set limiteGuide = 6 %}
+  {%- set altreGuide = collections.guide.length > limiteGuide %}
   <section class="sezione guide-invito" id="guide" aria-labelledby="h-guide">
     <div class="sezione-testa">
       <h2 id="h-guide">Guide per chi scrive</h2>
+      {%- if not altreGuide %}
       <a href="/guide/">Tutte le guide <span aria-hidden="true">→</span></a>
+      {%- endif %}
     </div>
     <ul class="guide-invito-griglia">
-      {%- for guida in collections.guide | limita(2) %}
+      {%- for guida in collections.guide | limita(limiteGuide) %}
       <li>
-        <a class="foglio guide-invito-scheda" href="{{ guida.url }}">
+        <a class="foglio guide-invito-scheda" href="{{ guida.url }}" data-lampada-puntatore>
           <h3>{{ guida.data.titolo }}</h3>
           <span aria-hidden="true">→</span>
         </a>
       </li>
       {%- endfor %}
     </ul>
+    {%- if altreGuide %}
+    <div class="guide-invito-altre">
+      <a class="pulsante" href="/guide/">Vedi altre guide <span aria-hidden="true">→</span></a>
+    </div>
+    {%- endif %}
   </section>
   {%- endif %}
 
