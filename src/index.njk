@@ -62,6 +62,25 @@ permalink: /
   </section>
   {%- endif %}
 
+  {%- if collections.guide.length %}
+  <section class="sezione guide-invito" id="guide" aria-labelledby="h-guide">
+    <div class="sezione-testa">
+      <h2 id="h-guide">Guide per chi scrive</h2>
+      <a href="/guide/">Tutte le guide <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="guide-invito-griglia">
+      {%- for guida in collections.guide | limita(2) %}
+      <li>
+        <a class="foglio guide-invito-scheda" href="{{ guida.url }}">
+          <h3>{{ guida.data.titolo }}</h3>
+          <span aria-hidden="true">→</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
   {%- if s.home.mostra_ultimo and ultimo %}
   <section class="sezione" id="ultimo" aria-labelledby="h-ultimo">
     <div class="sezione-testa sale"><h2 id="h-ultimo">Ultimo testo</h2></div>
