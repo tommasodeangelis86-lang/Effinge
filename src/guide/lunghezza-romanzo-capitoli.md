@@ -36,7 +36,7 @@ Queste fasce servono a orientarti sulla misura del **manoscritto intero**. Le ba
 
 ## Lunghezza per genere
 
-Per i generi, i valori partono dalle stime in parole dell’ex agente letterario Nathan Bransford per il mercato anglofono. Le abbiamo convertite usando circa **6 battute per parola, spazio compreso**. La proporzione varia con la lingua e con il testo. [Le stime di Nathan Bransford](https://nathanbransford.com/blog/2018/04/all-about-novel-word-counts)
+Le fasce per genere sono stime ricavate da conteggi in parole per il mercato anglofono. Per convertirle abbiamo usato circa **6 battute per parola, spazio compreso**. La proporzione varia con la lingua e con il testo.
 
 - **Narrativa generalista** · 450.000–600.000 battute, circa 250–333 cartelle.
 - **Narrativa letteraria, anche di formazione** · 300.000–720.000 battute, circa 167–400 cartelle.
@@ -48,7 +48,7 @@ Per i generi, i valori partono dalle stime in parole dell’ex agente letterario
 - **Fantasy** · 480.000–720.000 battute, circa 267–400 cartelle.
 - **Fantascienza** · 540.000–720.000 battute, circa 300–400 cartelle.
 
-Per un invio conta il limite della **singola collana o del bando**. Coda di Volpe indica un massimo di 260.000 battute per il romanzo breve. Pleasure Edizioni indica un minimo di 400.000 battute per romance e fantasy. Il bando InediTO 2027 fissa a 36.000 battute il massimo per un racconto. [Coda di Volpe](https://www.codadivolpe.it/contatti/pubblicare-con-noi/) · [Pleasure Edizioni](https://www.pleasureedizioni.com/inviomanoscritto) · [Bando InediTO](https://www.premioinedito.it/bando-2027/)
+Per un invio, usa il limite e l’unità di misura richiesti dalla **singola collana o dal bando**.
 
 ## Dove chiudere un capitolo
 

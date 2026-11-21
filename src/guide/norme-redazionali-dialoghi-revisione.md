@@ -35,7 +35,7 @@ Metti il **punto interrogativo** o **esclamativo** prima della chiusura delle vi
 
 > «Sei sicuro?» chiese lei.
 
-Per il **punto fermo** e la **virgola**, guarda gli esempi del normario che stai seguendo. Con una battuta autonoma come «Non torno indietro.» potresti incontrare edizioni in cui il punto sta dopo il caporale. Segui la convenzione scelta anche negli incisi. Per approfondire, puoi leggere [La punteggiatura dell’Accademia della Crusca](https://accademiadellacrusca.it/it/consulenza/la-punteggiatura/143).
+Per il **punto fermo** e la **virgola**, guarda gli esempi del normario che stai seguendo. Con una battuta autonoma come «Non torno indietro.» potresti incontrare edizioni in cui il punto sta dopo il caporale. Segui la convenzione scelta anche negli incisi.
 
 ## In che ordine rivedere il testo
 
