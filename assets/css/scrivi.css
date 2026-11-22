@@ -262,3 +262,9 @@ html.focus-totale.focus-quiete .scrivi-barra:hover,html.focus-totale.focus-quiet
 /* nota discreta in fondo alla pagina (anche per Google) */
 .scrivi-nota{max-width:46rem;margin:0 auto;padding:28px 20px 8px;text-align:center;font:400 .8125rem/1.6 var(--ui);color:var(--testo-3)}
 html.focus-totale .scrivi-nota{display:none}
+
+.scrivi-editor.in-riproduzione{opacity:0}
+.scrivi-editor.riscrittura{position:absolute;inset:0;visibility:hidden;pointer-events:none}
+.riscrittura .lettere-rivelate{visibility:visible}
+[data-riscrivi]:disabled{opacity:.45;cursor:default}
+.riscrittura .ultima::after{content:"";display:inline-block;width:0;height:.8em;box-shadow:1px 0 currentColor}

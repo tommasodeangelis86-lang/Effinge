@@ -94,6 +94,7 @@ eleventyExcludeFromCollections: true
             </div>
             <div class="scrivi-info">
               <span class="scrivi-stato" data-stato aria-live="polite"></span>
+              <button type="button" class="scrivi-manoscritto" data-riscrivi disabled data-speed="{{ impostazioni.animazione.velocita }}" data-fade="{{ impostazioni.animazione.dissolvenza }}" data-color="{{ impostazioni.lampada.colore | colore('#F0CB8A') }}" data-intensity="{{ impostazioni.lampada.intensita / 100 }}">Riscrivi</button>
               <button type="button" class="scrivi-manoscritto" data-comando="cartella" title="Battute per cartella: tocca per cambiare">Cartella 2000</button>
               <button type="button" class="scrivi-manoscritto" data-comando="manoscritto" aria-pressed="false" title="A4 · margini 2,3 cm · interlinea 1,5 · rientro 0,42 cm">Manoscritto</button>
             </div>

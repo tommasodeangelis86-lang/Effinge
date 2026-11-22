@@ -76,6 +76,23 @@
   /* ——— 2. Scrittura della scritta ——— */
   function rgba(hex, a) { var n = parseInt(hex.slice(1), 16); return 'rgba(' + (n >> 16 & 255) + ',' + (n >> 8 & 255) + ',' + (n & 255) + ',' + a + ')'; }
 
+  function aloneGlifo(o) {
+    return '0 0 .05em ' + rgba(o.color, (.9 * o.intensity).toFixed(2)) + ', 0 0 .22em ' + rgba(o.color, (.55 * o.intensity).toFixed(2));
+  }
+  function illuminaGlifo(g, o, ink, peak) {
+    if (g.animate) {
+      peak = peak || aloneGlifo(o);
+      g.animate([{ opacity: 0, filter: 'blur(.05em)' }, { opacity: 1, filter: 'blur(0)' }], { duration: Math.max(160, o.speed * 2.2), easing: 'cubic-bezier(.23,1,.32,1)', fill: 'backwards' });
+      g.animate([
+        { color: o.color, textShadow: peak, offset: 0 },
+        { color: o.color, textShadow: peak, offset: .15 },
+        { color: ink, textShadow: '0 0 .02em ' + rgba(o.color, .25), offset: .6 },
+        { color: ink, textShadow: '0 0 0 rgba(0,0,0,0)', offset: 1 }
+      ], { duration: o.fade + 160, easing: 'cubic-bezier(.22,.61,.36,1)' });
+    }
+  }
+  window.EffingeIlluminaGlifo = illuminaGlifo;
+
   function Scrittura(h1, lampada) {
     this.el = h1; this.lampada = lampada; this.timers = [];
     this.allaVista = h1.hasAttribute('data-scrittura-alla-vista');
@@ -122,22 +139,14 @@
     if (this.glifi.length) this.glifi[0].before(this.cursore);
     this.el.classList.add('scrivendo');
     var ink = getComputedStyle(this.el).color;
-    var peak = '0 0 .05em ' + rgba(o.color, (.9 * o.intensity).toFixed(2)) + ', 0 0 .22em ' + rgba(o.color, (.55 * o.intensity).toFixed(2));
+    var peak = aloneGlifo(o);
     if (L && this.glifi.length) { var p = L.at(this.glifi[0], -.4, .55); L.lag = Math.max(90, o.speed * 1.3); L.to(p.x, p.y); }
     this.glifi.forEach(function (g, i) {
       self.timers.push(setTimeout(function () {
         g.classList.add('acceso');
         g.after(self.cursore);
         if (L) { var p = L.at(g, .6, .55); L.to(p.x, p.y); }
-        if (g.animate) {
-          g.animate([{ opacity: 0, filter: 'blur(.05em)' }, { opacity: 1, filter: 'blur(0)' }], { duration: Math.max(160, o.speed * 2.2), easing: 'cubic-bezier(.23,1,.32,1)', fill: 'backwards' });
-          g.animate([
-            { color: o.color, textShadow: peak, offset: 0 },
-            { color: o.color, textShadow: peak, offset: .15 },
-            { color: ink, textShadow: '0 0 .02em ' + rgba(o.color, .25), offset: .6 },
-            { color: ink, textShadow: '0 0 0 rgba(0,0,0,0)', offset: 1 }
-          ], { duration: o.fade + 160, easing: 'cubic-bezier(.22,.61,.36,1)' });
-        }
+        illuminaGlifo(g, o, ink, peak);
       }, o.delay + i * o.speed));
     });
     this.timers.push(setTimeout(function () {

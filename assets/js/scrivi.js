@@ -20,6 +20,8 @@
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
   var editor = $('.scrivi-editor', app);
+  var riscrivi = $('[data-riscrivi]', app);
+  var copia = null, timerRiscrivi = 0;
   var foglio = editor.closest('.foglio');
   var luci = $('.scrivi-luci', app);
   var titolo = $('#titolo-sezione');
@@ -308,6 +310,7 @@
     app.classList.add('tipo-' + s.tipo);
   }
   function apri(sid) {
+    fermaRiscrittura();
     if (corrente && corrente !== sid && sezioni[corrente]) salva(true);
     corrente = sid;
     var s = sezioni[sid];
@@ -321,7 +324,10 @@
     fuoco(null);
     window.scrollTo({ top: 0 });
   }
-  function vuoto() { editor.classList.toggle('vuoto', !(editor.textContent || '').trim() && !editor.querySelector('hr,li')); }
+  function vuoto() {
+    riscrivi.disabled = !editor.textContent.trim();
+    editor.classList.toggle('vuoto', !(editor.textContent || '').trim() && !editor.querySelector('hr,li'));
+  }
 
   /* ——— Opere ——— */
   function caricaOpera(o) {
@@ -421,7 +427,7 @@
   var ultimoMouse = null, ancora = null, SOGLIA = 40;
   function modoScrittura() { root.classList.add('sta-scrivendo'); ancora = ultimoMouse; }
   document.addEventListener('pointermove', function (e) {
-    if (e.pointerType !== 'mouse') return;
+    if (copia || e.pointerType !== 'mouse') return;
     var prima = ultimoMouse;
     ultimoMouse = { x: e.clientX, y: e.clientY };
     if (prima && prima.x === e.clientX && prima.y === e.clientY) return;            // movimento fantasma
@@ -484,6 +490,84 @@
       setTimeout(function () { s.remove(); }, dur);
     });
   }
+
+  // La riproduzione usa una copia visiva. Salvataggio e annulla leggono sempre l’editor.
+  function fermaRiscrittura() {
+    if (!copia) return;
+    clearTimeout(timerRiscrivi);
+    copia.remove();
+    copia = null;
+    editor.classList.remove('in-riproduzione');
+    riscrivi.textContent = 'Riscrivi';
+  }
+
+  riscrivi.addEventListener('click', function () {
+    if (copia) { fermaRiscrittura(); return; }
+    if (!editor.textContent.trim()) return;
+    if (reduce) { avviso('Il testo è già visibile. Movimento ridotto attivo.'); return; }
+    var d = riscrivi.dataset;
+    var o = { speed: Number(d.speed) || 85, fade: Number(d.fade) || 340,
+      intensity: Number(d.intensity), color: d.color };
+    var ink = getComputedStyle(editor).color;
+    var passo = Math.max(1, Math.ceil(editor.textContent.length / 320));
+    var segmentatore = Intl.Segmenter && new Intl.Segmenter('it', { granularity: 'grapheme' });
+    copia = editor.cloneNode(true);
+    copia.removeAttribute('contenteditable');
+    copia.setAttribute('aria-hidden', 'true');
+    copia.inert = true;
+    copia.classList.add('riscrittura');
+    var walker = document.createTreeWalker(copia, NodeFilter.SHOW_TEXT);
+    var nodi = [], nodo;
+    while ((nodo = walker.nextNode())) if (nodo.length) nodi.push(nodo);
+    editor.after(copia);
+    editor.classList.add('in-riproduzione');
+    root.classList.remove('sta-scrivendo');
+    riscrivi.textContent = 'Interrompi';
+    var indice = 0, lettere, resto, precedente;
+    function avanza() {
+      if (!lettere) {
+        if (indice === nodi.length) {
+          timerRiscrivi = setTimeout(fermaRiscrittura, o.fade + 160);
+          return;
+        }
+        resto = nodi[indice++];
+        lettere = (segmentatore ? segmentatore.segment(resto.data) : resto.data)[Symbol.iterator]();
+      }
+      var gruppo = '';
+      while (gruppo.length < passo) {
+        var prossimo = lettere.next();
+        if (prossimo.done) { lettere = null; break; }
+        gruppo += segmentatore ? prossimo.value.segment : prossimo.value;
+      }
+      if (gruppo) {
+        var g = document.createElement('span');
+        if (precedente) precedente.classList.remove('ultima');
+        g.className = 'lettere-rivelate ultima';
+        precedente = g;
+        g.textContent = gruppo;
+        resto.before(g);
+        resto.deleteData(0, gruppo.length);
+        window.EffingeIlluminaGlifo(g, o, ink);
+        var rects = g.getClientRects(), fine = rects[rects.length - 1];
+        if (fine) {
+          if (fine.bottom > innerHeight - 24 || fine.bottom < 0) g.scrollIntoView({ block: 'center' });
+          var righe = g.getClientRects();
+          fine = righe[righe.length - 1];
+          if (fine) lampadaA(fine.right, fine.top + fine.height / 2, o.intensity);
+        }
+      }
+      timerRiscrivi = setTimeout(avanza, gruppo ? o.speed : 0);
+    }
+    avanza();
+  });
+  editor.addEventListener('focus', fermaRiscrittura);
+  editor.addEventListener('beforeinput', fermaRiscrittura);
+  document.addEventListener('pointerdown', function (e) {
+    if (copia && !riscrivi.contains(e.target)) fermaRiscrittura();
+  }, true);
+  document.addEventListener('keydown', function (e) {
+    if (copia && e.key === 'Escape') fermaRiscrittura();
+  });
 
   /* ——— Editor ——— */
   try { document.execCommand('defaultParagraphSeparator', false, 'p'); } catch (e) {}
