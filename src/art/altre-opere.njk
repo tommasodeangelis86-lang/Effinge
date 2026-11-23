@@ -1,0 +1,22 @@
+---
+layout: base.njk
+permalink: /art/altre-opere/
+sezioneArt: true
+stile: /assets/css/art.css
+titolo: Altre opere
+titolo_completo: Altre opere | Effinge Art
+seo_descrizione: "Scopri Mary e Massa Lubrense nella galleria Effinge Art."
+immagine: /assets/art/mary.webp
+---
+{% from "art-elementi.njk" import riga, scrittura %}
+<main id="contenuto" class="art-main art-contenitore art-dettaglio art-altre">
+  <a class="art-ritorno" href="/art/#opere">Opere in evidenza</a>
+  <section aria-labelledby="titolo-altre">
+    <h1 id="titolo-altre" class="art-gradiente gradiente-rosa" {{ scrittura(impostazioni) }}>Altre opere</h1>
+    <ul class="art-galleria art-galleria--altre">
+      {%- for opera in effingeArt.opere %}{% if opera.altra %}
+      {{ riga(opera, impostazioni) }}
+      {%- endif %}{% endfor %}
+    </ul>
+  </section>
+</main>

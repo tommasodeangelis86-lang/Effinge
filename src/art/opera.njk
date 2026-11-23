@@ -1,0 +1,44 @@
+---
+layout: base.njk
+sezioneArt: true
+stile: /assets/css/art.css
+pagination:
+  data: effingeArt.opere
+  size: 1
+  alias: opera
+permalink: /art/opere/{{ opera.slug }}/
+eleventyComputed:
+  titolo: "{{ opera.titolo }}"
+  titolo_completo: "{{ opera.titolo }} | Effinge Art"
+  seo_descrizione: "{{ opera.sommario }}"
+  immagine: "/assets/art/{{ opera.slug }}.webp"
+---
+{% from "art-elementi.njk" import scrittura %}
+<main id="contenuto" class="art-main art-contenitore art-dettaglio">
+  <a class="art-ritorno" href="{{ '/art/altre-opere/' if opera.altra else '/art/#opere' }}">{{ 'Altre opere' if opera.altra else 'Tutte le opere' }}</a>
+  <article class="art-opera{% if opera.fotoADestra %} art-opera--rovesciata{% endif %}" aria-labelledby="titolo-opera">
+    <header class="art-opera-testa">
+      <h1 id="titolo-opera" class="art-gradiente gradiente-{{ opera.gradiente }}" {{ scrittura(impostazioni) }}>{{ opera.titolo }}</h1>
+      <p>{{ opera.sommario }}</p>
+      {%- if opera.contesto %}<p>{{ opera.contesto }}</p>{% endif %}
+      {%- if opera.stato %}<p class="art-stato">{{ opera.stato }}{% if opera.prezzo %} · {{ opera.prezzo }}{% endif %}</p>{% endif %}
+    </header>
+    <figure class="art-opera-foto art-lampada" data-lampada-scorrimento>
+      <img src="/assets/art/{{ opera.slug }}.webp" width="{{ opera.width }}" height="{{ opera.height }}" alt="{{ opera.alt }}" fetchpriority="high" decoding="async">
+    </figure>
+    {%- if opera.testo.length or opera.stato == 'Disponibile' %}
+    <div class="art-opera-testo">
+      {%- for paragrafo in opera.testo %}<p>{{ paragrafo }}</p>{% endfor %}
+      {%- if opera.stato == 'Disponibile' %}
+      <a class="art-azione" href="mailto:{{ effingeArt.contatto }}?subject={{ ('Effinge Art - ' + opera.titolo) | urlencode }}">Chiedi informazioni</a>
+      {%- endif %}
+    </div>
+    {%- endif %}
+  </article>
+  {%- if pagination.href.previous or pagination.href.next %}
+  <nav class="art-opera-nav" aria-label="Altre opere di Effinge Art">
+    {%- if pagination.href.previous %}<a href="{{ pagination.href.previous }}">Opera precedente</a>{% endif %}
+    {%- if pagination.href.next %}<a href="{{ pagination.href.next }}">Opera successiva</a>{% endif %}
+  </nav>
+  {%- endif %}
+</main>

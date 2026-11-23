@@ -1,4 +1,5 @@
 {%- set s = impostazioni -%}
+{%- set nomeSito = 'Effinge Art' if sezioneArt else s.sito.nome -%}
 {%- set titoloPagina = (seo_titolo or titolo or title) -%}
 {%- set descr = seo_descrizione or estratto or s.sito.descrizione -%}
 {#- Titolo per Google: homepage dal pannello; testi «Titolo — Categoria | Effinge»; altre pagine «Titolo | Effinge» -#}
@@ -22,7 +23,7 @@
 <meta name="description" content="{{ descr }}">
 <link rel="canonical" href="{{ page.url | assoluto(s.sito.indirizzo) }}">
 <meta property="og:type" content="{{ 'article' if layout == 'testo.njk' else 'website' }}">
-<meta property="og:site_name" content="{{ s.sito.nome }}">
+<meta property="og:site_name" content="{{ nomeSito }}">
 <meta property="og:title" content="{{ (titoloPagina if page.url != '/' else titoloGoogle) or s.sito.nome }}">
 <meta property="og:locale" content="it_IT">
 <meta property="og:description" content="{{ descr }}">
@@ -48,8 +49,19 @@
 {%- endif %}
 <style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
 </head>
-<body>
+<body{% if sezioneArt %} class="art-sito"{% endif %}>
 <a class="salta" href="#contenuto">Vai al contenuto</a>
+{%- if sezioneArt %}
+<header class="barra piena art-barra">
+  <a class="marchio art-marchio" href="/art/" aria-label="Effinge Art, home"><span>Effinge</span><span>Art</span></a>
+  <nav aria-label="Effinge Art">
+    <a href="/art/#opere">Opere</a>
+    <a href="/art/altre-opere/"{% if page.url == '/art/altre-opere/' %} aria-current="page"{% endif %}>Altre opere</a>
+    <a href="/art/#commissioni">Contatti</a>
+    <a href="/">Effinge</a>
+  </nav>
+</header>
+{%- else %}
 <header class="barra{% if page.url != '/' %} piena{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
   <nav aria-label="Principale">
@@ -61,6 +73,7 @@
     <a href="/scrivi/"{% if page.url == '/scrivi/' %} aria-current="page"{% endif %}>Scrivi</a>
     {%- endif %}
     <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
+    <a href="/art/" aria-label="Effinge Art">Art</a>
     <div class="sfondi">
       <button type="button" class="tondino" data-apri-sfondi aria-haspopup="true" aria-expanded="false" aria-controls="sfondi-scelta" aria-label="Cambia lo sfondo" title="Sfondo"></button>
       <div class="sfondi-scelta" id="sfondi-scelta" hidden>
@@ -76,11 +89,16 @@
     </div>
   </nav>
 </header>
+{%- endif %}
 {{ content | safe }}
 <footer class="piede" id="contatti">
-  <span>{{ s.sito.nome }} © {{ build.anno }}</span>
+  <span>{{ nomeSito }} © {{ build.anno }}</span>
+  {%- if sezioneArt %}
+  <span><a href="mailto:{{ effingeArt.contatto }}">{{ effingeArt.contatto }}</a> · <a href="/">Effinge</a></span>
+  {%- else %}
   {%- if s.sito.piede %}<span>{{ s.sito.piede }}</span>{% endif %}
   <span><a href="/guide/">Guide per chi scrive</a> · <a href="/archivio/">Archivio</a></span>
+  {%- endif %}
 </footer>
 <script src="/assets/js/sito.js?v={{ build.versione }}" defer></script>
 {%- if script %}
