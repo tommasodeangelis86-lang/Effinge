@@ -20,7 +20,7 @@ colori e animazione, mettere il sito online e collegare effinge.it.
 | `assets/css/sito.css`, `assets/js/sito.js` | Stile e comportamento (lampada, scrittura, scene) |
 | `assets/fonts/` | Cormorant Garamond, EB Garamond, Inter Tight (self-hosted, OFL) |
 | `.pages.yml` | Configurazione del pannello Pages CMS |
-| `netlify.toml` | Pubblicazione su Netlify |
+| `.github/workflows/pubblica.yml` | Pubblicazione automatica su GitHub Pages da `main` |
 | `media/` | Immagini caricate dal pannello |
 | `direzioni/`, `riferimenti/` | Proposte precedenti e prototipo v3, solo come archivio |
 
@@ -53,8 +53,3 @@ In `.claude/skills/`, caricate automaticamente da Claude Code in questo reposito
 - **Skill di Emil Kowalski** — [emilkowalski/skill](https://github.com/emilkowalski/skill): `emil-design-eng`, `animate`, `improve-animations`, `review-animations`, `animation-performance`, `choreograph` e altre. Escluse quelle solo per app native (Swift, Expo).
 
 Il brief ha sempre la precedenza sulle skill.
-
-## Prossimi passi
-
-1. Collaudo dell'autore sull'indirizzo provvisorio di Netlify (vedi guida).
-2. Collegamento di effinge.it su Aruba e attivazione di «Visibile su Google».

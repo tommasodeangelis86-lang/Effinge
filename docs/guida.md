@@ -8,62 +8,30 @@ ripubblica il sito da solo in circa un minuto.
 
 ---
 
-## Parte 1 — Messa online (una volta sola)
+## Parte 1 — Pubblicazione e pannello
 
-> **Aggiornamento.** Il sito ora è pubblicato gratis da **GitHub Pages**, non più da Netlify (i crediti
-> gratuiti di Netlify non bastavano). Ogni salvataggio dal pannello e ogni «Pubblica sul sito» compare in
-> GitHub → scheda **Actions** → «Pubblica il sito» e va online in circa un minuto. Su Aruba: quattro record
-> **A** per `@` (185.199.108.153, .109, .110, .111) e il **CNAME** `www` → `tommasodeangelis86-lang.github.io`.
-> Su GitHub: Settings → Pages → Source «GitHub Actions», Custom domain `www.effinge.it`, «Enforce HTTPS».
-> I passaggi su Netlify qui sotto restano solo come storia.
+### Pubblicare con GitHub Pages
 
-Servono tre account gratuiti: **GitHub** (dove vive il sito, ce l’hai già), **Netlify**
-(che lo pubblica) e **Pages CMS** (il pannello, si entra con GitHub).
+Il flusso **Pubblica il sito** compila e pubblica Effinge su **GitHub Pages** a ogni modifica su `main`.
+Vale anche per i salvataggi dal pannello e per «Pubblica sul sito» da Scrivi. Puoi seguire la
+pubblicazione nella scheda **Actions** del repository Effinge.
 
-### 1. Pubblicare il sito su Netlify
+In **Settings → Pages**, la fonte di pubblicazione è **GitHub Actions** e il dominio personalizzato
+è `www.effinge.it`. L’opzione **Enforce HTTPS** usa una connessione protetta.
 
-1. Vai su **app.netlify.com** e scegli *Sign up* → *GitHub*.
-2. Clicca **Add new project** → **Import an existing project** → **GitHub**.
-3. Autorizza Netlify e scegli il repository **Effinge**.
-4. Nella schermata successiva controlla:
-   - *Branch to deploy*: **main**
-   - *Build command*: `npm run build` (già scritto in automatico)
-   - *Publish directory*: `_site` (già scritto in automatico)
-5. Clicca **Deploy**. Dopo un minuto il sito è online a un indirizzo provvisorio, per esempio
-   `qualcosa-123.netlify.app`. Puoi cambiarlo in *Site configuration → Change site name*
-   (per esempio `effinge.netlify.app`).
+### Collegare il pannello Pages CMS
 
-### 2. Collegare il pannello Pages CMS
-
-1. Vai su **app.pagescms.org** e clicca **Sign in with GitHub**.
-2. Installa l’app quando te lo chiede e dai accesso al repository **Effinge**.
+1. Apri **effinge.it/admin** e clicca **Sign in with GitHub**.
+2. Autorizza Pages CMS per il repository **Effinge** quando te lo chiede.
 3. Apri il repository e scegli il ramo **main**.
-4. A sinistra vedi tre voci: **Testi**, **Pagine**, **Impostazioni del sito**, più **Media**
-   per le immagini.
+4. A sinistra trovi **Testi**, **Pagine**, **Impostazioni del sito** e **Media**.
 
-### 3. Collaudo (prima di collegare effinge.it)
+### DNS di effinge.it su Aruba
 
-Come previsto dal brief, prova da solo queste due cose sull’indirizzo provvisorio:
-
-- pubblica un testo nuovo (Parte 2, «Pubblicare un testo»);
-- cambia la velocità o l’intensità della lampada (Parte 2, «Animazione e lampada»).
-
-Se tutto torna, colleghi il dominio.
-
-### 4. Collegare effinge.it (Aruba)
-
-1. Su Netlify: *Domain management* → **Add a domain** → scrivi `effinge.it` → *Verify* →
-   *Add domain*. Netlify mostra i **valori DNS** da copiare: un record per `effinge.it` e
-   uno per `www.effinge.it`. Tienili aperti.
-2. Su Aruba: entra in **admin.aruba.it** → *Domini* → **effinge.it** →
-   **Gestione DNS e name server**.
-3. Modifica (o aggiungi) i due record con i valori di Netlify:
-   - il record **A** del dominio principale (`@` o `effinge.it`);
-   - il record **CNAME** di `www`.
-4. **Non toccare i record MX**: sono quelli della posta @effinge.it.
-5. Salva. Entro qualche ora (a volte fino a 24) il sito risponde su effinge.it e Netlify attiva da
-   solo il certificato https (il lucchetto).
-6. Nel pannello, in **Impostazioni del sito → Sito**, attiva **Visibile su Google**.
+Il dominio principale `effinge.it` punta a GitHub Pages con quattro record **A** per `@`
+(`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`).
+Il record **CNAME** di `www` punta a `tommasodeangelis86-lang.github.io`. I record **MX**
+gestiscono la posta e sono indipendenti dalla pubblicazione del sito.
 
 ---
 
