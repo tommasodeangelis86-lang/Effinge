@@ -1,0 +1,63 @@
+---
+layout: base.njk
+permalink: /art/
+sezioneArt: true
+stile: /assets/css/art.css
+titolo: Effinge Art
+titolo_completo: Effinge Art — Galleria di pittura
+seo_descrizione: "Esplora la galleria Effinge Art. Paesaggi, ritratti, nature morte e informazioni sulle opere disponibili e su commissione."
+immagine: /assets/art/la-lettrice.webp
+---
+{% from "art-elementi.njk" import riga, scrittura %}
+<main id="contenuto" class="art-main">
+  <section class="art-apertura art-contenitore" aria-labelledby="titolo-art">
+    <div class="art-ritratto">
+      <div class="art-lampada" data-lampada-scorrimento>
+        <img src="/assets/art/ritratto.webp" width="864" height="1184" alt="Ritratto dell’artista in galleria" fetchpriority="high" decoding="async">
+      </div>
+      <h1 id="titolo-art" class="art-gradiente gradiente-vita" {{ scrittura(impostazioni) }}>A life through colors</h1>
+    </div>
+    <div class="art-presentazione">
+      <h2 class="art-gradiente gradiente-rosa">Effinge Art</h2>
+      <p>Da oltre cinquant’anni la pittura accompagna il lavoro dell’artista casertana che espone in questa galleria. Il paesaggio è il suo soggetto prediletto. Un tratto delicato e incisivo unisce l’attenzione ai luoghi alla ricerca di una loro risonanza emotiva.</p>
+      <p>Il colore e i dettagli raccontano il legame con la natura e la ricerca introspettiva dei ritratti. Nella Valle di Chelm il paesaggio diventa un luogo dell’anima, uno spazio in cui fermarsi ad ascoltare.</p>
+      <p>Ogni mese sono disponibili due commissioni. Tempi e costi dipendono dal soggetto e dalla complessità dell’opera.</p>
+    </div>
+    <section id="commissioni" class="art-contatti art-lampada" data-lampada-scorrimento aria-labelledby="titolo-commissioni">
+      <img src="/assets/art/la-lettrice.webp" width="1080" height="1440" alt="" decoding="async">
+      <div class="art-contatti-testo">
+        <h2 id="titolo-commissioni">Scrivici per informazioni</h2>
+        <p>Opere disponibili e richieste su commissione.</p>
+        <a class="art-azione" href="mailto:{{ effingeArt.contatto }}">{{ effingeArt.contatto }}</a>
+      </div>
+    </section>
+  </section>
+
+  <section id="opere" class="art-contenitore art-sezione" aria-labelledby="titolo-opere">
+    <h2 id="titolo-opere" class="art-gradiente gradiente-rosa" {{ scrittura(impostazioni) }}>Opere in evidenza</h2>
+    <ul class="art-galleria">
+      {%- for opera in effingeArt.opere %}{% if not opera.altra %}
+      {{ riga(opera, impostazioni) }}
+      {%- endif %}{% endfor %}
+    </ul>
+  </section>
+
+  <section class="art-contenitore art-sezione art-evento" aria-labelledby="titolo-evento">
+    <figure class="art-lampada" data-lampada-scorrimento>
+      <img src="/assets/art/rome-art-week.webp" width="1440" height="810" alt="Opere esposte a Rome Art Week 2025" loading="lazy" decoding="async">
+    </figure>
+    <div>
+      <h2 id="titolo-evento" class="art-gradiente gradiente-rosa" {{ scrittura(impostazioni) }}>Rome Art Week 2025</h2>
+    </div>
+  </section>
+
+  <section class="art-contenitore art-sezione" aria-labelledby="titolo-altre">
+    <h2 id="titolo-altre" class="art-gradiente gradiente-rosa" {{ scrittura(impostazioni) }}>Altre opere</h2>
+    <ul class="art-galleria art-galleria--altre">
+      {%- for opera in effingeArt.opere %}{% if opera.altra %}
+      {{ riga(opera, impostazioni) }}
+      {%- endif %}{% endfor %}
+    </ul>
+    <a class="art-azione art-azione--secondaria" href="/art/altre-opere/">Vedi le altre opere</a>
+  </section>
+</main>

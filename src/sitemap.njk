@@ -8,6 +8,11 @@ eleventyExcludeFromCollections: true
   <url><loc>{{ '/archivio/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
   <url><loc>{{ '/scrivi/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
   <url><loc>{{ '/guide/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  <url><loc>{{ '/art/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  <url><loc>{{ '/art/altre-opere/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  {%- for opera in effingeArt.opere %}
+  <url><loc>{{ ('/art/opere/' + opera.slug + '/') | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  {%- endfor %}
   {%- for g in collections.guide %}
   <url><loc>{{ g.url | assoluto(impostazioni.sito.indirizzo) }}</loc><lastmod>{{ g.date | dataIso }}</lastmod></url>
   {%- endfor %}

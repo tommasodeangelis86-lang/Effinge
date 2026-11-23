@@ -27,7 +27,7 @@
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
 
   /* ——— 1. Lampada ——— */
-  function Lampada(foglio) {
+  function Lampada(foglio, segueScorrimento) {
     this.foglio = foglio;
     this.buio = document.createElement('span');
     this.buio.className = 'lampada buio';
@@ -45,7 +45,7 @@
     this.last = 0;
     this.loop = this.loop.bind(this);
     this.apply();
-    requestAnimationFrame(this.loop);
+    if (!segueScorrimento) requestAnimationFrame(this.loop);
   }
   Lampada.prototype.to = function (x, y, lag) { this.tx = x; this.ty = y; if (lag) this.lag = lag; };
   Lampada.prototype.jump = function (x, y) { this.x = this.tx = x; this.y = this.ty = y; this.apply(); };
@@ -252,6 +252,17 @@
     foglio.addEventListener('pointerleave', rest);
   }
 
+  function lampadaAlloScorrimento(foglio) {
+    var lampada;
+    return function () {
+      var r = foglio.getBoundingClientRect();
+      if (r.bottom <= 0 || r.top >= innerHeight || !r.height) return;
+      if (!lampada) lampada = new Lampada(foglio, true);
+      var punto = clamp((innerHeight * .52 - r.top) / r.height, .12, .88);
+      lampada.jump(r.width * lerp(.32, .65, punto), r.height * punto);
+    };
+  }
+
   function fogliettoScrivi(foglio) {
     var L = new Lampada(foglio);
     var frase = foglio.querySelector('[data-scrittura]');
@@ -426,6 +437,9 @@
     if ((s = document.querySelector('.apertura'))) scene.push(scenaApertura(s));
     if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
     Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-puntatore]'), lampadaAlPuntatore);
+    if (!reduce) Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-scorrimento]'), function (foglio) {
+      scene.push(lampadaAlloScorrimento(foglio));
+    });
     Array.prototype.forEach.call(document.querySelectorAll('[data-scrittura-al-passaggio]'), fogliettoScrivi);
     scritturaAllaVista();
     Array.prototype.forEach.call(document.querySelectorAll('.archivio'), archivio);
