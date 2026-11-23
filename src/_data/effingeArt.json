@@ -1,5 +1,15 @@
 {
   "contatto": "effingeart@gmail.com",
+  "presentazione": [
+    "Da oltre cinquant’anni la pittura accompagna il lavoro dell’artista casertana che espone in questa galleria. Il paesaggio è il suo soggetto prediletto. Un tratto delicato e incisivo unisce l’attenzione ai luoghi alla ricerca di una loro risonanza emotiva.",
+    "Il colore e i dettagli raccontano il legame con la natura e la ricerca introspettiva dei ritratti. Nella Valle di Chelm il paesaggio diventa un luogo dell’anima, uno spazio in cui fermarsi ad ascoltare.",
+    "Ogni mese sono disponibili due commissioni. Tempi e costi dipendono dal soggetto e dalla complessità dell’opera."
+  ],
+  "commissioni_titolo": "Scrivici per informazioni",
+  "commissioni_testo": "Opere disponibili e richieste su commissione.",
+  "titolo_opere": "Opere in evidenza",
+  "titolo_evento": "Rome Art Week 2025",
+  "titolo_altre": "Altre opere",
   "opere": [
     {
       "slug": "naples-1882",
@@ -9,7 +19,6 @@
       "contesto": "Un’elegia mediterranea",
       "prezzo": "700 €",
       "stato": "Venduto",
-      "gradiente": "acqua",
       "width": 1440,
       "height": 717,
       "testo": [
@@ -25,7 +34,6 @@
       "contesto": "2015, Roma",
       "prezzo": "1.300 €",
       "stato": "Venduto",
-      "gradiente": "acqua",
       "width": 1081,
       "height": 1407,
       "testo": [
@@ -40,7 +48,6 @@
       "contesto": "2016, Caserta",
       "prezzo": "2.000 €",
       "stato": "Venduto",
-      "gradiente": "fuoco",
       "width": 1080,
       "height": 1440,
       "testo": [
@@ -55,8 +62,6 @@
       "contesto": "2016, Caserta",
       "prezzo": "1.000 €",
       "stato": "Venduto",
-      "gradiente": "acqua",
-      "gradienteGalleria": "rosa",
       "width": 1120,
       "height": 928,
       "testo": [
@@ -72,7 +77,6 @@
       "contesto": "2019, Caserta",
       "prezzo": "800 €",
       "stato": "Disponibile",
-      "gradiente": "fuoco",
       "fotoADestra": true,
       "width": 810,
       "height": 1440,
@@ -89,8 +93,6 @@
       "contesto": "2018, Benevento",
       "prezzo": "1.500 €",
       "stato": "Venduto",
-      "gradiente": "oro",
-      "gradienteGalleria": "rosa",
       "width": 1440,
       "height": 1048,
       "testo": [
@@ -108,7 +110,6 @@
       "contesto": "2008, Umbria",
       "prezzo": "600 €",
       "stato": "Disponibile",
-      "gradiente": "oro",
       "width": 1440,
       "height": 1080,
       "testo": [
@@ -125,7 +126,6 @@
       "contesto": "2015, Caserta",
       "prezzo": "1.000 €",
       "stato": "Disponibile",
-      "gradiente": "viola-oro",
       "fotoADestra": true,
       "width": 1080,
       "height": 1440,
@@ -142,8 +142,6 @@
       "contesto": "2020, Caserta",
       "prezzo": "2.000 €",
       "stato": "Disponibile",
-      "gradiente": "mare",
-      "gradienteGalleria": "acqua",
       "width": 1440,
       "height": 1080,
       "testo": [
@@ -161,8 +159,6 @@
       "contesto": "2010, Caserta",
       "prezzo": "1.000 €",
       "stato": "Venduto",
-      "gradiente": "viola-oro",
-      "gradienteGalleria": "fuoco",
       "fotoADestra": true,
       "width": 1080,
       "height": 1440,
@@ -179,7 +175,6 @@
       "contesto": "2009, Roma",
       "prezzo": "1.200 €",
       "stato": "Venduto",
-      "gradiente": "acqua",
       "width": 1440,
       "height": 965,
       "testo": [
@@ -197,8 +192,6 @@
       "contesto": "2013, Lampedusa",
       "prezzo": "1.000 €",
       "stato": "Disponibile",
-      "gradiente": "viola",
-      "gradienteGalleria": "mare",
       "width": 1080,
       "height": 1440,
       "testo": [
@@ -212,7 +205,6 @@
       "titolo": "Mary",
       "sommario": "Madre e bambino in un paesaggio di colline e cipressi.",
       "alt": "Una figura in manto blu con un bambino in braccio, su uno sfondo di colline e cipressi.",
-      "gradiente": "oro",
       "altra": true,
       "width": 1440,
       "height": 1440
@@ -222,7 +214,6 @@
       "titolo": "Massa Lubrense",
       "sommario": "Veduta della costa di Massa Lubrense.",
       "alt": "Una veduta di Massa Lubrense con case sulla costa e barche nel mare blu.",
-      "gradiente": "mare",
       "altra": true,
       "width": 1080,
       "height": 1440

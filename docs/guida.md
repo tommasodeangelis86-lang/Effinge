@@ -172,6 +172,10 @@ Chiunque visiti il sito può usare Scrivi, ma ognuno vede solo le proprie opere.
 
 Le guide stanno in `src/guide/` (una per file, in Markdown). In cima a ogni file: `titolo`, `titolo_completo` (titolo per Google), `seo_descrizione`, `ordine` (posizione nell’elenco) e `faq`, la lista di domande e risposte (`d:` domanda, `r:` risposta) che appare in fondo alla pagina e viene segnalata a Google come FAQ. Escono su `/guide/<nome-file>/`, nell’indice `/guide/` e nella sitemap da sole. Il calcolatore di cartelle è il blocco `data-calcolatore` nella guida sulle cartelle.
 
+## Effinge Art
+
+Nel pannello (https://app.pagescms.org, oppure www.effinge.it/admin/) la voce **Effinge Art** contiene tutti i testi della galleria: la presentazione in apertura (un paragrafo per riquadro), il riquadro contatti, i titoli delle sezioni e la scheda di ogni quadro (titolo, sottotitolo, anno e luogo, stato, prezzo, descrizione). L’ordine dei quadri nel pannello è l’ordine nella galleria. Per un quadro nuovo carica la foto nel campo «Foto del quadro» e scegli un «Nome nell’indirizzo» (minuscole e trattini).
+
 ## Cosa richiede ancora me (o un tecnico)
 
 - cambiare l’impaginazione, i caratteri o il comportamento della lampada oltre le impostazioni;

@@ -117,6 +117,57 @@ content:
         options:
           format: markdown
 
+  - name: art
+    label: Effinge Art
+    description: I testi della galleria e le schede dei quadri.
+    type: file
+    path: src/_data/effingeArt.json
+    format: json
+    fields:
+      - { name: contatto, label: Email per le informazioni, type: string, required: true }
+      - name: presentazione
+        label: Presentazione (in apertura)
+        description: Un paragrafo per riquadro. Si scrivono sotto la lampada quando la pagina si apre.
+        type: text
+        list: true
+      - { name: commissioni_titolo, label: Titolo del riquadro contatti, type: string }
+      - { name: commissioni_testo, label: Testo del riquadro contatti, type: string }
+      - { name: titolo_opere, label: Titolo della galleria, type: string }
+      - { name: titolo_evento, label: Titolo della foto dell’evento, type: string }
+      - { name: titolo_altre, label: Titolo «Altre opere», type: string }
+      - name: opere
+        label: Quadri
+        description: L’ordine qui è l’ordine nella galleria. Tocca un quadro per aprirne la scheda.
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.titolo}"
+        fields:
+          - { name: titolo, label: Titolo, type: string, required: true }
+          - { name: slug, label: Nome nell’indirizzo, type: string, required: true, description: "Solo minuscole e trattini, per esempio la-valle-di-chelm. Diventa /art/opere/la-valle-di-chelm/. Non cambiarlo per i quadri già pubblicati." , pattern: { regex: "^[a-z0-9]+(-[a-z0-9]+)*$", message: "Solo lettere minuscole, numeri e trattini." } }
+          - { name: immagine, label: Foto del quadro, type: image, description: "Solo per i quadri nuovi: quelli già presenti usano la loro foto." }
+          - { name: alt, label: Descrizione della foto, type: string, description: "Cosa si vede nel quadro, per chi non vede l’immagine." }
+          - { name: sommario, label: Sottotitolo, type: string }
+          - { name: contesto, label: Anno e luogo, type: string }
+          - name: stato
+            label: Stato
+            type: select
+            options:
+              values:
+                - { value: Disponibile, label: Disponibile }
+                - { value: Venduto, label: Venduto }
+          - { name: prezzo, label: Prezzo, type: string, description: "Per esempio 700 €." }
+          - { name: altra, label: Va in «Altre opere», type: boolean }
+          - { name: fotoADestra, label: Foto a destra nella sua pagina, type: boolean }
+          - name: testo
+            label: Descrizione del quadro
+            description: Un paragrafo per riquadro.
+            type: text
+            list: true
+          - { name: width, label: "Larghezza della foto (pixel, facoltativa)", type: number }
+          - { name: height, label: "Altezza della foto (pixel, facoltativa)", type: number }
+
   - name: impostazioni
     label: Impostazioni del sito
     description: Apertura, animazione, lampada, colori e homepage.

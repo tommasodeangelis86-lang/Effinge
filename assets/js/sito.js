@@ -98,9 +98,11 @@
     this.allaVista = h1.hasAttribute('data-scrittura-alla-vista');
     var spazio = this.allaVista ? ' ' : ' ';
     var text = h1.textContent.replace(/\s+/g, ' ').trim();
-    h1.setAttribute('aria-label', text);
     h1.textContent = '';
-    var chars = window.Intl && Intl.Segmenter ? Array.from(new Intl.Segmenter('it', { granularity: 'grapheme' }).segment(text), function (s) { return s.segment; }) : Array.from(text);
+    if (/^H[1-6]$/.test(h1.tagName)) h1.setAttribute('aria-label', text);
+    else { var sr = document.createElement('span'); sr.className = 'nascosto'; sr.textContent = text; h1.appendChild(sr); }
+    var unita = h1.dataset.unita === 'parola';
+    var chars = unita ? text.split(/(\s+)/).filter(Boolean) : window.Intl && Intl.Segmenter ? Array.from(new Intl.Segmenter('it', { granularity: 'grapheme' }).segment(text), function (s) { return s.segment; }) : Array.from(text);
     this.glifi = chars.map(function (c) {
       var s = document.createElement('span');
       s.className = 'glifo'; s.setAttribute('aria-hidden', 'true');
@@ -115,10 +117,10 @@
   Scrittura.prototype.opts = function () {
     var d = this.el.dataset;
     return {
-      enabled: bool(d.enabled, true), speed: num(d.speed, 85, 20, 600), delay: num(d.delay, 250, 0, 3000),
+      enabled: bool(d.enabled, true), speed: d.durata ? num(d.durata / Math.max(1, this.glifi.length), 30, 4, 120) : num(d.speed, 85, 20, 600), delay: num(d.delay, 250, 0, 3000),
       fade: num(d.fade, 340, 120, 1200), intensity: num(d.intensity, .8, 0, 1),
       color: /^#[0-9a-f]{6}$/i.test(d.color || '') ? d.color : '#F0CB8A',
-      cursor: bool(d.cursor, true), repeat: d.repeat === 'sessione' ? 'sessione' : 'sempre'
+      cursor: bool(d.cursor, true) && !d.durata, repeat: d.repeat === 'sessione' ? 'sessione' : 'sempre'
     };
   };
   Scrittura.prototype.stop = function () {
@@ -163,13 +165,14 @@
     if (!titoli.length || reduce || !('IntersectionObserver' in window)) return;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
+        // parte quando se ne vede un quarto, o almeno un terzo dello schermo (testi molto lunghi)
+        if (!entry.isIntersecting || (entry.intersectionRatio < .25 && entry.intersectionRect.height < innerHeight * .33)) return;
         var titolo = entry.target;
         io.unobserve(titolo);
         titolo.classList.remove('scrittura-attesa');
         new Scrittura(titolo).play(true);
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: .25 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: [0, .1, .25, .5] });
     Array.prototype.forEach.call(titoli, function (titolo) {
       if (!bool(titolo.dataset.enabled, true) || !titolo.textContent.trim()) return;
       titolo.classList.add('scrittura-attesa');

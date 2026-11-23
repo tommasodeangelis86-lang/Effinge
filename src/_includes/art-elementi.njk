@@ -2,15 +2,19 @@
 data-scrittura-alla-vista data-enabled="{{ 'true' if s.animazione.attiva else 'false' }}" data-speed="{{ s.animazione.velocita }}" data-delay="{{ s.animazione.ritardo }}" data-fade="{{ s.animazione.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if s.animazione.cursore else 'false' }}"
 {%- endmacro %}
 
+{% macro testo(s, durata) -%}
+{{ scrittura(s) }} data-unita="parola" data-durata="{{ durata or 2200 }}"
+{%- endmacro %}
+
 {% macro riga(opera, s) %}
 <li>
   <a class="art-riga" href="/art/opere/{{ opera.slug }}/">
     <span class="art-miniatura art-lampada" data-lampada-scorrimento>
-      <img src="/assets/art/{{ opera.slug }}.webp" width="{{ opera.width }}" height="{{ opera.height }}" alt="" loading="lazy" decoding="async">
+      <img src="{{ opera.immagine or ('/assets/art/' + opera.slug + '.webp') }}"{% if opera.width %} width="{{ opera.width }}" height="{{ opera.height }}"{% endif %} alt="" loading="lazy" decoding="async">
     </span>
     <div>
-      <h3 class="art-gradiente gradiente-{{ opera.gradienteGalleria or opera.gradiente }}" {{ scrittura(s) }}>{{ opera.titolo }}</h3>
-      {%- if not opera.altra %}<p>{{ opera.sommario }}</p>{% endif %}
+      <h3 class="art-gradiente" {{ scrittura(s) }}>{{ opera.titolo }}</h3>
+      {%- if not opera.altra and opera.sommario %}<p {{ testo(s, 1200) }}>{{ opera.sommario }}</p>{% endif %}
       {%- if opera.stato %}<p class="art-stato">{{ opera.stato }}{% if opera.stato == 'Disponibile' and opera.prezzo %} · {{ opera.prezzo }}{% endif %}</p>{% endif %}
     </div>
   </a>
