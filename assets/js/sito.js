@@ -253,8 +253,18 @@
   }
 
   function lampadaAlloScorrimento(foglio) {
-    var lampada;
+    var lampada, sopra = false;
+    // sui quadri di Art, con il mouse, la luce va dove guardi
+    if (foglio.classList.contains('art-lampada') && matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      foglio.addEventListener('pointermove', function (e) {
+        if (e.pointerType !== 'mouse' || !lampada) return;
+        var b = foglio.getBoundingClientRect(); sopra = true;
+        lampada.jump(e.clientX - b.left, e.clientY - b.top);
+      });
+      foglio.addEventListener('pointerleave', function () { sopra = false; });
+    }
     return function () {
+      if (sopra) return;
       var r = foglio.getBoundingClientRect();
       if (r.bottom <= 0 || r.top >= innerHeight || !r.height) return;
       if (!lampada) lampada = new Lampada(foglio, true);
@@ -427,9 +437,29 @@
     conta();
   }
 
+  /* ——— Effinge Art: interruttore della luce piena (ricordato) ——— */
+  function luceArt() {
+    var btn = document.querySelectorAll('[data-art-luce]');
+    if (!btn.length) return;
+    var root = document.documentElement;
+    function segna(on) {
+      root.classList.toggle('art-luce-piena', on);
+      Array.prototype.forEach.call(btn, function (b) { b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    }
+    var on = false; try { on = localStorage.getItem('effinge-art-luce') === '1'; } catch (e) {}
+    segna(on);
+    Array.prototype.forEach.call(btn, function (b) {
+      b.addEventListener('click', function () {
+        on = !root.classList.contains('art-luce-piena'); segna(on);
+        try { localStorage.setItem('effinge-art-luce', on ? '1' : '0'); } catch (e) {}
+      });
+    });
+  }
+
   /* ——— Avvio ——— */
   function init() {
     sfondi();
+    luceArt();
     Array.prototype.forEach.call(document.querySelectorAll('[data-calcolatore]'), calcolatore);
     // Scrivi: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
     if (document.querySelector('[data-scrivi-app]')) setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);

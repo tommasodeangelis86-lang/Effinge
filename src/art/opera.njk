@@ -23,8 +23,12 @@ eleventyComputed:
       {%- if opera.contesto %}<p>{{ opera.contesto }}</p>{% endif %}
       {%- if opera.stato %}<p class="art-stato">{{ opera.stato }}{% if opera.prezzo %} · {{ opera.prezzo }}{% endif %}</p>{% endif %}
     </header>
-    <figure class="art-opera-foto art-lampada" data-lampada-scorrimento>
-      <img src="/assets/art/{{ opera.slug }}.webp" width="{{ opera.width }}" height="{{ opera.height }}" alt="{{ opera.alt }}" fetchpriority="high" decoding="async">
+    <figure class="art-opera-foto">
+      <div class="art-lampada" data-lampada-scorrimento>
+        <img src="/assets/art/{{ opera.slug }}.webp" width="{{ opera.width }}" height="{{ opera.height }}" alt="{{ opera.alt }}" fetchpriority="high" decoding="async">
+        <button type="button" class="art-tocca" data-art-luce aria-pressed="false"><span class="nascosto">Luce piena sul quadro</span></button>
+      </div>
+      <figcaption class="art-didascalia"><span class="spenta">Tocca il quadro per vederne i colori veri</span><span class="accesa">Tocca di nuovo per tornare alla lampada</span></figcaption>
     </figure>
     {%- if opera.testo.length or opera.stato == 'Disponibile' %}
     <div class="art-opera-testo">

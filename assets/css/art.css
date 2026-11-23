@@ -1,21 +1,8 @@
-html[data-sfondo] body.art-sito {
-  --art-fondo: #0e0a0a;
-  --art-testo: #f5f5ef;
-  --art-secondario: #c5bab3;
-  --art-linea: #3a302e;
-  background: var(--art-fondo);
-  color: var(--art-testo);
-  font: 400 1.27rem/1.5 var(--display);
-}
-
-html[data-sfondo] body.art-sito::before,
-html[data-sfondo] body.art-sito::after {
-  display: none;
-}
-
-html[data-sfondo] .art-barra.piena {
-  background: rgba(14, 10, 10, .9);
-  border-color: var(--art-linea);
+body.art-sito {
+  --art-testo: var(--testo);
+  --art-secondario: var(--testo-2);
+  --art-linea: var(--filo);
+  font: 400 1.125rem/1.6 var(--lettura);
 }
 
 .art-barra {
@@ -29,17 +16,6 @@ html[data-sfondo] .art-barra.piena {
   white-space: nowrap;
 }
 
-.art-barra nav {
-  font-family: var(--display);
-  font-weight: 400;
-  color: var(--art-secondario);
-}
-
-.art-sito .piede {
-  border-color: var(--art-linea);
-  color: var(--art-secondario);
-  font: 400 1.0625rem/1.4 var(--display);
-}
 
 .art-main {
   padding-block-end: clamp(70px, 10vw, 140px);
@@ -58,6 +34,7 @@ html[data-sfondo] .art-barra.piena {
 .art-main h2,
 .art-main h3 {
   margin: 0;
+  font-family: var(--display);
   font-weight: 400;
   line-height: .98;
   text-wrap: balance;
@@ -79,31 +56,7 @@ html[data-sfondo] .art-barra.piena {
 }
 
 .art-gradiente {
-  color: var(--art-testo);
-}
-
-.gradiente-vita { --art-gradiente: linear-gradient(90deg, #ff66c4, #0cc0df 55%, #ffde59); }
-.gradiente-rosa { --art-gradiente: linear-gradient(90deg, #ff66c4, #ffde59); }
-.gradiente-acqua { --art-gradiente: linear-gradient(90deg, #0cc0df, #ffde59); }
-.gradiente-fuoco { --art-gradiente: linear-gradient(90deg, #ff3131, #ff914d); }
-.gradiente-oro { --art-gradiente: linear-gradient(90deg, #ffde59, #ff914d); }
-.gradiente-viola-oro { --art-gradiente: linear-gradient(180deg, #7b2d9f, #fdd82e); }
-.gradiente-mare { --art-gradiente: linear-gradient(90deg, #5de0e6, #004aad); }
-.gradiente-viola { --art-gradiente: linear-gradient(90deg, #8c52ff, #5ce1e6); }
-
-@supports (background-clip: text) {
-  .art-gradiente:not(.scrivendo) {
-    background-image: var(--art-gradiente);
-    background-clip: text;
-    color: transparent;
-  }
-}
-
-@media (forced-colors: active) {
-  .art-gradiente:not(.scrivendo) {
-    background: none;
-    color: CanvasText;
-  }
+  color: var(--testo);
 }
 
 .art-apertura {
@@ -154,9 +107,6 @@ html[data-sfondo] .art-barra.piena {
   align-items: end;
   aspect-ratio: .72;
   padding: clamp(16px, 2.5vw, 32px);
-  border: 2px solid transparent;
-  background: linear-gradient(var(--art-fondo), var(--art-fondo)) padding-box, var(--art-gradiente) border-box;
-  --art-gradiente: linear-gradient(120deg, #ff66c4, #ffde59);
 }
 
 .art-contatti > img {
@@ -172,47 +122,49 @@ html[data-sfondo] .art-barra.piena {
   position: relative;
   z-index: 4;
   padding: clamp(16px, 2.2vw, 28px);
-  background: rgba(14, 10, 10, .94);
-  border: 1px solid var(--art-linea);
+  background: color-mix(in srgb, var(--stanza) 88%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
 }
 
 .art-contatti-testo h2 {
-  color: #ffde87;
+  color: var(--testo);
   font-size: clamp(1.8rem, 2.65vw, 2.7rem);
 }
 
 .art-contatti-testo p {
   margin: .5em 0 .8em;
   color: var(--art-secondario);
-  font-size: 1.14rem;
-  line-height: 1.35;
+  font: 400 1rem/1.5 var(--ui);
 }
 
 .art-azione {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   max-width: 100%;
-  padding: .58em 1.12em;
+  padding: 14px 22px;
   border: 1px solid transparent;
-  border-radius: 2px;
-  background: #ffde87;
-  color: #160f0b;
-  font: 600 1.14rem/1.2 var(--display);
+  border-radius: 999px;
+  background: var(--carta);
+  color: var(--inchiostro);
+  font: 500 .9375rem/1.2 var(--ui);
+  letter-spacing: .01em;
   overflow-wrap: anywhere;
+  transition: transform .16s var(--ease), background-color .2s ease;
 }
 
-.art-azione:hover {
-  background: #ffedbb;
-}
+.art-azione:active { transform: scale(.97); }
 
 .art-azione--secondaria {
   margin-top: 2rem;
-  border-color: var(--art-linea);
+  border-color: color-mix(in srgb, var(--testo) 30%, transparent);
   background: transparent;
-  color: var(--art-testo);
+  color: var(--testo);
 }
 
 .art-azione--secondaria:hover {
-  background: #201714;
+  background: color-mix(in srgb, var(--testo) 8%, transparent);
 }
 
 .art-sezione {
@@ -263,8 +215,10 @@ html[data-sfondo] .art-barra.piena {
 
 .art-riga .art-stato,
 .art-opera .art-stato {
-  font-size: 1.0625rem;
-  color: #ffde87;
+  font: 500 .75rem/1.4 var(--ui);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--testo-2);
 }
 
 .art-miniatura {
@@ -295,8 +249,11 @@ html[data-sfondo] .art-barra.piena {
   height: auto;
 }
 
-.art-lampada > .lampada.buio { filter: opacity(.38); }
-.art-lampada > .lampada.calore { filter: opacity(.65); }
+.art-lampada > .lampada.buio { width: 150cqw; height: 150cqw; filter: opacity(.9); }
+.art-ritratto .art-lampada > .lampada.buio { width: 190cqw; height: 190cqw; filter: opacity(.7); }
+.art-lampada > .lampada.calore { width: 75cqw; height: 75cqw; filter: opacity(.55); }
+.art-lampada > .lampada { transition: filter .6s ease; }
+html.art-luce-piena .art-lampada > .lampada { filter: opacity(0); }
 
 .art-evento {
   display: grid;
@@ -318,7 +275,7 @@ html[data-sfondo] .art-barra.piena {
   display: inline-block;
   margin: 0 0 clamp(24px, 4vw, 58px);
   color: var(--art-secondario);
-  font-size: 1.125rem;
+  font: 450 .875rem/1.4 var(--ui);
   text-decoration: underline;
   text-underline-offset: .2em;
 }
@@ -338,7 +295,7 @@ html[data-sfondo] .art-barra.piena {
 }
 
 .art-opera-testa { grid-area: testa; }
-.art-opera-foto { grid-area: foto; background: #18100f; }
+.art-opera-foto { grid-area: foto; }
 .art-opera-testo { grid-area: testo; max-width: 35rem; }
 
 .art-opera-testa h1 {
@@ -369,6 +326,7 @@ html[data-sfondo] .art-barra.piena {
 }
 
 .art-opera-nav a {
+  font: 450 .875rem/1.4 var(--ui);
   color: var(--art-secondario);
   text-decoration: underline;
   text-underline-offset: .2em;
@@ -431,4 +389,85 @@ html[data-sfondo] .art-barra.piena {
     grid-template-rows: auto;
     gap: 20px;
   }
+}
+
+/* ——— Effinge nella galleria: interruttore, didascalia, apertura ——— */
+.nascosto {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.art-interruttore {
+  display: inline-grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--testo) 30%, transparent);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--testo-2);
+  cursor: pointer;
+  transition: color .2s ease, background-color .3s ease, border-color .3s ease, box-shadow .3s ease;
+}
+
+.art-interruttore .ic {
+  width: 16px; height: 16px; fill: none; stroke: currentColor;
+  stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+
+.art-interruttore:hover { color: var(--testo); }
+
+.art-interruttore[aria-pressed="true"] {
+  border-color: var(--luce);
+  background: color-mix(in srgb, var(--luce) 18%, transparent);
+  color: var(--luce);
+  box-shadow: 0 0 18px color-mix(in srgb, var(--luce) 40%, transparent);
+}
+
+.art-tocca {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.art-tocca[aria-pressed="true"] { cursor: zoom-out; }
+.art-tocca:focus-visible { outline: 2px solid var(--luce); outline-offset: 4px; }
+
+.art-didascalia {
+  margin-top: 12px;
+  font: 450 .8125rem/1.4 var(--ui);
+  color: var(--testo-3, var(--testo-2));
+}
+
+.art-didascalia .accesa,
+html.art-luce-piena .art-didascalia .spenta { display: none; }
+html.art-luce-piena .art-didascalia .accesa { display: inline; }
+
+.art-riga div > p:not(.art-stato) { font-size: 1.0625rem; }
+
+/* apertura: il ritratto si accende piano, come la lampada sul foglio */
+.art-ritratto .art-lampada::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: #000;
+  pointer-events: none;
+  animation: art-accendi 2.6s cubic-bezier(.4, 0, .2, 1) .25s both;
+}
+
+@keyframes art-accendi { from { opacity: .96; } to { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .art-ritratto .art-lampada::after { animation: none; opacity: 0; }
+}
+
+@media (max-width: 640px) {
+  .art-barra .facoltativo { display: none; }
 }
