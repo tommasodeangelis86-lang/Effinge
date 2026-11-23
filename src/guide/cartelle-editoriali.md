@@ -1,6 +1,6 @@
 ---
 titolo: "Cartelle editoriali: cosa sono e come contarle"
-titolo_completo: "Cartelle editoriali: cosa sono e come contarle | Effinge"
+titolo_completo: "Calcolo cartelle editoriali online e conversione delle battute | Effinge"
 seo_descrizione: "Cos'è una cartella editoriale, quante battute contiene (1800, 2000 o 1500) e come contarle: con Word, Google Docs o il calcolatore gratuito online."
 date: 2026-11-21
 ordine: 1
@@ -53,6 +53,14 @@ Incolla qui il testo: il conto avviene nel tuo browser e non viene inviato da ne
 <div><dt>Cartelle da 1500</dt><dd data-r="c1500">0</dd></div>
 </dl>
 </div>
+
+## Quante battute sono 50, 100 o 200 cartelle?
+
+| Cartelle | Battute spazi inclusi, a 1.800 per cartella |
+| ---: | ---: |
+| 50 | 90.000 |
+| 100 | 180.000 |
+| 200 | 360.000 |
 
 ## Come si contano nei programmi di scrittura
 

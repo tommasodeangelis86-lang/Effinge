@@ -1,19 +1,18 @@
 {
   "sito": {
     "nome": "Effinge",
-    "descrizione": "Un atlante delle cose invisibili. Effinge è una pubblicazione letteraria indipendente nata nel 2026 con un editor immersivo per scrivere nel buio.",
+    "titolo_home": "Effinge — ritrova l'ispirazione",
+    "descrizione": "Un atlante delle cose invisibili. Effinge è uno spazio di scrittura immersivo nato nel 2026.",
     "indirizzo": "https://www.effinge.it",
-    "indicizza": true,
-    "piede": "",
-    "titolo_home": "Effinge — Rivista letteraria indipendente e spazio di scrittura"
+    "indicizza": true
   },
   "apertura": {
     "scritta": "Effinge",
     "sottotitolo": "Un atlante delle cose invisibili.",
     "intestazione_sinistra": "Effinge",
-    "intestazione_destra": "Pubblicazione letteraria",
+    "intestazione_destra": "Spazio di scrittura immersiva",
     "firma_sinistra": "Indipendente",
-    "firma_destra": "MMXXVI"
+    "firma_destra": "2026"
   },
   "animazione": {
     "attiva": true,
@@ -28,12 +27,12 @@
     "intensita": 80
   },
   "colori": {
+    "sfondo": "grafite",
+    "buio": 55,
     "stanza": "#0A0A09",
     "carta": "#ECE7DC",
     "inchiostro": "#1A1916",
-    "testo": "#E9E5DB",
-    "sfondo": "grafite",
-    "buio": 55
+    "testo": "#E9E5DB"
   },
   "progetto": {
     "mostra": true,
