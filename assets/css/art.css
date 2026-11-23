@@ -94,7 +94,7 @@ html[data-sfondo] .art-barra.piena {
 }
 
 .gradiente-vita { --art-gradiente: linear-gradient(90deg, #ff66c4, #0cc0df 55%, #ffde59); }
-.gradiente-rosa { --art-gradiente: linear-gradient(90deg, #ff66c4, #ffde59); }
+.gradiente-rosa { --art-gradiente: var(--art-gradiente-rosa); }
 .gradiente-acqua { --art-gradiente: linear-gradient(90deg, #0cc0df, #ffde59); }
 .gradiente-fuoco { --art-gradiente: linear-gradient(90deg, #ff3131, #ff914d); }
 .gradiente-oro { --art-gradiente: linear-gradient(90deg, #ffde59, #ff914d); }

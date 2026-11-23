@@ -65,7 +65,6 @@
 <header class="barra{% if page.url != '/' %} piena{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
   <nav aria-label="Principale">
-    <a href="/archivio/"{% if page.url == '/archivio/' %} aria-current="page"{% endif %}>Archivio</a>
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}
     <a href="{{ p.url }}"{% if page.url == p.url %} aria-current="page"{% endif %}{% if not loop.last or impostazioni.home.scrivi.nel_menu %} class="facoltativo"{% endif %}>{{ p.data.titolo }}</a>
     {%- endif %}{% endfor %}
@@ -73,7 +72,7 @@
     <a href="/scrivi/"{% if page.url == '/scrivi/' %} aria-current="page"{% endif %}>Scrivi</a>
     {%- endif %}
     <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
-    <a href="/art/" aria-label="Effinge Art">Art</a>
+    <a class="barra-art" href="/art/" aria-label="Effinge Art">Art</a>
     <div class="sfondi">
       <button type="button" class="tondino" data-apri-sfondi aria-haspopup="true" aria-expanded="false" aria-controls="sfondi-scelta" aria-label="Cambia lo sfondo" title="Sfondo"></button>
       <div class="sfondi-scelta" id="sfondi-scelta" hidden>
