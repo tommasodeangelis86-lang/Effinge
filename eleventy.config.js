@@ -42,6 +42,7 @@ export default function (config) {
   });
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
+  config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
 
   // Testi pubblicati, dal più recente
   config.addCollection('testi', (api) =>
