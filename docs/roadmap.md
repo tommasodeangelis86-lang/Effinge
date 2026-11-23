@@ -2,13 +2,15 @@
 
 Ordine deciso con l’autore. Ogni fase si apre solo quando quella prima è chiusa.
 
-## Fase attuale — Focus totale in Scrivi
+## Fatto — Focus totale in Scrivi
 Dall’idea di Narrator: tutti i comandi ridotti a icone, solo la pagina in vista.
 Il sito della barra in alto sparisce, la barra dell’opera diventa icone che si dissolvono mentre
 si scrive, i capitoli si aprono a richiesta, la formattazione diventa una colonna stretta. Schermo
 intero dove il browser lo consente; Esc per uscire.
 
-## Fase 2 — Narrator: voci e suggerimenti, con le chiavi di chi scrive
+## Fatto (novembre 2026) — Fase 2: Narrator, voci e suggerimenti con le chiavi di chi scrive
+In `assets/js/scrivi-voce.js`. Scelte fatte: lettura «Manuale» come predefinita (Frase e Auto a richiesta); Claude con l'SDK ufficiale e modello `claude-opus-5-5` (cambiabile in «Chiavi AI»); OpenAI `gpt-4.1-mini` e Gemini `gemini-2.5-flash` come modelli predefiniti, cambiabili; al massimo 12 parti per richiesta (si può selezionare un brano). Restano da decidere i punti sotto «Da decidere».
+
 Riferimento: `design_handoff_narrator_features/` (README e prototipo `Narrator.html`, non nel
 repository).
 

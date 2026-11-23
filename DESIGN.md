@@ -164,6 +164,11 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
   - A4, margini **2,3 cm**, interlinea **1,5**, rientro **0,42 cm**;
   - esportazione Word in Times New Roman 12.
 - **Conteggi**: parole, battute (spazi inclusi, senza gli a capo) e cartelle da **2000** o **1800** battute (pulsante «Cartella»).
+- **Narratore** (`assets/js/scrivi-voce.js`), nella colonna di destra, gruppi «Voce» e «Suggerimenti»:
+  - la parola letta si accende con `--luce` (pastiglia in `multiply`) e **la lampada la segue**;
+  - i suggerimenti sono **sottolineature sopra il testo**, in uno strato a parte (`.scrivi-segni`): il testo non cambia finché non si tocca «Accetta», e l'accettazione si annulla con Ctrl+Z;
+  - colori dei suggerimenti, smorzati e mai saturi: Migliora `#B7791F`, Taglia `#6B6A64`, Stile `#4F7A5C`;
+  - la nota del suggerimento usa EB Garamond per la proposta, con un filo di `--luce` a sinistra.
 
 ## 13. Tecnica e sicurezza (vincoli)
 
@@ -173,5 +178,6 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
   - script solo locali; script inline solo nel `<head>` (calcolati automaticamente);
   - nessuna risorsa esterna (font, script, immagini, iframe).
 - Niente librerie o CDN esterne. Il codice è JavaScript semplice in `sito.js` (un solo IIFE, ES5 compatibile).
-- Test: `npx @11ty/eleventy`, poi `node tests/sito.mjs`, `node tests/guide.mjs`, `node tests/art.mjs` e `node tests/scrivi.mjs` (Playwright).
+- Test: `npx @11ty/eleventy`, poi `node tests/sito.mjs`, `node tests/guide.mjs`, `node tests/art.mjs`, `node tests/scrivi.mjs` e `node tests/voce.mjs` (Playwright; le API dei fornitori sono simulate).
+- **Chiavi AI** di chi scrive: solo nel suo browser (`localStorage`, oppure `sessionStorage` se toglie «Ricorda»), inviate solo al fornitore. La CSP apre `api.anthropic.com`, `api.openai.com`, `api.elevenlabs.io`, `generativelanguage.googleapis.com` e `media-src blob:` **solo nella pagina Scrivi**. Claude si chiama con l'SDK ufficiale (`assets/vendor/anthropic-1.12.0.js`, rigenerabile con `npm run vendor:anthropic`), caricato solo quando servono i suggerimenti.
 - Nei commit usa l’indirizzo noreply di GitHub come autore, mai un’email personale.

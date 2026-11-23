@@ -22,7 +22,9 @@ function regolaDiSicurezza(html) {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
-    "connect-src 'self' https://api.github.com",
+    // Solo in Scrivi: il Narratore parla direttamente con i fornitori scelti da chi scrive, con le sue chiavi.
+    "connect-src 'self' https://api.github.com" + (/data-scrivi-app/.test(html) ? ' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://generativelanguage.googleapis.com' : ''),
+    "media-src 'self'" + (/data-scrivi-app/.test(html) ? ' blob:' : ''),
     "object-src 'none'",
     "frame-src 'none'",
     "base-uri 'self'",
@@ -40,7 +42,7 @@ export default function (config) {
       '\n<meta http-equiv="Content-Security-Policy" content="' + csp + '">' +
       '\n<meta name="referrer" content="strict-origin-when-cross-origin">');
   });
-  config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
+  config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
   config.addPassthroughCopy({ 'assets/css/art.css': 'assets/css/art.css', 'assets/art': 'assets/art' });

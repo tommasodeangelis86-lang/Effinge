@@ -313,6 +313,7 @@
     fermaRiscrittura();
     if (corrente && corrente !== sid && sezioni[corrente]) salva(true);
     corrente = sid;
+    app.dispatchEvent(new CustomEvent('effinge:sezione'));
     var s = sezioni[sid];
     editor.innerHTML = s.html || '<p><br></p>';
     titolo.value = s.titolo || '';
@@ -615,6 +616,7 @@
   formato.addEventListener('mousedown', function (e) { if (e.target.closest('button')) e.preventDefault(); });   // non perdere la selezione
   formato.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
+    if (!b.dataset.cmd && !b.dataset.blocco && !b.dataset.inserisci) return;   // voce e suggerimenti hanno i loro comandi
     var sel = getSelection();
     if (!sel.rangeCount || !editor.contains(sel.anchorNode)) {
       editor.focus();
@@ -1001,8 +1003,16 @@
     markdown: md,
     opera: function () { return opera; },
     sezioni: function () { return opera ? opera.ordine.map(function (x) { return sezioni[x]; }) : []; },
+    lampada: function (x, y, int) { lampadaA(x, y, int); },   // il Narratore la porta sulla parola letta
     pronto: null
   };
+  // il Narratore (voce e suggerimenti) si carica a parte, dopo l'editor
+  (function () {
+    var s = document.createElement('script');
+    s.src = '/assets/js/scrivi-voce.js' + (versione ? '?v=' + versione : '');
+    s.defer = true;
+    document.head.appendChild(s);
+  })();
 
   /* ——— Avvio ——— */
   window.EffingeScrivi.pronto = apriDB().then(function (db) {

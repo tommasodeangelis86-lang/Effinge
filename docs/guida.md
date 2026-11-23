@@ -176,6 +176,13 @@ Le guide stanno in `src/guide/` (una per file, in Markdown). In cima a ogni file
 
 Nel pannello (https://app.pagescms.org, oppure www.effinge.it/admin/) la voce **Effinge Art** contiene tutti i testi della galleria: la presentazione in apertura (un paragrafo per riquadro), il testo delle commissioni, i social accanto alla foto (compaiono solo se ne inserisci almeno uno), i titoli delle sezioni e la scheda di ogni quadro (titolo, sottotitolo, anno e luogo, stato, descrizione). La casella «Nel mosaico in apertura» sceglie i quadri del mosaico (pensato per 12). Sui quadri «Disponibile» compare da solo il pulsante «Richiedi informazioni», che apre una mail all’indirizzo indicato in alto. L’ordine dei quadri nel pannello è l’ordine nella galleria. Per un quadro nuovo carica la foto nel campo «Foto del quadro» e scegli un «Nome nell’indirizzo» (minuscole e trattini).
 
+## Il Narratore in Scrivi
+
+Nella colonna di destra di Scrivi:
+- **Voce**: ▶ legge il capitolo (o solo il brano selezionato), ■ ferma (anche Esc). L’icona accanto apre le impostazioni: chi legge (voce del sistema gratis, oppure OpenAI o ElevenLabs con la propria chiave), voce, velocità e «Mentre scrivi» (Manuale, Frase, Auto).
+- **Suggerimenti**: Migliora, Taglia, Stile. Le frasi da rivedere vengono sottolineate; toccandole si vede la proposta con «Accetta» o «Ignora». Il testo non cambia finché non tocchi «Accetta» (e Ctrl+Z annulla).
+- **Chiavi AI**: ognuno inserisce le proprie chiavi API (Claude, OpenAI, Gemini, ElevenLabs). Restano nel suo browser e vanno solo al fornitore: Effinge non le vede e non paga i consumi. Le chiavi API si creano nelle console dei fornitori; gli abbonamenti alla chat (ChatGPT Plus, Claude Pro) non le includono.
+
 ## Cosa richiede ancora me (o un tecnico)
 
 - cambiare l’impaginazione, i caratteri o il comportamento della lampada oltre le impostazioni;

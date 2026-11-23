@@ -6,10 +6,15 @@
   "scripts": {
     "build": "eleventy",
     "start": "eleventy --serve",
-    "test": "node tests/sito.mjs"
+    "test": "node tests/sito.mjs",
+    "vendor:anthropic": "node tools/vendor-anthropic.mjs"
   },
   "devDependencies": {
-    "@11ty/eleventy": "3.1.2"
+    "@11ty/eleventy": "3.1.2",
+    "@anthropic-ai/sdk": "^1.12.0",
+    "esbuild": "^0.25.10"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

@@ -7,6 +7,6 @@ Regole fisse:
 - Niente risorse esterne (CDN, Google Fonts, script di terzi): la CSP le blocca.
 - Ogni campo nuovo nei dati (`src/_data/*.json`) va aggiunto anche in `.pages.yml`, così si può modificare dal pannello.
 - Rispetta `prefers-reduced-motion`, il focus da tastiera e il contrasto WCAG 2.2 AA. Verifica che non compaia uno scorrimento orizzontale su telefono (390px).
-- Prima di consegnare: `npx @11ty/eleventy` e i test in `tests/` (`node tests/sito.mjs`, `tests/guide.mjs`, `tests/art.mjs`, `tests/scrivi.mjs`).
+- Prima di consegnare: `npx @11ty/eleventy` e i test in `tests/` (`node tests/sito.mjs`, `tests/guide.mjs`, `tests/art.mjs`, `tests/scrivi.mjs`, `tests/voce.mjs`).
 - Non pubblicare file personali (manoscritti, documenti con dati di contatto) nel repository: è pubblico.
 - Un agente alla volta: se un'altra sessione sta lavorando sul sito, aspetta che abbia finito.

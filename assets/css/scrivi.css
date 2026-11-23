@@ -268,3 +268,30 @@ html.focus-totale .scrivi-nota{display:none}
 .riscrittura .lettere-rivelate{visibility:visible}
 [data-riscrivi]:disabled{opacity:.45;cursor:default}
 .riscrittura .ultima::after{content:"";display:inline-block;width:0;height:.8em;box-shadow:1px 0 currentColor}
+
+/* ——— Narratore: voce e suggerimenti ——— */
+.campo select{width:100%;min-width:0;border:1px solid var(--filo);border-radius:10px;background:var(--stanza);color:var(--testo);padding:11px 12px;font:400 .9375rem/1.3 var(--ui);outline:none}
+.campo select:focus{border-color:var(--testo-3)}
+.spunta small{display:block;margin-top:2px;font:400 .75rem/1.3 var(--ui);color:var(--testo-3)}
+.scrivi-segni{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:visible}
+.voce-parola{position:absolute;left:0;top:0;border-radius:4px;background:color-mix(in srgb,var(--luce) 34%,transparent);box-shadow:0 0 14px color-mix(in srgb,var(--luce) 45%,transparent);mix-blend-mode:multiply;transition:transform .09s linear,width .09s linear}
+.ai-segno{position:absolute;left:0;top:0;border-bottom:2px solid var(--colore-ai);background:color-mix(in srgb,var(--colore-ai) 12%,transparent);border-radius:2px}
+.ai-migliora{--colore-ai:#B7791F}
+.ai-taglia{--colore-ai:#6B6A64}
+.ai-stile{--colore-ai:#4F7A5C}
+.ai-nota{position:fixed;z-index:70;width:min(340px,calc(100vw - 24px));padding:16px;border-radius:14px;background:var(--stanza-2);color:var(--testo);border:1px solid var(--filo);box-shadow:0 20px 50px -16px rgba(0,0,0,.85)}
+.ai-nota-perche{margin:0 0 10px;font:500 .8125rem/1.45 var(--ui);color:var(--testo-2)}
+.ai-nota-proposta{margin:0 0 14px;padding-left:12px;border-left:2px solid var(--luce);font:400 1.0625rem/1.55 var(--lettura);color:var(--testo)}
+.ai-nota-azioni{display:flex;gap:8px}
+.ai-elenco{display:flex;align-items:center;justify-content:space-between;gap:8px;font:500 .6875rem/1.3 var(--ui);color:var(--testo-2)}
+.ai-elenco button{border:0;background:none;padding:4px 0;color:var(--testo-3);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.voce-stato{margin:0;min-height:1em;font:450 .6875rem/1.35 var(--ui);color:var(--testo-3)}
+.voce-stato:empty{display:none}
+html.voce-attiva [data-voce="leggi"]{color:var(--luce)}
+html.ai-lavora [data-suggerisci]{opacity:.45;pointer-events:none}
+html.ai-lavora .voce-stato{color:var(--luce)}
+@media (prefers-reduced-motion:reduce){.voce-parola{transition:none}}
+.formato h2 .h-breve{display:none}
+html.focus-totale .formato h2 .h-lungo{display:none}
+html.focus-totale .formato h2 .h-breve{display:inline}
+html.focus-totale .ai-elenco,html.focus-totale .voce-stato{display:none}
