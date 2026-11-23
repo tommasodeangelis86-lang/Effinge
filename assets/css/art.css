@@ -26,23 +26,12 @@ html[data-sfondo] .art-barra.piena {
   display: inline-flex;
   align-items: center;
   gap: .35em;
-  font: 400 clamp(1.5rem, 2.7vw, 2.125rem)/1 var(--display);
   white-space: nowrap;
 }
 
-.art-marchio span + span {
-  display: grid;
-  place-items: center;
-  inline-size: 1.7em;
-  aspect-ratio: 1;
-  background: #070909;
-  border: 1px solid #566061;
-  color: #fff;
-  font-size: .92em;
-}
-
 .art-barra nav {
-  font: 500 clamp(.95rem, 1.6vw, 1.14rem)/1.15 var(--display);
+  font-family: var(--display);
+  font-weight: 400;
   color: var(--art-secondario);
 }
 
@@ -94,7 +83,7 @@ html[data-sfondo] .art-barra.piena {
 }
 
 .gradiente-vita { --art-gradiente: linear-gradient(90deg, #ff66c4, #0cc0df 55%, #ffde59); }
-.gradiente-rosa { --art-gradiente: var(--art-gradiente-rosa); }
+.gradiente-rosa { --art-gradiente: linear-gradient(90deg, #ff66c4, #ffde59); }
 .gradiente-acqua { --art-gradiente: linear-gradient(90deg, #0cc0df, #ffde59); }
 .gradiente-fuoco { --art-gradiente: linear-gradient(90deg, #ff3131, #ff914d); }
 .gradiente-oro { --art-gradiente: linear-gradient(90deg, #ffde59, #ff914d); }

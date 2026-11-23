@@ -12,7 +12,6 @@
   --testo-3:#7F7B72;
   --luce:#F0CB8A;
   --filo:#2A2926;
-  --art-gradiente-rosa:linear-gradient(90deg,#ff66c4,#ffde59);
 
   --display:"Cormorant Garamond","Cormorant",Garamond,"Times New Roman",serif;
   --lettura:"EB Garamond",Garamond,"Iowan Old Style",Georgia,serif;
@@ -45,19 +44,18 @@ button{font:inherit;color:inherit}
 .barra nav{display:flex;align-items:center;gap:clamp(18px,3vw,36px);font:450 .8125rem/1 var(--ui);letter-spacing:.01em;color:var(--testo-2)}
 .barra nav a{padding:8px 0;transition:color .2s ease}
 .barra nav a:hover,.barra nav a[aria-current]{color:var(--testo)}
-.barra nav a.barra-art {
+.barra-art {
   display: inline-grid;
   flex: none;
   place-items: center;
   inline-size: 1.875rem;
   aspect-ratio: 1;
-  padding: 0;
-  border: 1px solid transparent;
+  border: 1px solid #fff;
   border-radius: 0;
-  background: linear-gradient(#0008, #0008) padding-box, var(--art-gradiente-rosa) border-box;
   color: #fff;
-  font: 600 1rem/1 var(--display);
+  font: 400 1rem/1 var(--display);
 }
+.barra nav a.barra-art{padding:0;color:#fff}
 @media (max-width:560px){
   .barra{gap:12px;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
   .barra nav{gap:clamp(8px,3vw,16px);line-height:1.2}
