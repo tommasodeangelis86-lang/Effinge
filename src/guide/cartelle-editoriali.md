@@ -54,6 +54,14 @@ Incolla qui il testo: il conto avviene nel tuo browser e non viene inviato da ne
 </dl>
 </div>
 
+## Quante battute sono 50, 100 o 200 cartelle?
+
+| Cartelle | Battute spazi inclusi, a 1.800 per cartella |
+| ---: | ---: |
+| 50 | 90.000 |
+| 100 | 180.000 |
+| 200 | 360.000 |
+
 ## Come si contano nei programmi di scrittura
 
 La formula è sempre la stessa: **battute spazi inclusi ÷ battute per cartella**.
