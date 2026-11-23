@@ -298,8 +298,7 @@ html[data-sfondo] body::after{content:"";position:fixed;top:0;right:0;bottom:0;l
 .buio input::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;margin-top:-7px;border-radius:50%;background:var(--carta);border:0;box-shadow:0 2px 6px rgba(0,0,0,.6)}
 .buio input::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--carta);border:0;box-shadow:0 2px 6px rgba(0,0,0,.6)}
 .buio input:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:6px}
-/* Pagina di lettura: la lampada vera al posto dell'alone fisso; i comandi in basso a sinistra
-   (in basso a destra Netlify può mostrare la sua etichetta) */
+/* Pagina di lettura: lampada sul foglio e comandi in basso a sinistra. */
 .lettura-pagina .foglio{overflow:hidden}
 .lettura-pagina .foglio .lampada.buio{width:520cqw;height:520cqw}
 .lettura-pagina .foglio .lampada.calore{width:170cqw;height:170cqw}

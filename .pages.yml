@@ -1,5 +1,5 @@
 # Pannello di gestione di Effinge (Pages CMS — https://app.pagescms.org)
-# Ogni salvataggio crea una modifica nel repository; Netlify ripubblica il sito in circa un minuto.
+# Ogni salvataggio crea un commit su GitHub e avvia la pubblicazione su GitHub Pages.
 
 media:
   input: media

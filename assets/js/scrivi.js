@@ -739,7 +739,7 @@
   /* ——— Autore: pubblicare sul sito (solo dove è stata inserita la chiave GitHub) ———
      La chiave è un «fine-grained token» di GitHub con permesso Contents: lettura e scrittura,
      limitato al repository del sito. Resta in questo browser. Il capitolo diventa un file
-     src/testi/AAAA-MM-GG-titolo.md, lo stesso formato del pannello; Netlify ripubblica da solo. */
+     src/testi/AAAA-MM-GG-titolo.md, lo stesso formato del pannello. Il commit avvia GitHub Pages. */
   var API = 'https://api.github.com', KEY_AUTORE = 'effinge-autore';
   var autore = null;
   try { autore = JSON.parse(leggi(KEY_AUTORE) || 'null'); } catch (e) { autore = null; }
