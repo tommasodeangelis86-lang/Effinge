@@ -130,8 +130,15 @@ content:
         description: Un paragrafo per riquadro. Si scrivono sotto la lampada quando la pagina si apre.
         type: text
         list: true
-      - { name: commissioni_titolo, label: Titolo del riquadro contatti, type: string }
-      - { name: commissioni_testo, label: Testo del riquadro contatti, type: string }
+      - { name: commissioni, label: Commissioni, type: text, description: "Il testo sopra il pulsante «Scrivici per informazioni»." }
+      - name: social
+        label: Social
+        description: "Compaiono accanto alla foto dell’artista. Per esempio nome Instagram, indirizzo https://www.instagram.com/…"
+        type: object
+        list: true
+        fields:
+          - { name: nome, label: Nome, type: string, required: true }
+          - { name: indirizzo, label: Indirizzo, type: string, required: true, pattern: { regex: "^https://", message: "L’indirizzo deve cominciare con https://" } }
       - { name: titolo_opere, label: Titolo della galleria, type: string }
       - { name: titolo_evento, label: Titolo della foto dell’evento, type: string }
       - { name: titolo_altre, label: Titolo «Altre opere», type: string }
@@ -157,7 +164,7 @@ content:
               values:
                 - { value: Disponibile, label: Disponibile }
                 - { value: Venduto, label: Venduto }
-          - { name: prezzo, label: Prezzo, type: string, description: "Per esempio 700 €." }
+          - { name: nel_mosaico, label: Nel mosaico in apertura, type: boolean, description: "Il mosaico è fatto per 12 quadri." }
           - { name: altra, label: Va in «Altre opere», type: boolean }
           - { name: fotoADestra, label: Foto a destra nella sua pagina, type: boolean }
           - name: testo

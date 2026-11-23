@@ -174,7 +174,7 @@ Le guide stanno in `src/guide/` (una per file, in Markdown). In cima a ogni file
 
 ## Effinge Art
 
-Nel pannello (https://app.pagescms.org, oppure www.effinge.it/admin/) la voce **Effinge Art** contiene tutti i testi della galleria: la presentazione in apertura (un paragrafo per riquadro), il riquadro contatti, i titoli delle sezioni e la scheda di ogni quadro (titolo, sottotitolo, anno e luogo, stato, prezzo, descrizione). L’ordine dei quadri nel pannello è l’ordine nella galleria. Per un quadro nuovo carica la foto nel campo «Foto del quadro» e scegli un «Nome nell’indirizzo» (minuscole e trattini).
+Nel pannello (https://app.pagescms.org, oppure www.effinge.it/admin/) la voce **Effinge Art** contiene tutti i testi della galleria: la presentazione in apertura (un paragrafo per riquadro), il testo delle commissioni, i social accanto alla foto (compaiono solo se ne inserisci almeno uno), i titoli delle sezioni e la scheda di ogni quadro (titolo, sottotitolo, anno e luogo, stato, descrizione). La casella «Nel mosaico in apertura» sceglie i quadri del mosaico (pensato per 12). Sui quadri «Disponibile» compare da solo il pulsante «Richiedi informazioni», che apre una mail all’indirizzo indicato in alto. L’ordine dei quadri nel pannello è l’ordine nella galleria. Per un quadro nuovo carica la foto nel campo «Foto del quadro» e scegli un «Nome nell’indirizzo» (minuscole e trattini).
 
 ## Cosa richiede ancora me (o un tecnico)
 

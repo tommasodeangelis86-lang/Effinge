@@ -459,10 +459,41 @@
     });
   }
 
+  /* ——— Effinge Art: la lampada passa sul mosaico e accende i quadri vicini ——— */
+  function mosaicoArt(box) {
+    var tessere = Array.prototype.slice.call(box.querySelectorAll('.art-tessera'));
+    if (!tessere.length) return;
+    if (reduce) { tessere.forEach(function (t) { t.style.setProperty('--luce-t', '.9'); }); return; }
+    var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+    var x = .3, y = .4, tx = x, ty = y, mouse = false, visibile = true, t0 = performance.now(), last = 0;
+    function centri() { var b = box.getBoundingClientRect(); return tessere.map(function (t) { var r = t.getBoundingClientRect(); return { x: (r.left + r.width / 2 - b.left) / b.width, y: (r.top + r.height / 2 - b.top) / b.height }; }); }
+    var c = centri();
+    addEventListener('resize', function () { c = centri(); });
+    if (fine) {
+      box.addEventListener('pointermove', function (e) { var b = box.getBoundingClientRect(); tx = (e.clientX - b.left) / b.width; ty = (e.clientY - b.top) / b.height; mouse = true; });
+      box.addEventListener('pointerleave', function () { mouse = false; });
+    }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { visibile = e[0].isIntersecting; if (visibile) requestAnimationFrame(passo); }).observe(box);
+    function passo(now) {
+      if (!visibile) return;
+      var dt = Math.min(now - (last || now) || 16, 50); last = now;
+      if (!mouse) { var s = (now - t0) / 1000; tx = .5 + .42 * Math.sin(s * .23); ty = .5 + .38 * Math.sin(s * .31 + 1.3); }   // la lampada gira piano da sola
+      var k = 1 - Math.exp(-dt / (mouse ? 140 : 600));
+      x += (tx - x) * k; y += (ty - y) * k;
+      tessere.forEach(function (t, i) {
+        var dx = (c[i].x - x) * 1.25, dy = c[i].y - y, d2 = dx * dx + dy * dy;
+        t.style.setProperty('--luce-t', (.26 + .78 * Math.exp(-d2 / .07)).toFixed(3));
+      });
+      requestAnimationFrame(passo);
+    }
+    requestAnimationFrame(passo);
+  }
+
   /* ——— Avvio ——— */
   function init() {
     sfondi();
     luceArt();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-art-mosaico]'), mosaicoArt);
     Array.prototype.forEach.call(document.querySelectorAll('[data-calcolatore]'), calcolatore);
     // Scrivi: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
     if (document.querySelector('[data-scrivi-app]')) setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);

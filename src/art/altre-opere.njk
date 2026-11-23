@@ -15,7 +15,7 @@ immagine: /assets/art/mary.webp
     <h1 id="titolo-altre" class="art-gradiente" {{ scrittura(impostazioni) }}>Altre opere</h1>
     <ul class="art-galleria art-galleria--altre">
       {%- for opera in effingeArt.opere %}{% if opera.altra %}
-      {{ riga(opera, impostazioni) }}
+      {{ riga(opera, impostazioni, effingeArt.contatto) }}
       {%- endif %}{% endfor %}
     </ul>
   </section>

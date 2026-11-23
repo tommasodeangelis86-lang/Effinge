@@ -13,7 +13,7 @@ eleventyComputed:
   seo_descrizione: "{{ opera.sommario }}"
   immagine: "{{ opera.immagine or ('/assets/art/' + opera.slug + '.webp') }}"
 ---
-{% from "art-elementi.njk" import scrittura, testo %}
+{% from "art-elementi.njk" import scrittura, testo, richiedi %}
 <main id="contenuto" class="art-main art-contenitore art-dettaglio">
   <a class="art-ritorno" href="{{ '/art/altre-opere/' if opera.altra else '/art/#opere' }}">{{ 'Altre opere' if opera.altra else 'Tutte le opere' }}</a>
   <article class="art-opera{% if opera.fotoADestra %} art-opera--rovesciata{% endif %}" aria-labelledby="titolo-opera">
@@ -21,7 +21,7 @@ eleventyComputed:
       <h1 id="titolo-opera" class="art-gradiente" {{ scrittura(impostazioni) }}>{{ opera.titolo }}</h1>
       <p {{ testo(impostazioni, 1200) }}>{{ opera.sommario }}</p>
       {%- if opera.contesto %}<p {{ testo(impostazioni, 900) }}>{{ opera.contesto }}</p>{% endif %}
-      {%- if opera.stato %}<p class="art-stato">{{ opera.stato }}{% if opera.prezzo %} · {{ opera.prezzo }}{% endif %}</p>{% endif %}
+      {%- if opera.stato %}<p class="art-stato">{{ opera.stato }}</p>{% endif %}
     </header>
     <figure class="art-opera-foto">
       <div class="art-lampada" data-lampada-scorrimento>
@@ -34,7 +34,7 @@ eleventyComputed:
     <div class="art-opera-testo">
       {%- for paragrafo in opera.testo %}<p {{ testo(impostazioni, 2800) }}>{{ paragrafo }}</p>{% endfor %}
       {%- if opera.stato == 'Disponibile' %}
-      <a class="art-azione" href="mailto:{{ effingeArt.contatto }}?subject={{ ('Effinge Art - ' + opera.titolo) | urlencode }}">Chiedi informazioni</a>
+      {{ richiedi(opera, effingeArt.contatto, 'art-azione') }}
       {%- endif %}
     </div>
     {%- endif %}

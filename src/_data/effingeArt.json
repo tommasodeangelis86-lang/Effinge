@@ -1,10 +1,10 @@
 {
   "contatto": "effingeart@gmail.com",
   "presentazione": [
-    "Da oltre cinquant’anni la pittura accompagna il lavoro dell’artista casertana che espone in questa galleria. Il paesaggio è il suo soggetto prediletto. Un tratto delicato e incisivo unisce l’attenzione ai luoghi alla ricerca di una loro risonanza emotiva.\nOgni mese sono disponibili due commissioni. Tempi e costi dipendono dal soggetto e dalla complessità dell’opera."
+    "Da oltre cinquant’anni la pittura accompagna il lavoro dell’artista casertana che espone in questa galleria. Il paesaggio è il suo soggetto prediletto. Un tratto delicato e incisivo unisce l’attenzione ai luoghi alla ricerca di una loro risonanza emotiva."
   ],
-  "commissioni_titolo": "Scrivici per informazioni",
-  "commissioni_testo": "Opere disponibili e richieste su commissione.",
+  "commissioni": "Ogni mese sono disponibili due commissioni. Tempi e costi dipendono dal soggetto e dalla complessità dell’opera.",
+  "social": [],
   "titolo_opere": "Opere in evidenza",
   "titolo_evento": "Rome Art Week 2025",
   "titolo_altre": "Altre opere",
@@ -22,8 +22,9 @@
         "Il dipinto cattura una veduta costiera che incarna il romanticismo del paesaggio napoletano dell'epoca. In primo piano, la costa frastagliata accoglie la vita quotidiana: piccole figure di pescatori si muovono accanto a barche tirate in secca, suggerendo un legame indissolubile tra l'uomo e il mare. La composizione è dominata da un promontorio sulla sinistra, dove un'architettura rurale si fonde con la roccia nuda, testimoniando un'urbanizzazione che, all'epoca, rispettava ancora i volumi della natura.",
         "Il 1882 rappresenta un anno di transizione cruciale per Napoli. Siamo in piena epoca post-unitaria, pochi anni prima dell'inizio del \"Risanamento\" (la grande trasformazione urbanistica della città)."
       ],
-      "width": 1440,
-      "height": 717
+      "width": 1404,
+      "height": 717,
+      "nel_mosaico": true
     },
     {
       "titolo": "Rovine, Roma",
@@ -37,8 +38,9 @@
       "testo": [
         "Un'opera che trasporta l'osservatore nella bellezza intramontabile della Città Eterna. Questo dipinto celebra il fascino delle rovine romane, immerse in un paesaggio rigoglioso dove la storia e la natura si fondono in un abbraccio senza tempo. L’artista invita a riscoprire la grandezza del passato con uno sguardo colmo di meraviglia e serenità."
       ],
-      "width": 1081,
-      "height": 1407
+      "width": 1065,
+      "height": 1386,
+      "nel_mosaico": true
     },
     {
       "titolo": "La lettrice",
@@ -52,8 +54,9 @@
       "testo": [
         "Un’opera che cattura un momento di pura introspezione e quiete. Realizzato nel 2016 a Caserta, questo dipinto esplora il delicato equilibrio tra il mondo esterno, vibrante nei toni accesi della fioritura, e lo spazio intimo della lettura. L'artista descrive il processo creativo come un 'tiro alla fune' tra sogno e critica, regalandoci un'immagine che parla di scoperta personale e armonia con la natura."
       ],
-      "width": 1080,
-      "height": 1440
+      "width": 1026,
+      "height": 1390,
+      "nel_mosaico": true
     },
     {
       "titolo": "La Valle di Chelm",
@@ -69,7 +72,8 @@
         "Qui, la valle diventa un luogo universale dell'anima, dove il tempo sembra essersi fermato per permettere la riflessione e l'ascolto della natura."
       ],
       "width": 1120,
-      "height": 928
+      "height": 928,
+      "nel_mosaico": true
     },
     {
       "titolo": "Immersa",
@@ -85,7 +89,8 @@
         "Il dipinto trasforma il paesaggio in un \"luogo universale dell'anima\". Qui, il tempo sembra fermarsi, sospeso tra il verde brillante del prato e i toni caldi del tramonto (o di un bosco autunnale) che coronano l'orizzonte."
       ],
       "width": 810,
-      "height": 1440
+      "height": 953,
+      "nel_mosaico": true
     },
     {
       "titolo": "L’ombra dei pioppi",
@@ -103,7 +108,8 @@
         "Attraverso l'uso sapiente del colore e una grande attenzione ai dettagli, l'opera diventa una celebrazione dell'armonia tra l'essere umano e l'ambiente, offrendo uno spazio di pura introspezione e quiete per chiunque si fermi a osservarla."
       ],
       "width": 1440,
-      "height": 1048
+      "height": 1048,
+      "nel_mosaico": true
     },
     {
       "titolo": "Doni",
@@ -120,7 +126,8 @@
         "Per l'artista, la creazione di quest'opera significa trasformare un momento quotidiano in uno spazio di pura introspezione e quiete. Il suo stile, caratterizzato da un tratto delicato ma incisivo, riflette un costante \"tiro alla fune\" creativo tra il sogno e la critica, una sfida interiore che si risolve in un'immagine di pace assoluta e in una profonda connessione con la terra."
       ],
       "width": 1440,
-      "height": 1080
+      "height": 1080,
+      "nel_mosaico": true
     },
     {
       "titolo": "Overture",
@@ -135,8 +142,9 @@
         "Quest'opera ritrae una figura intenta a suonare il violino tra i colori di un bosco autunnale, completamente assorbita dall'armonia tra musica e natura. Incastonato in una sinfonia di luci e ombre, il protagonista diventa parte integrante del paesaggio dorato, dove le note sembrano fondersi con il fruscio delle foglie.",
         "Il gesto di suonare sottolinea un legame tattile e profondo con la terra, trasformando l'esecuzione in un rito di ascolto e di silenzio. Il dipinto eleva il sentiero a un \"luogo universale dell'anima\", dove il tempo sembra fermarsi, sospeso tra il calore del fogliame e i toni malinconici del tramonto che coronano l'orizzonte."
       ],
-      "width": 1080,
-      "height": 1440
+      "width": 972,
+      "height": 1426,
+      "nel_mosaico": true
     },
     {
       "titolo": "Dopo la tempesta",
@@ -154,7 +162,8 @@
         "L'opera non è solo una marina, ma un invito a fermarsi per ascoltare il respiro della natura che torna a calmarsi, offrendo un messaggio di speranza universale racchiuso in una composizione di straordinaria forza emotiva."
       ],
       "width": 1440,
-      "height": 1080
+      "height": 1080,
+      "nel_mosaico": false
     },
     {
       "titolo": "A nudo",
@@ -169,8 +178,9 @@
         "Il dipinto rappresenta un momento di profonda vulnerabilità e onestà espressiva. Quest'opera si distacca dai paesaggi tipici dell'artista per concentrarsi sulla figura umana, esplorata con lo stesso approccio introspettivo che caratterizza tutta la sua produzione pittorica.",
         "Il dipinto ritrae il torso nudo di un uomo colto in un momento di riflessione o di attesa, dove la plasticità dei muscoli e la calda tonalità della pelle contrastano nettamente con uno sfondo rosso vibrante e carico di energia emotiva. Per l'artista, mettere \"a nudo\" il soggetto non significa solo rappresentarne l'anatomia, ma spogliarlo delle sovrastrutture per rivelarne l'essenza più autentica e umana."
       ],
-      "width": 1080,
-      "height": 1440
+      "width": 936,
+      "height": 1296,
+      "nel_mosaico": true
     },
     {
       "titolo": "Rome, 1861",
@@ -188,7 +198,8 @@
         "Questa tela, testimonianza di una passione cinquantennale, riflette la dedizione assoluta che l'artista riserva a ogni sua creazione, limitando la sua produzione a pochi pezzi selezionati per preservarne l'eccellenza e l'anima."
       ],
       "width": 1440,
-      "height": 965
+      "height": 965,
+      "nel_mosaico": true
     },
     {
       "titolo": "Help, Marenostrum",
@@ -204,8 +215,9 @@
         "L'opera ritrae il volto di un uomo che emerge con fatica dai flutti agitati di un mare blu intenso, mentre una mano protesa cerca disperatamente soccorso, incontrando un'altra mano pronta ad afferrarla. La composizione gioca su una prospettiva che immerge l'osservatore direttamente nella scena, dove l'acqua spumosa e vibrante carica l'immagine di una tensione palpabile.",
         "Per l'artista, questo dipinto trasforma un momento di tragica realtà in uno spazio di pura introspezione, elevando il concetto di mare a un \"luogo universale dell'anima\" dove il tempo sembra fermarsi per permettere la riflessione e l'ascolto."
       ],
-      "width": 1080,
-      "height": 1440
+      "width": 1034,
+      "height": 1015,
+      "nel_mosaico": true
     },
     {
       "titolo": "Mary",
@@ -215,7 +227,8 @@
       "altra": true,
       "fotoADestra": false,
       "width": 1440,
-      "height": 1440
+      "height": 1440,
+      "nel_mosaico": false
     },
     {
       "titolo": "Massa Lubrense",
@@ -224,8 +237,9 @@
       "sommario": "Veduta della costa di Massa Lubrense.",
       "altra": true,
       "fotoADestra": false,
-      "width": 1080,
-      "height": 1440
+      "width": 947,
+      "height": 737,
+      "nel_mosaico": true
     }
   ]
 }
