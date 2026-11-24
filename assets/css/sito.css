@@ -362,3 +362,11 @@ html:not(.js) .guida + .comandi{display:none}
 .altre-guide a{text-decoration:underline;text-underline-offset:3px}
 .scrivi-nota a{text-decoration:underline;text-underline-offset:3px;color:var(--testo-2)}
 @media (max-width:560px){.calcolatore-risultati{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+@media (max-width: 560px) {
+  .barra-principale { min-width: 0; }
+  .barra nav.barra-principale { gap: clamp(5px, 2vw, 11px); }
+  .barra-principale a[href="/guide/"], .barra-principale .barra-checklist { text-align: center; text-wrap: balance; }
+  .barra-principale .barra-checklist { max-width: 6.5em; }
+  .barra-principale .sfondi { flex: none; }
+}

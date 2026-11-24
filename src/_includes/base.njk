@@ -10,7 +10,7 @@
 {%- else -%}{%- set titoloGoogle = s.sito.nome -%}{%- endif -%}
 {%- set immagineSocial = (immagine or '/assets/effinge-anteprima.png') | assoluto(s.sito.indirizzo) -%}
 <!doctype html>
-<html lang="it" data-sfondo="{{ impostazioni.colori.sfondo or 'grafite' }}" style="--buio:{{ ((impostazioni.colori.buio if impostazioni.colori.buio is number else 55) / 100) }}">
+<html lang="it" data-sfondo="{{ sfondoPagina or impostazioni.colori.sfondo or 'grafite' }}" style="--buio:{{ ((impostazioni.colori.buio if impostazioni.colori.buio is number else 55) / 100) }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -66,7 +66,7 @@
 {%- else %}
 <header class="barra{% if page.url != '/' %} piena{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
-  <nav aria-label="Principale">
+  <nav class="barra-principale" aria-label="Principale">
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}
     <a href="{{ p.url }}"{% if page.url == p.url %} aria-current="page"{% endif %}{% if not loop.last or impostazioni.home.scrivi.nel_menu %} class="facoltativo"{% endif %}>{{ p.data.titolo }}</a>
     {%- endif %}{% endfor %}
@@ -74,6 +74,7 @@
     <a href="/scrivi/"{% if page.url == '/scrivi/' %} aria-current="page"{% endif %}>Scrivi</a>
     {%- endif %}
     <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
+    <a class="barra-checklist" href="/checkmanoscritto/"{% if page.url == '/checkmanoscritto/' %} aria-current="page"{% endif %}>Checklist manoscritto</a>
     <a class="barra-art" href="/art/" aria-label="Effinge Art">Art</a>
     {% include "sfondi.njk" %}
   </nav>
@@ -91,7 +92,7 @@
 </footer>
 <script src="/assets/js/sito.js?v={{ build.versione }}" defer></script>
 {%- if script %}
-<script src="{{ script }}?v={{ build.versione }}" defer></script>
+<script src="{{ script }}?v={{ build.versione }}"{% if scriptModulo %} type="module"{% else %} defer{% endif %}></script>
 {%- endif %}
 </body>
 </html>

@@ -60,6 +60,8 @@ La prima pagina, da sola, contiene:
 
 ## Lista di controllo prima di inviare
 
+Se hai già un file Word, aprilo nella [Checklist manoscritto](/checkmanoscritto/) per controllare l’impaginazione e scaricare una nuova copia.
+
 - A4, margini 2–2,5 cm, numeri di pagina.
 - Carattere semplice in corpo 12, interlinea 1,5 (o quella richiesta).
 - Rientro della prima riga, niente righe vuote tra i paragrafi.
