@@ -1,0 +1,119 @@
+---
+layout: base.njk
+permalink: /checkmanoscritto/
+titolo: Checklist manoscritto
+titolo_completo: Checklist manoscritto — Controlla e impagina un DOCX | Effinge
+seo_descrizione: Controlla impaginazione, capitoli e lunghezza del tuo manoscritto Word. Correggi il formato e scarica una copia, direttamente nel browser.
+stile: /assets/css/checkmanoscritto.css
+script: /assets/js/checkmanoscritto.js
+scriptModulo: true
+sfondoPagina: blu-effinge
+eleventyExcludeFromCollections: true
+---
+{% from "art-elementi.njk" import scrittura %}
+{% macro riquadro(id, titolo, descrizione, aperto=false) %}
+<details class="check-riquadro" data-check="{{ id }}"{% if aperto %} open{% endif %}>
+  <summary>
+    <span class="check-testa"><span class="check-nome">{{ titolo }}</span><span class="check-stato" data-stato-riga>Da fare</span></span>
+    <span class="check-descrizione">{{ descrizione }}</span>
+  </summary>
+  <div class="check-corpo">{{ caller() }}</div>
+</details>
+{% endmacro %}
+<main id="contenuto" class="check-pagina" data-check-manoscritto>
+  <header class="check-apertura">
+    <h1 {{ scrittura(impostazioni) }}>Checklist manoscritto</h1>
+    <p>Controlla il tuo manoscritto Word, sistema l’impaginazione e scarica una nuova copia.</p>
+  </header>
+
+  <section class="check-file" aria-label="Documento da controllare">
+    <label class="pulsante check-apri" for="check-file">Apri un file Word <span aria-hidden="true">↑</span></label>
+    <input class="sr" id="check-file" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-describedby="check-privato">
+    <p id="check-privato">DOCX fino a 25 MB. Il manoscritto resta nel tuo browser.</p>
+    <p class="check-messaggio" data-esito role="status"></p>
+    <noscript><p>Per leggere e correggere un file Word serve JavaScript. Puoi consultare la <a href="/guide/impaginare-manoscritto/">guida all’impaginazione</a>.</p></noscript>
+  </section>
+
+  <details class="check-profilo">
+    <summary>Impostazioni di invio <span data-profilo-label>Formato Effinge</span></summary>
+    <div class="check-corpo">
+      <label for="check-profilo">Riferimento per il controllo</label>
+      <select id="check-profilo">
+        <option value="effinge" selected>Formato Effinge</option>
+        <option value="personalizzato">Requisiti personalizzati</option>
+      </select>
+      <p data-riepilogo-formato>A4 verticale, Times New Roman 12, margini di 2,3 cm, interlinea 1,5 e rientro di 0,42 cm.</p>
+      <fieldset data-personalizzato hidden>
+        <legend>Formato del documento</legend>
+        <div class="check-campi">
+          <label>Pagina <select name="pagina"><option value="A4">A4</option><option value="Letter">Letter</option></select></label>
+          <label>Carattere <input name="carattere" type="text" maxlength="80" value="Times New Roman" required></label>
+          <label>Corpo (pt) <input name="corpo" type="number" min="6" max="36" step="0.5" value="12" required></label>
+          <label>Margini (cm) <input name="margini" type="number" min="0.5" max="5" step="0.1" value="2.3" required></label>
+          <label>Interlinea <input name="interlinea" type="number" min="1" max="3" step="0.1" value="1.5" required></label>
+          <label>Rientro (cm) <input name="rientro" type="number" min="0" max="3" step="0.01" value="0.42" required></label>
+          <label>Allineamento <select name="allineamento"><option value="both">Giustificato</option><option value="left">A sinistra</option></select></label>
+        </div>
+        <label class="check-conferma"><input name="numeri" type="checkbox" checked> Numeri di pagina richiesti</label>
+        <label class="check-conferma"><input name="paginaNuova" type="checkbox" checked> Ogni capitolo su una pagina nuova</label>
+      </fieldset>
+    </div>
+  </details>
+
+  <section aria-labelledby="check-lista">
+    <div class="check-intestazione">
+      <h2 id="check-lista">Prima di inviare</h2>
+      <p><span data-avanzamento aria-live="polite">0 di 8 completati</span><progress max="8" value="0" aria-label="Controlli completati"></progress></p>
+    </div>
+    <div class="check-griglia">
+      {% call riquadro("formato", "Impaginazione", "Pagina, margini, carattere e interlinea.", true) %}
+        <div data-rapporto-formato><p>Apri un DOCX per confrontare l’impaginazione con il formato scelto.</p></div>
+        <button class="check-secondario" type="button" data-applica disabled>Applica formato Effinge</button>
+      {% endcall %}
+      {% call riquadro("capitoli", "Capitoli e stacchi", "Titoli, interruzioni di pagina e separazione delle scene.") %}
+        <div data-rapporto-capitoli><p>I titoli individuati nel file appariranno qui.</p></div>
+        <label class="check-aggiungi" data-aggiungi hidden>Cerca un titolo nel testo
+          <input type="search" maxlength="120" placeholder="Per esempio, La partenza" data-cerca-titolo autocomplete="off">
+        </label>
+        <div data-risultati-titoli></div>
+        <label class="check-conferma"><input type="checkbox" data-manuale="capitoli" disabled> Ho verificato ordine, titoli e stacchi di scena.</label>
+        <button class="check-secondario" type="button" data-interruzioni disabled>Metti i capitoli su pagina nuova</button>
+      {% endcall %}
+      {% call riquadro("lunghezza", "Lunghezza", "Parole, battute spazi inclusi e cartelle editoriali.") %}
+        <div class="check-campi">
+          <label>Battute per cartella <select data-unita-cartella><option>1800</option><option>2000</option><option>1500</option></select></label>
+          <label>Misura del limite <select data-unita-limite><option value="battute">Battute</option><option value="parole">Parole</option><option value="cartelle">Cartelle</option></select></label>
+          <label>Limite, se richiesto <input type="number" min="1" step="1" data-limite></label>
+        </div>
+        <div data-rapporto-lunghezza><p>Apri un file per vedere i conteggi.</p></div>
+      {% endcall %}
+      {% call riquadro("pulizia", "Pulizia del documento", "Commenti, revisioni e segni di lavorazione.") %}
+        <div data-rapporto-pulizia><p>Il controllo segnala gli elementi da rivedere nel file.</p></div>
+        <label class="check-conferma"><input type="checkbox" data-manuale="pulizia" disabled> Ho verificato i segni segnalati.</label>
+      {% endcall %}
+      {% call riquadro("rilettura", "Ultima rilettura", "Refusi, dialoghi, nomi e tempi verbali.") %}
+        <p>Rileggi ad alta voce i passaggi che hai riscritto. Controlla nomi, punti di vista e punteggiatura dei dialoghi.</p>
+        <p><a href="/scrivi/">Apri Foglio Effinge</a> · <a href="/guide/norme-redazionali-dialoghi-revisione/">Leggi la guida alla revisione</a></p>
+        <label class="check-conferma"><input type="checkbox" data-manuale="rilettura"> Ho concluso la rilettura.</label>
+      {% endcall %}
+      {% call riquadro("frontespizio", "Frontespizio e anonimato", "Titolo, firma, recapiti e proprietà del file.") %}
+        <label class="check-conferma"><input type="checkbox" data-anonimo> L’invio richiede l’anonimato.</label>
+        <div data-rapporto-frontespizio><p>Verifica i dati da mettere in prima pagina secondo le richieste dell’invio.</p></div>
+        <label class="check-conferma"><input type="checkbox" data-manuale="frontespizio"> Ho verificato il frontespizio e i dati del documento.</label>
+      {% endcall %}
+      {% call riquadro("allegati", "Allegati e requisiti", "Formato, nome del file e materiali richiesti.") %}
+        <label class="check-conferma"><input type="checkbox" data-allegato> Il formato e il nome del file seguono le istruzioni di invio.</label>
+        <label class="check-conferma"><input type="checkbox" data-allegato> Ho preparato gli eventuali allegati richiesti, come sinossi, estratto o biografia.</label>
+      {% endcall %}
+      {% call riquadro("finale", "Copia finale", "Un ultimo sguardo al documento da inviare.") %}
+        <p>Apri la copia scaricata e verifica il frontespizio, almeno un cambio di capitolo e le ultime pagine.</p>
+        <label class="check-conferma"><input type="checkbox" data-manuale="finale" disabled> Ho aperto e controllato la copia finale.</label>
+      {% endcall %}
+    </div>
+  </section>
+
+  <div class="check-esporta">
+    <button class="pulsante" type="button" data-esporta disabled>Scarica copia DOCX <span aria-hidden="true">↓</span></button>
+    <p data-esito-copia role="status">Le correzioni si applicano alla copia da scaricare.</p>
+  </div>
+</main>

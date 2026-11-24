@@ -45,6 +45,11 @@ export default function (config) {
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
+  config.addPassthroughCopy({
+    'assets/css/checkmanoscritto.css': 'assets/css/checkmanoscritto.css',
+    'assets/js/checkmanoscritto.js': 'assets/js/checkmanoscritto.js',
+    'assets/js/checkmanoscritto-docx.js': 'assets/js/checkmanoscritto-docx.js',
+  });
   config.addPassthroughCopy({ 'assets/css/art.css': 'assets/css/art.css', 'assets/art': 'assets/art' });
 
   // Testi pubblicati, dal più recente
