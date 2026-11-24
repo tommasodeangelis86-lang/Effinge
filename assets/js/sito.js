@@ -387,7 +387,7 @@
   // La lampada è usata anche dalla pagina «Scrivi» (assets/js/scrivi.js).
   window.EffingeLampada = Lampada;
 
-  /* ——— Sfondo: un tondino in alto, cinque sfumati; la scelta resta in questo browser ——— */
+  /* ——— Sfondo: un tondino in alto; la scelta resta in questo browser ——— */
   function sfondi() {
     var tondino = document.querySelector('[data-apri-sfondi]'), scelta = document.getElementById('sfondi-scelta');
     if (!tondino || !scelta) return;

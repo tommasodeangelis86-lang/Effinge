@@ -83,6 +83,7 @@ Lo sfondo si sceglie con il tondino in alto a destra (`html[data-sfondo]`). Sopr
 | `eternal-constance` | `linear-gradient(to top,#09203f,#537895)` |
 | `midnight-bloom` | `linear-gradient(-20deg,#2b5876,#4e4376)` |
 | `solid-stone` | `linear-gradient(to right,#243949,#517fa4)` |
+| `blu-effinge` (Blu Effinge) | `radial-gradient(ellipse 67% 42% at 73% 66%,#182136 0%,#161e32 50%,#12192b 100%,#101627 150%,#0f1525 220%)`, fondo `#0F1525`, testo `#F2ECE0`, note `#918D83` |
 
 Le sezioni nuove **non** devono avere un fondo proprio: ereditano lo sfondo e il buio. Effinge Art li usa come pareti.
 
