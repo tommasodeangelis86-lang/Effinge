@@ -7,7 +7,7 @@
   --carta:#ECE7DC;
   --inchiostro:#1A1916;
   --inchiostro-2:#5B5850;
-  --testo:#E9E5DB;
+  --testo:var(--testo-predefinito,#E9E5DB);
   --testo-2:#A29D92;
   --testo-3:#7F7B72;
   --luce:#F0CB8A;
@@ -256,7 +256,7 @@ html:not(.js) .righe li{opacity:1}
 .corpo .note{margin-top:2.5em;padding-top:1em;border-top:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);font-size:.85em}
 .corpo .note p{text-indent:0}
 
-/* ——— Sfondo del sito: grafite (predefinito) e altri quattro sfumati di WebGradients ———
+/* ——— Sfondi del sito ———
    Il predefinito si sceglie dal pannello; chi visita può cambiarlo con il tondino in alto. */
 :root{--sfondo:var(--stanza);--sfondo-blend:normal;--buio:.55}
 [data-sfondo="grafite"]{--sfondo:linear-gradient(to bottom,#323232 0%,#3f3f3f 40%,#1c1c1c 150%),linear-gradient(to top,rgba(255,255,255,.4) 0%,rgba(0,0,0,.25) 200%);--sfondo-blend:multiply}
@@ -264,6 +264,10 @@ html:not(.js) .righe li{opacity:1}
 [data-sfondo="eternal-constance"]{--sfondo:linear-gradient(to top,#09203f 0%,#537895 100%)}
 [data-sfondo="midnight-bloom"]{--sfondo:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
 [data-sfondo="solid-stone"]{--sfondo:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+[data-sfondo="blu-effinge"],.sfondi-scelta [data-scegli="blu-effinge"]{
+  --sfondo:#0f1525 radial-gradient(ellipse 67% 42% at 73% 66%,#182136 0%,#161e32 50%,#12192b 100%,#101627 150%,#0f1525 220%);
+}
+[data-sfondo="blu-effinge"]{--testo:#f2ece0;--testo-3:#918d83}
 html[data-sfondo] body{background:transparent}
 html[data-sfondo] body::before{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:var(--sfondo);background-blend-mode:var(--sfondo-blend)}
 html[data-sfondo] .barra.piena,html[data-sfondo] .scrivi-barra{background:rgba(0,0,0,.18);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border-color:rgba(255,255,255,.08)}
@@ -285,6 +289,7 @@ html[data-sfondo] .pill:not([aria-pressed="true"]):not(.primario),html[data-sfon
 .sfondi-scelta [data-scegli="eternal-constance"]{background:linear-gradient(to top,#09203f 0%,#537895 100%)}
 .sfondi-scelta [data-scegli="midnight-bloom"]{background:linear-gradient(-20deg,#2b5876 0%,#4e4376 100%)}
 .sfondi-scelta [data-scegli="solid-stone"]{background:linear-gradient(to right,#243949 0%,#517fa4 100%)}
+.sfondi-scelta [data-scegli="blu-effinge"]{background:var(--sfondo)}
 @media (prefers-reduced-motion:reduce){.sfondi-scelta{animation:none}}
 /* Il cursore del buio: un velo nero uniforme sopra lo sfumato (0 = sfumato originale, 1 = nero assoluto) */
 html[data-sfondo] body::after{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:#000;opacity:var(--buio);pointer-events:none}

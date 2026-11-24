@@ -41,13 +41,13 @@
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/inter-tight-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<script>if(window.top!==window.self){document.documentElement.style.visibility='hidden';try{window.top.location.replace(window.location.href)}catch(e){}}document.documentElement.classList.add('js');try{var f=localStorage.getItem('effinge-sfondo');if(f&&/^(grafite|vicious-stance|eternal-constance|midnight-bloom|solid-stone)$/.test(f))document.documentElement.setAttribute('data-sfondo',f);var b=localStorage.getItem('effinge-buio');if(b!==null&&b!==''&&isFinite(b))document.documentElement.style.setProperty('--buio',Math.min(1,Math.max(0,b/100)))}catch(e){}</script>
+<script>if(window.top!==window.self){document.documentElement.style.visibility='hidden';try{window.top.location.replace(window.location.href)}catch(e){}}document.documentElement.classList.add('js');try{var f=localStorage.getItem('effinge-sfondo');if(f&&/^(grafite|vicious-stance|eternal-constance|midnight-bloom|solid-stone|blu-effinge)$/.test(f))document.documentElement.setAttribute('data-sfondo',f);var b=localStorage.getItem('effinge-buio');if(b!==null&&b!==''&&isFinite(b))document.documentElement.style.setProperty('--buio',Math.min(1,Math.max(0,b/100)))}catch(e){}</script>
 <link rel="stylesheet" href="/assets/css/fonts.css?v={{ build.versione }}">
 <link rel="stylesheet" href="/assets/css/sito.css?v={{ build.versione }}">
 {%- if stile %}
 <link rel="stylesheet" href="{{ stile }}?v={{ build.versione }}">
 {%- endif %}
-<style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
+<style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo-predefinito:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
 </head>
 <body{% if sezioneArt %} class="art-sito"{% endif %}>
 <a class="salta" href="#contenuto">Vai al contenuto</a>

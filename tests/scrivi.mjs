@@ -86,18 +86,18 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   });
   const inc = await page.evaluate(() => { const ed = document.querySelector('.scrivi-editor'); const st = [...ed.querySelectorAll('[style]')].map(e => e.getAttribute('style')).join('|'); const p = [...ed.querySelectorAll('p')].find(x => x.textContent.includes('incollato')); return { stili: st, font: p ? getComputedStyle(p).fontFamily : '' }; });
   ok(!/Arial|red|30px/.test(inc.stili) && /EB Garamond/.test(inc.font), 'incolla: stile esterno passato ' + JSON.stringify(inc));
-  // sfondo: un tondino con cinque sfumati, ricordato dopo il ricaricamento
+  // sfondo: Blu Effinge è disponibile e viene ricordato dopo il ricaricamento
   await page.click('[data-apri-sfondi]');
   const nScelte = await page.$$eval('#sfondi-scelta:not([hidden]) [data-scegli]', l => l.length);
-  ok(nScelte === 5, `scelte di sfondo: ${nScelte} invece di 5`);
+  ok(nScelte === 6, `scelte di sfondo: ${nScelte} invece di 6`);
   await page.screenshot({ path: join(out, 'scrivi-sfondi-scelta.png') });
-  await page.click('#sfondi-scelta [data-scegli="midnight-bloom"]');
-  const sf = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage, chiuso: document.getElementById('sfondi-scelta').hidden }));
-  ok(sf.attr === 'midnight-bloom' && /gradient/.test(sf.bg), 'sfondo non applicato: ' + JSON.stringify(sf));
+  await page.getByRole('radio', { name: 'Blu Effinge' }).click();
+  const sf = await page.evaluate(() => ({ attr: document.documentElement.dataset.sfondo, bg: getComputedStyle(document.body, '::before').backgroundImage }));
+  ok(sf.attr === 'blu-effinge' && sf.bg.startsWith('radial-gradient('), 'sfondo non applicato: ' + JSON.stringify(sf));
   await page.waitForTimeout(400);
-  await page.screenshot({ path: join(out, 'scrivi-sfondo-midnight.png') });
+  await page.screenshot({ path: join(out, 'scrivi-sfondo-blu.png') });
   await page.reload(); await page.evaluate(() => window.EffingeScrivi.pronto);
-  ok((await page.evaluate(() => document.documentElement.getAttribute('data-sfondo'))) === 'midnight-bloom', 'sfondo non ricordato dopo il ricaricamento');
+  ok((await page.evaluate(() => document.documentElement.dataset.sfondo)) === 'blu-effinge', 'sfondo non ricordato dopo il ricaricamento');
   await page.click('.scrivi-editor'); await page.keyboard.press('Control+End');
   // focus totale: solo la pagina, comandi a icone che si dissolvono scrivendo, Esc per uscire
   await page.click('[data-comando="focus"]'); await page.waitForTimeout(500);

@@ -245,6 +245,7 @@ content:
                 - { value: eternal-constance, label: "Eternal Constance (blu notte)" }
                 - { value: midnight-bloom, label: "Midnight Bloom (viola e petrolio)" }
                 - { value: solid-stone, label: "Solid Stone (blu e azzurro)" }
+                - { value: blu-effinge, label: "Blu Effinge" }
           - name: buio
             label: Quanto è scuro lo sfondo (0–100)
             description: "0 = lo sfumato com'è, 100 = nero assoluto. Ogni visitatore può cambiarlo con il cursore nel tondino in alto."
