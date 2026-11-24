@@ -373,25 +373,9 @@ html.art-luce-piena .art-didascalia .accesa { display: inline; }
 
 .art-presentazione + .art-presentazione { margin-top: .8em; }
 
-.art-artista {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px 18px;
-  margin-top: 30px;
-}
-
-.art-cerchio {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: 50% 22%;
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--testo) 25%, transparent), 0 0 0 6px color-mix(in srgb, var(--stanza) 60%, transparent), 0 0 40px color-mix(in srgb, var(--luce) 22%, transparent);
-}
-
 .art-social {
   display: inline-flex;
+  margin-top: 30px;
   align-items: center;
   padding: 4px;
   border-radius: 999px;

@@ -140,7 +140,7 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 
 - Stessa grammatica di Effinge: tre caratteri, niente colori nell'interfaccia, pareti e buio del sito.
 - **Apertura**:
-  - a sinistra l'etichetta «EFFINGE ART», la presentazione che si scrive, la foto dell'artista in un **cerchio** di 88px e i social (solo se compilati nel pannello);
+  - a sinistra l'etichetta «EFFINGE ART», la presentazione che si scrive e i social (solo se compilati nel pannello);
   - sotto una linea, il blocco **COMMISSIONI** con il pulsante «Scrivici per informazioni».
 - **Mosaico**:
   - a destra 12 quadri **nudi nel buio** (nessun fondo, cornice o bordo), su 4 colonne;

@@ -17,14 +17,11 @@ immagine: /assets/art/naples-1882.webp
       {%- for p in effingeArt.presentazione %}
       <p class="art-presentazione" {{ testo(impostazioni, 2600) }}>{{ p }}</p>
       {%- endfor %}
-      <div class="art-artista">
-        <img class="art-cerchio" src="/assets/art/ritratto.webp" width="864" height="1184" alt="Ritratto dell’artista in galleria" fetchpriority="high" decoding="async">
-        {%- if effingeArt.social and effingeArt.social.length %}
-        <div class="art-social" aria-label="Social">
-          {%- for x in effingeArt.social %}{% if (x.indirizzo | string).indexOf('https://') == 0 %}<a href="{{ x.indirizzo }}" target="_blank" rel="noopener">{{ x.nome }}</a>{% endif %}{% endfor %}
-        </div>
-        {%- endif %}
+      {%- if effingeArt.social and effingeArt.social.length %}
+      <div class="art-social" aria-label="Social">
+        {%- for x in effingeArt.social %}{% if (x.indirizzo | string).indexOf('https://') == 0 %}<a href="{{ x.indirizzo }}" target="_blank" rel="noopener">{{ x.nome }}</a>{% endif %}{% endfor %}
       </div>
+      {%- endif %}
       <div id="commissioni" class="art-commissioni">
         <p class="art-etichetta">Commissioni</p>
         {%- if effingeArt.commissioni %}<p class="art-commissioni-testo" {{ testo(impostazioni, 1600) }}>{{ effingeArt.commissioni }}</p>{% endif %}

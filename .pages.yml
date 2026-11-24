@@ -133,7 +133,7 @@ content:
       - { name: commissioni, label: Commissioni, type: text, description: "Il testo sopra il pulsante «Scrivici per informazioni»." }
       - name: social
         label: Social
-        description: "Compaiono accanto alla foto dell’artista. Per esempio nome Instagram, indirizzo https://www.instagram.com/…"
+        description: "Compaiono sotto la presentazione dell’artista. Per esempio nome Instagram, indirizzo https://www.instagram.com/…"
         type: object
         list: true
         fields:
