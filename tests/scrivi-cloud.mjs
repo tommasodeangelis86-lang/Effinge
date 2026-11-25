@@ -40,7 +40,10 @@ async function prepara(ctx) {
     const headers = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': '*', 'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS' };
     const json = (dati, status = 200) => route.fulfill({ status, json: dati, headers });
     if (req.method() === 'OPTIONS') return route.fulfill({ status: 204, headers });
-    if (url.pathname === '/auth/v1/token') return json(accesso);
+    if (url.pathname === '/auth/v1/token') {
+      if (url.searchParams.get('grant_type') === 'password') assert.equal(req.postDataJSON().email, autore.email);
+      return json(accesso);
+    }
     if (url.pathname === '/auth/v1/logout') return route.fulfill({ status: 204, headers });
     assert.equal(req.headers().authorization, 'Bearer ' + jwt);
     if (url.pathname === '/rest/v1/effinge_autori') return json([{ utente: autore.id }]);
@@ -70,6 +73,12 @@ try {
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, acceptDownloads: true });
   const pagina = await prepara(ctx);
   const editor = pagina.locator('.scrivi-editor[contenteditable]');
+  const titolo = pagina.locator('#titolo-sezione');
+  await pagina.goto(indirizzo + '/');
+  await pagina.getByRole('navigation', { name: 'Principale' }).getByRole('link', { name: 'Accedi' }).click();
+  await pagina.getByRole('dialog', { name: 'Accedi all’archivio' }).waitFor();
+  assert.equal(new URL(pagina.url()).search, '', 'Il login dal menu di altre pagine apre la finestra una volta');
+  await pagina.locator('#archivio-privato [data-chiudi]').click();
   await pagina.evaluate(() => new Promise((ok, ko) => {
     const richiesta = indexedDB.open('effinge-scrivi', 1);
     richiesta.onerror = ko;
@@ -84,24 +93,47 @@ try {
   }));
   await pagina.reload();
   await pagina.evaluate(() => window.EffingeScrivi.pronto);
-  assert.equal(await pagina.getByRole('button', { name: 'Accedi', exact: true }).isVisible(), true);
+  const menu = pagina.getByRole('navigation', { name: 'Principale' });
+  const accedi = menu.getByRole('button', { name: 'Accedi', exact: true });
+  assert.equal(await accedi.isVisible(), true);
+  assert.deepEqual(await accedi.evaluate(el => [el.previousElementSibling.textContent, el.nextElementSibling.textContent]), ['Checklist manoscritto', 'Art']);
+  for (const width of [320, 390]) {
+    await pagina.setViewportSize({ width, height: 844 });
+    assert.equal(await pagina.evaluate(async () => {
+      await document.fonts.ready;
+      const header = document.querySelector('.barra').getBoundingClientRect();
+      const toolbar = document.querySelector('.scrivi-barra').getBoundingClientRect();
+      const ultimo = document.querySelector('.barra-principale .tondino').getBoundingClientRect();
+      return ultimo.right <= innerWidth && header.bottom <= toolbar.top;
+    }), true, `Menu e comandi del foglio visibili a ${width}px`);
+  }
   assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), false);
+  assert.equal(await pagina.locator('#archivio-privato').isVisible(), false);
+  assert.equal(await titolo.inputValue(), '');
+  assert.equal(await titolo.evaluate(el => el.tagName === 'TEXTAREA' && el.form === null), true);
+  assert.equal(await pagina.locator('input[type=password]').evaluateAll(campi => campi.every(campo => campo.form)), true, 'Le credenziali hanno ciascuna il proprio modulo');
+  await titolo.fill('Il foglio\nnella notte');
+  assert.equal(await titolo.inputValue(), 'Il foglio nella notte');
   await editor.fill('Testo scritto come ospite.');
   await pagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('bozza in questa scheda'));
   const download = pagina.waitForEvent('download');
   await pagina.locator('[data-comando="esporta"]').click();
   assert.match((await download).suggestedFilename(), /\.docx$/);
+  await pagina.getByRole('button', { name: 'Salva', exact: true }).click();
+  await pagina.getByRole('dialog', { name: 'Accedi all’archivio' }).waitFor();
+  await pagina.locator('#archivio-privato [data-chiudi]').click();
   assert.equal(chiamate, 0, 'Scrivere ed esportare da ospite non usa Supabase');
-  assert.equal(await pagina.evaluate(() => scrollX === 0 && document.querySelector('[data-salva-archivio]').getBoundingClientRect().right <= innerWidth), true);
+  assert.equal(await pagina.evaluate(() => scrollX === 0 && document.querySelector('.barra-principale .tondino').getBoundingClientRect().right <= innerWidth), true);
 
   await entra(pagina);
   await pagina.waitForFunction(() => document.querySelector('[data-esito-archivio]').textContent.includes('Salvato'));
   assert.match(archivio.dati.sezioni[0].html, /Testo scritto come ospite\./);
+  assert.equal(archivio.dati.sezioni[0].titolo, 'Il foglio nella notte');
   assert.equal(archivio.dati.opere.length, 1, 'L’accesso non importa altre opere locali');
   await pagina.locator('#archivio-privato [data-chiudi]').click();
   assert.equal(await pagina.getByRole('button', { name: 'Salva', exact: true }).isVisible(), true);
-  assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), true);
-  assert.equal(await pagina.evaluate(() => document.querySelector('[data-uscita-archivio]').getBoundingClientRect().right <= innerWidth), true);
+  assert.equal(await menu.getByRole('button', { name: 'Esci', exact: true }).isVisible(), true);
+  assert.equal(await pagina.evaluate(() => document.querySelector('.barra-principale .tondino').getBoundingClientRect().right <= innerWidth), true);
   await editor.fill('Testo aggiornato nell’archivio.');
   await pagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('salvato nell’archivio'));
   assert.ok(scritture > 1);

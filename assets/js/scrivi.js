@@ -319,7 +319,7 @@
     app.dispatchEvent(new CustomEvent('effinge:sezione'));
     var s = sezioni[sid];
     editor.innerHTML = s.html || '<p><br></p>';
-    titolo.value = s.titolo || '';
+    titolo.value = String(s.titolo || '').replace(/[\r\n]/g, ' ');
     luci.replaceChildren();
     intestazione();
     vuoto();
@@ -607,8 +607,17 @@
     if (!html && txt.indexOf('\n') < 0) { document.execCommand('insertText', false, txt); return; }
     document.execCommand('insertHTML', false, html ? pulisci(html.replace(/<!--[\s\S]*?-->/g, '')) : testoInHtml(txt));
   });
-  titolo.addEventListener('input', function () { salva(false); clearTimeout(timerMini); timerMini = setTimeout(aggiornaMiniatura, 600); });
-  titolo.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); editor.focus(); } });
+  titolo.addEventListener('input', function () {
+    if (titolo.value.includes('\n')) {
+      var inizio = titolo.selectionStart, fine = titolo.selectionEnd;
+      titolo.value = titolo.value.replace(/\n/g, ' ');
+      titolo.setSelectionRange(inizio, fine);
+    }
+    salva(false);
+    clearTimeout(timerMini);
+    timerMini = setTimeout(aggiornaMiniatura, 600);
+  });
+  titolo.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); editor.focus(); } });
   nomeOpera.addEventListener('change', function () { opera.titolo = nomeOpera.value.trim() || 'Senza titolo'; nomeOpera.value = opera.titolo; archivio.salvaOpera(opera); });
   nomeOpera.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); nomeOpera.blur(); } });
   addEventListener('pagehide', function () { salva(true); });
@@ -772,7 +781,8 @@
   }
   function esito(el, msg, tipo) { el.textContent = msg; el.className = 'esito' + (tipo ? ' ' + tipo : ''); }
   $('[data-apri-autore]').addEventListener('click', function () { dlgOpere.close(); mostraAutore(); esito($('[data-esito-autore]'), ''); dlgAut.showModal(); });
-  $('[data-collega-autore]').addEventListener('click', function () {
+  $('#modulo-chiave-autore').addEventListener('submit', function (evento) {
+    evento.preventDefault();
     var token = $('#chiave-autore').value.trim(), out = $('[data-esito-autore]');
     if (!/^(github_pat_|ghp_)[A-Za-z0-9_]{20,}$/.test(token)) { esito(out, 'Questa non sembra una chiave GitHub: deve iniziare con github_pat_.', 'errore'); return; }
     esito(out, 'Verifico la chiave…');
@@ -1038,7 +1048,7 @@
   var statoCloud = 'bozza in questa scheda';
   var dialogoCloud = $('#archivio-privato'), formCloud = $('[data-accesso-archivio]');
   var esitoCloud = $('[data-esito-archivio]');
-  var tastoArchivio = $('[data-salva-archivio]'), tastoUscita = $('[data-uscita-archivio]');
+  var tastoSalvaArchivio = $('[data-salva-archivio]'), tastoMenuArchivio = $('[data-menu-archivio]');
 
   function memoriaVuota() { return { opere: Object.create(null), sezioni: Object.create(null) }; }
   function clonaArchivio(x) { return cloud ? JSON.parse(JSON.stringify(x)) : x; }
@@ -1160,19 +1170,13 @@
   function mostraAccount() {
     if (!cloud) return;
     var connesso = !!account && !accessoScaduto;
-    var azione = connesso ? 'Salva' : 'Accedi';
     formCloud.hidden = connesso;
     $('[data-sessione-archivio]').hidden = !connesso;
     $('[data-account-archivio]').textContent = account ? account.email : '';
     $('#h-archivio-privato').textContent = connesso ? 'Archivio privato' : 'Accedi all’archivio';
-    tastoArchivio.setAttribute('aria-label', azione);
-    tastoArchivio.title = connesso ? 'Salva nell’archivio privato' : 'Accedi all’archivio privato';
-    $('[data-testo-archivio]').textContent = azione;
-    $('[data-icona-accesso]').hidden = connesso;
-    $('[data-icona-salvataggio]').hidden = !connesso;
+    tastoMenuArchivio.textContent = connesso ? 'Esci' : 'Accedi';
     $('[data-nota-ospite]').hidden = !!account;
     $('[data-nota-connesso]').hidden = !connesso;
-    tastoUscita.hidden = !account;
   }
 
   function apriUltima(lista, preferita) {
@@ -1212,12 +1216,14 @@
     mostraAccount();
   }
 
+  async function apriDialogoArchivio() {
+    await window.EffingeScrivi.pronto;
+    mostraAccount();
+    if (!dialogoCloud.open) dialogoCloud.showModal();
+  }
+
   if (cloud) {
-    tastoArchivio.addEventListener('click', async function () {
-      await window.EffingeScrivi.pronto;
-      mostraAccount();
-      if (!dialogoCloud.open) dialogoCloud.showModal();
-    });
+    tastoSalvaArchivio.addEventListener('click', apriDialogoArchivio);
     formCloud.addEventListener('submit', async function (evento) {
       evento.preventDefault();
       var invio = formCloud.querySelector('[type=submit]');
@@ -1254,13 +1260,13 @@
     var tastoEsciDialogo = $('[data-esci-archivio]');
     var chiudiCloud = $('[data-chiudi]', dialogoCloud);
     dialogoCloud.addEventListener('cancel', function (evento) {
-      if (tastoUscita.disabled) evento.preventDefault();
+      if (tastoMenuArchivio.disabled) evento.preventDefault();
     });
 
     async function esciArchivio() {
-      if (!account || tastoUscita.disabled) return;
+      if (!account || tastoMenuArchivio.disabled) return;
       if (!dialogoCloud.open) dialogoCloud.showModal();
-      tastoUscita.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = true;
+      tastoMenuArchivio.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = true;
       esitoCloud.textContent = 'Uscita in corso…';
       try {
         await salva(true);
@@ -1282,12 +1288,16 @@
       } catch (errore) {
         mostraErroreCloud(errore);
       } finally {
-        tastoUscita.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = false;
+        tastoMenuArchivio.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = false;
         chiudiCloud.focus();
       }
     }
     tastoEsciDialogo.addEventListener('click', esciArchivio);
-    tastoUscita.addEventListener('click', esciArchivio);
+    tastoMenuArchivio.addEventListener('click', async function () {
+      await window.EffingeScrivi.pronto;
+      if (account && !accessoScaduto) await esciArchivio();
+      else await apriDialogoArchivio();
+    });
 
     $('[data-apri-bozze-locali]').addEventListener('click', async function () {
       var bozze = await scopriBozze().catch(memoriaVuota);
@@ -1345,6 +1355,14 @@
     caricandoArchivio = false;
     mostraStatoCloud();
   });
+  if (cloud) {
+    var indirizzo = new URL(location.href);
+    if (indirizzo.searchParams.has('accedi')) {
+      indirizzo.searchParams.delete('accedi');
+      history.replaceState(history.state, '', indirizzo);
+      apriDialogoArchivio();
+    }
+  }
   // ricorda l'ultima sezione aperta
   if (!cloud) setInterval(function () { if (opera && corrente && opera.ultima !== corrente) { opera.ultima = corrente; archivio.salvaOpera(opera); } }, 4000);
 })();
