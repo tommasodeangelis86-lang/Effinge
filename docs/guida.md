@@ -151,6 +151,8 @@ Effinge, senza passare dal pannello. Serve una volta sola, su ogni dispositivo, 
 La chiave resta solo nel browser di quel dispositivo e può scrivere solo nel repository Effinge. Non
 inserirla su computer di altri. Per toglierla: «Scollega»; per revocarla ovunque, eliminala su GitHub.
 
+L’[archivio privato di Scrivi](archivio-privato.md) descrive anche il funzionamento con Supabase quando è attivo.
+
 **Dove finisce quello che scrivi.** Tutto resta **nel browser del dispositivo che usi**: quello che
 scrivi su iPhone non compare sul computer, e niente viene inviato a te o al sito. Se cancelli i dati
 del browser, le opere si perdono: esporta in Word regolarmente come copia di sicurezza.

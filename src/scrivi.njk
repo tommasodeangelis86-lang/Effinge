@@ -8,7 +8,7 @@ script: /assets/js/scrivi.js
 stile: /assets/css/scrivi.css
 eleventyExcludeFromCollections: true
 ---
-{#- Spazio di scrittura. Opere e capitoli restano nel browser di chi scrive (IndexedDB): nessun account, nessun invio. -#}
+{#- Spazio di scrittura. L’archivio privato è visibile solo se è configurato un progetto Supabase. -#}
 {%- macro icona(nome) -%}
 <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
 {%- if nome == 'b' %}<path d="M7 5h6a3.5 3.5 0 0 1 0 7H7zM7 12h7a3.5 3.5 0 0 1 0 7H7z"/>
@@ -28,6 +28,7 @@ eleventyExcludeFromCollections: true
 {%- elif nome == 'cl' %}<path d="M4 7V5h11v2M9.5 5l-3 14M5 19h5M14 14l6 6M20 14l-6 6"/>
 {%- elif nome == 'imp' %}<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
 {%- elif nome == 'esp' %}<path d="M12 15V3M7 8l5-5 5 5M5 21h14"/>
+{%- elif nome == 'salva' %}<path d="M5 3h12l4 4v14H3V3h2zM7 3v6h10V3M7 21v-7h10v7"/>
 {%- elif nome == 'cap' %}<rect x="4" y="3" width="7" height="8" rx="1.5"/><rect x="4" y="13" width="7" height="8" rx="1.5"/><path d="M14 6h6M14 9h4M14 16h6M14 19h4"/>
 {%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
 {%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
@@ -49,7 +50,7 @@ eleventyExcludeFromCollections: true
 </svg>
 {%- endmacro -%}
 
-<main id="contenuto" class="scrivi-pagina" data-scrivi-app>
+<main id="contenuto" class="scrivi-pagina" data-scrivi-app{% if supabase %} data-archivio-url="{{ supabase.url }}" data-archivio-chiave="{{ supabase.chiave }}"{% endif %}>
   <h1 class="sr">Foglio Effinge — editor di scrittura senza distrazioni</h1>
   <div class="scrivi-barra" role="toolbar" aria-label="Opera">
     <div class="barra-sx">
@@ -61,6 +62,7 @@ eleventyExcludeFromCollections: true
     <div class="barra-centro">
       <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}<span>Concentrazione</span></button>
       <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}<span>Lampada</span></button>
+      {%- if supabase %}<button type="button" class="pill" data-salva-archivio aria-label="Salva nell’archivio privato" aria-haspopup="dialog" aria-controls="archivio-privato" title="Archivio privato">{{ icona('salva') }}<span>Salva</span></button>{% endif %}
     </div>
     <div class="barra-dx">
       <button type="button" class="pill pubblica" data-comando="pubblica" aria-label="Pubblica sul sito" title="Pubblica sul sito" hidden>{{ icona('pub') }}<span>Pubblica sul sito</span></button>
@@ -189,14 +191,42 @@ eleventyExcludeFromCollections: true
   <p><strong>La pagina non si è caricata del tutto.</strong> Ricaricala tenendo premuto Maiusc (sul computer: Ctrl + Maiusc + R, su Mac: Cmd + Maiusc + R). Se il problema resta, scrivimi.</p>
 </div>
 
-<p class="scrivi-nota">Foglio Effinge è uno strumento gratuito di scrittura immersiva online: ogni lettera si illumina mentre digiti, aiutandoti a superare il blocco dello scrittore. Quello che scrivi resta nel tuo browser. Guide: <a href="/guide/cartelle-editoriali/">contare le cartelle editoriali</a> · <a href="/guide/impaginare-manoscritto/">impaginare un manoscritto</a>.</p>
+<p class="scrivi-nota">Foglio Effinge è uno strumento gratuito di scrittura immersiva online: ogni lettera si illumina mentre digiti, aiutandoti a superare il blocco dello scrittore. {% if supabase %}Puoi scrivere ed esportare in Word liberamente. L’accesso serve per salvare nell’archivio privato.{% else %}Quello che scrivi resta nel tuo browser.{% endif %} Guide: <a href="/guide/cartelle-editoriali/">contare le cartelle editoriali</a> · <a href="/guide/impaginare-manoscritto/">impaginare un manoscritto</a>.</p>
 
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <ul class="finestra-elenco" data-elenco-opere></ul>
-  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button><button type="button" class="pill" data-apri-autore>Accesso autore</button></div>
-  <p class="finestra-nota">Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».</p>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button><button type="button" class="pill" data-apri-autore>Accesso autore</button>{% if supabase %}<button type="button" class="pill" data-apri-bozze-locali hidden>Bozze di questo browser</button>{% endif %}</div>
+  <p class="finestra-nota">{% if supabase %}Da ospite, le bozze nuove restano in questa scheda. Accedi con «Salva» per ritrovarle anche su un altro dispositivo.{% else %}Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».{% endif %}</p>
 </dialog>
+
+{% if supabase %}
+<dialog class="finestra" id="archivio-privato" aria-labelledby="h-archivio-privato">
+  <div class="finestra-testa"><h2 id="h-archivio-privato">Archivio privato</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <form class="finestra-corpo modulo" data-accesso-archivio>
+    <p>Accedi per salvare e ritrovare le tue opere. Le bozze aperte in questa scheda verranno aggiunte al tuo archivio.</p>
+    <label class="campo"><span>Email</span><input name="email" type="email" autocomplete="username" required></label>
+    <label class="campo"><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
+    <div><button class="pill primario" type="submit">Accedi per salvare</button></div>
+  </form>
+  <div class="finestra-corpo" data-sessione-archivio hidden>
+    <p data-account-archivio></p>
+    <p>Le modifiche vengono salvate automaticamente nell’archivio privato.</p>
+    <div class="finestra-piede"><button type="button" class="pill primario" data-salva-ora>Salva ora</button><button type="button" class="pill" data-esci-archivio>Esci</button></div>
+  </div>
+  <p class="finestra-nota" data-esito-archivio role="status"></p>
+</dialog>
+
+<dialog class="finestra" id="bozze-locali" aria-labelledby="h-bozze-locali">
+  <div class="finestra-testa"><h2 id="h-bozze-locali">Bozze di questo browser</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <div class="finestra-corpo">
+    <p>Scegli un’opera da copiare nella sessione aperta. La copia originale sul dispositivo viene conservata.</p>
+    <ul class="finestra-elenco" data-elenco-bozze-locali></ul>
+  </div>
+</dialog>
+<script src="/assets/vendor/supabase-auth.js?v={{ build.versione }}" defer></script>
+<script src="/assets/js/scrivi-cloud.js?v={{ build.versione }}" defer></script>
+{% endif %}
 
 <dialog class="finestra" id="autore" aria-labelledby="h-autore">
   <div class="finestra-testa"><h2 id="h-autore">Accesso autore</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>

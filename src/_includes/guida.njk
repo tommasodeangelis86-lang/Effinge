@@ -24,7 +24,7 @@ layout: base.njk
       {%- endif %}
       <aside class="invito-scrivi" aria-label="Foglio Effinge" data-lettura>
         <p class="invito-titolo">Scrivi al buio, sotto una lampada</p>
-        <p>Foglio Effinge è un editor gratuito e senza distrazioni: conta parole, battute e cartelle mentre scrivi, impagina il manoscritto ed esporta in Word. Quello che scrivi resta nel tuo browser.</p>
+        <p>Foglio Effinge è un editor gratuito e senza distrazioni: conta parole, battute e cartelle mentre scrivi, impagina il manoscritto ed esporta in Word. {% if supabase %}L’archivio privato è disponibile con un account abilitato.{% else %}Quello che scrivi resta nel tuo browser.{% endif %}</p>
         <a class="pulsante" href="/scrivi/">Prova Foglio Effinge <span aria-hidden="true">→</span></a>
       </aside>
       {%- set altre = collections.guide | escludi(page.url) %}
