@@ -29,8 +29,8 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          EFFINGE_SUPABASE_URL: ${{ vars.EFFINGE_SUPABASE_URL }}
-          EFFINGE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.EFFINGE_SUPABASE_PUBLISHABLE_KEY }}
+          EFFINGE_SUPABASE_URL: https://kvmwiggttjyggjlmeben.supabase.co
+          EFFINGE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_7AUzFO54WlaWtB09F2dj8g_41JHBzRS
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
