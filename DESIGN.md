@@ -49,7 +49,7 @@ Tre famiglie, ognuna con un compito. I file sono in `assets/fonts/` e vengono se
 | Pulsante | `500 .9375rem/1 --ui` |
 | Piè di pagina | `450 .75rem/1.6 --ui` |
 
-Le **guide** sono un'eccezione voluta: i paragrafi sono separati da `.9em` di spazio, senza rientro, perché sono testi da consultare e non da leggere di seguito.
+Le **guide** usano paragrafi separati da `.9em` di spazio, senza rientro. Nella tabella delle misure del romanzo, Inter Tight e cifre tabulari tengono allineati parole, battute e cartelle. Le celle vanno a capo su telefono.
 
 ## 4. Palette
 
