@@ -14,14 +14,14 @@ La prima attivazione è per un solo autore, con accesso tramite email e password
    on conflict do nothing;
    ```
 
-4. Da **Connect** copia **Project URL** e **Publishable key**. Su GitHub, in **Settings → Secrets and variables → Actions → Variables**, inseriscili rispettivamente come `EFFINGE_SUPABASE_URL` e `EFFINGE_SUPABASE_PUBLISHABLE_KEY`. Solo la chiave `sb_publishable_…` è prevista nel browser.
+4. Il progetto Effinge è indicato in [Pubblica il sito](../.github/workflows/pubblica.yml) con il suo **Project URL** e la **Publishable key**. In caso di cambio progetto, aggiorna lì i due valori pubblici forniti dalla schermata **Connect**.
 5. Esegui il workflow **Pubblica il sito**. Apri Scrivi, digita come ospite, usa **Salva** e verifica di ritrovare la bozza dopo l’accesso da un altro browser.
 
 Le regole del database limitano lettura e scrittura all’account abilitato e al suo archivio. Quando si prova a salvare una versione superata da un altro dispositivo, la scheda mostra un avviso e conserva il testo aperto. Prima di ricaricare si può esportare la propria versione in Word.
 
 Le opere salvate con la versione precedente di Scrivi si possono aprire da **Opere → Bozze di questo browser**. Le copie originali rimangono su quel dispositivo. Le bozze vengono inviate a Supabase dopo l’accesso, quando sono state aperte in questa scheda.
 
-Il sito mantiene il salvataggio IndexedDB esistente durante la preparazione del progetto, finché le due variabili di pubblicazione sono vuote.
+Una build locale senza configurazione Supabase usa il salvataggio IndexedDB.
 
 ## Prova locale
 
