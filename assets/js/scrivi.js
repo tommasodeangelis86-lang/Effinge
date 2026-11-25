@@ -685,7 +685,11 @@
   $('[data-comando="opere"]').addEventListener('click', function () { salva(true); renderOpere(); dlgOpere.showModal(); });
   $('[data-nuova-opera]').addEventListener('click', function () { salva(true); creaOpera('Nuova opera').then(function () { dlgOpere.close(); nomeOpera.focus(); nomeOpera.select(); }); });
   $$('dialog [data-chiudi]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
-  $$('dialog').forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
+  $$('dialog').forEach(function (d) {
+    d.addEventListener('click', function (e) {
+      if (e.target === d && !d.querySelector('[data-chiudi]:disabled')) d.close();
+    });
+  });
 
   /* ——— Word: importa ed esporta (il modulo si carica solo quando serve) ——— */
   function word() {
