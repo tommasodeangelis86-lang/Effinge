@@ -29,6 +29,8 @@ eleventyExcludeFromCollections: true
 {%- elif nome == 'imp' %}<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
 {%- elif nome == 'esp' %}<path d="M12 15V3M7 8l5-5 5 5M5 21h14"/>
 {%- elif nome == 'salva' %}<path d="M5 3h12l4 4v14H3V3h2zM7 3v6h10V3M7 21v-7h10v7"/>
+{%- elif nome == 'account' %}<path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
+{%- elif nome == 'logout' %}<path d="M10 4H4v16h6m5-4 4-4-4-4m4 4H9"/>
 {%- elif nome == 'cap' %}<rect x="4" y="3" width="7" height="8" rx="1.5"/><rect x="4" y="13" width="7" height="8" rx="1.5"/><path d="M14 6h6M14 9h4M14 16h6M14 19h4"/>
 {%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
 {%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
@@ -62,7 +64,10 @@ eleventyExcludeFromCollections: true
     <div class="barra-centro">
       <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}<span>Concentrazione</span></button>
       <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}<span>Lampada</span></button>
-      {%- if supabase %}<button type="button" class="pill" data-salva-archivio aria-label="Salva nell’archivio privato" aria-haspopup="dialog" aria-controls="archivio-privato" title="Archivio privato">{{ icona('salva') }}<span>Salva</span></button>{% endif %}
+      {%- if supabase %}
+      <button type="button" class="pill" data-salva-archivio aria-label="Accedi" aria-haspopup="dialog" aria-controls="archivio-privato" title="Accedi all’archivio privato"><span class="ic-archivio" data-icona-accesso>{{ icona('account') }}</span><span class="ic-archivio" data-icona-salvataggio hidden>{{ icona('salva') }}</span><span data-testo-archivio>Accedi</span></button>
+      <button type="button" class="pill" data-uscita-archivio aria-label="Esci" aria-haspopup="dialog" aria-controls="archivio-privato" title="Esci dall’archivio privato" hidden>{{ icona('logout') }}<span>Esci</span></button>
+      {%- endif %}
     </div>
     <div class="barra-dx">
       <button type="button" class="pill pubblica" data-comando="pubblica" aria-label="Pubblica sul sito" title="Pubblica sul sito" hidden>{{ icona('pub') }}<span>Pubblica sul sito</span></button>
@@ -196,15 +201,15 @@ eleventyExcludeFromCollections: true
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <ul class="finestra-elenco" data-elenco-opere></ul>
-  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button><button type="button" class="pill" data-apri-autore>Accesso autore</button>{% if supabase %}<button type="button" class="pill" data-apri-bozze-locali hidden>Bozze di questo browser</button>{% endif %}</div>
-  <p class="finestra-nota">{% if supabase %}Da ospite, le bozze nuove restano in questa scheda. Accedi con «Salva» per ritrovarle anche su un altro dispositivo.{% else %}Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».{% endif %}</p>
+  <div class="finestra-piede"><button type="button" class="pill primario" data-nuova-opera>Nuova opera</button><button type="button" class="pill" data-apri-autore>Pubblicazione GitHub</button>{% if supabase %}<button type="button" class="pill" data-apri-bozze-locali hidden>Bozze di questo browser</button>{% endif %}</div>
+  <p class="finestra-nota">{% if supabase %}<span data-nota-ospite>Da ospite, le bozze nuove restano in questa scheda. Usa «Accedi» per ritrovarle anche su un altro dispositivo.</span><span data-nota-connesso hidden>Le opere di questa sessione vengono salvate nell’archivio privato.</span>{% else %}Le opere sono salvate solo in questo browser, su questo dispositivo. Per conservarle altrove usa «Esporta in Word».{% endif %}</p>
 </dialog>
 
 {% if supabase %}
 <dialog class="finestra" id="archivio-privato" aria-labelledby="h-archivio-privato">
-  <div class="finestra-testa"><h2 id="h-archivio-privato">Archivio privato</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <div class="finestra-testa"><h2 id="h-archivio-privato">Accedi all’archivio</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <form class="finestra-corpo modulo" data-accesso-archivio>
-    <p>Accedi per salvare e ritrovare le tue opere. Le bozze aperte in questa scheda verranno aggiunte al tuo archivio.</p>
+    <p>Usa l’email e la password del tuo account Effinge per salvare le opere nell’archivio privato. Le bozze di questa scheda verranno aggiunte all’archivio.</p>
     <label class="campo"><span>Email</span><input name="email" type="email" autocomplete="username" required></label>
     <label class="campo"><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
     <div><button class="pill primario" type="submit">Accedi per salvare</button></div>
@@ -229,10 +234,10 @@ eleventyExcludeFromCollections: true
 {% endif %}
 
 <dialog class="finestra" id="autore" aria-labelledby="h-autore">
-  <div class="finestra-testa"><h2 id="h-autore">Accesso autore</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
+  <div class="finestra-testa"><h2 id="h-autore">Pubblicazione GitHub</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <div class="finestra-corpo">
     <div data-autore-fuori>
-      <p>Con l’accesso autore compare il pulsante <strong>Pubblica sul sito</strong>: il capitolo aperto diventa un testo di Effinge.</p>
+      <p>Collega GitHub per attivare <strong>Pubblica sul sito</strong> e pubblicare il capitolo aperto su Effinge.</p>
       <p>Incolla qui la chiave personale che hai creato su GitHub (inizia con <code>github_pat_</code>). Resta solo in questo browser; va inserita una volta su ogni dispositivo.</p>
       <label class="campo"><span>Chiave GitHub</span><input type="password" id="chiave-autore" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
       <p class="esito" data-esito-autore aria-live="polite"></p>
