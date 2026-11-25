@@ -1,0 +1,77 @@
+---
+layout: base.njk
+stile: /assets/css/strumenti.css
+---
+<main id="contenuto" class="lettura-pagina guida strumento-pagina">
+  <article class="foglio">
+    <div class="contenuto">
+      <header class="lettura-testa" data-lettura>
+        <div class="meta"><a href="/strumenti/">Strumenti per chi scrive</a></div>
+        <h1>{{ titolo }}</h1>
+        <p class="strumento-intro">{{ introduzione }}</p>
+      </header>
+      <div class="corpo" data-lettura>
+        {% if strumento == 'modello' %}
+        <section id="strumento" class="calcolatore strumento-modello" aria-label="Scarica il modello">
+          <div class="strumento-azioni">
+            <a class="pulsante" href="/assets/templates/manoscritto-1800-effinge.docx" download>Scarica Word (.docx)</a>
+            <a class="pulsante" href="/assets/templates/manoscritto-1800-effinge.odt" download>Scarica OpenDocument (.odt)</a>
+          </div>
+          <figure>
+            <div class="anteprima-30x60" aria-hidden="true"><div></div></div>
+            <figcaption>Anteprima A4 con 30 righe da 60 posizioni</figcaption>
+          </figure>
+          <a class="strumento-foglio" href="/scrivi/">Inizia a scrivere direttamente nel browser con Foglio Effinge →</a>
+        </section>
+        {% else %}
+        <section id="strumento" class="calcolatore" data-strumento="{{ strumento }}" aria-label="{{ titolo }}">
+          <label class="calcolatore-campo" for="testo-strumento">Incolla o scrivi il tuo testo</label>
+          <textarea id="testo-strumento" spellcheck="false" aria-describedby="nota-strumento"></textarea>
+          <p id="nota-strumento" class="strumento-nota">L’analisi avviene nel browser. Apri il testo nel Foglio per creare una nuova opera. Con una sessione attiva, il Foglio salva le opere nell’archivio privato.</p>
+          {% if strumento == 'cartelle' %}
+          <dl class="calcolatore-risultati strumento-risultati">
+            <div><dt>Cartelle da 1.800</dt><dd data-misura="cartelle1800">0</dd></div>
+            <div><dt>Cartelle da 2.000</dt><dd data-misura="cartelle2000">0</dd></div>
+            <div><dt>Battute con spazi</dt><dd data-misura="battute">0</dd></div>
+            <div><dt>Battute senza spazi</dt><dd data-misura="senzaSpazi">0</dd></div>
+            <div><dt>Parole</dt><dd data-misura="parole">0</dd></div>
+            <div><dt>Tempo di lettura</dt><dd data-misura="lettura">0 s</dd></div>
+          </dl>
+          {% else %}
+          <dl class="calcolatore-risultati strumento-risultati">
+            <div><dt>Possibili avverbi in -mente</dt><dd data-misura="avverbi">0</dd></div>
+            <div><dt>Parole per frase</dt><dd data-misura="mediaFrase">0</dd></div>
+            <div><dt>Densità lessicale stimata</dt><dd data-misura="densita">0%</dd></div>
+          </dl>
+          <div data-ripetizioni hidden>
+            <h2 class="strumento-risultati-titolo">Parole ripetute</h2>
+            <p data-nessuna-ripetizione>Nessuna parola ripetuta oltre alle parole di servizio.</p>
+            <table class="misure-romanzo ripetizioni-tabella" data-tabella-ripetizioni hidden>
+              <caption>Le 15 parole significative più ripetute</caption>
+              <thead><tr><th scope="col">Parola</th><th scope="col">Occorrenze</th></tr></thead><tbody></tbody>
+            </table>
+            <h2 class="strumento-risultati-titolo">Testo evidenziato</h2>
+            <p class="strumento-nota">Le parole in evidenza sono tra le più ripetute. La sottolineatura segnala le possibili forme in <em>-mente</em>.</p>
+            <p data-anteprima-ridotta class="strumento-nota" hidden>Qui vedi l’inizio del testo. Le statistiche riguardano tutto ciò che hai incollato.</p>
+            <div class="strumento-anteprima" data-testo-evidenziato tabindex="0" role="region" aria-label="Anteprima del testo evidenziato"></div>
+          </div>
+          {% endif %}
+          <p class="strumento-nota sr" role="status" data-stato-strumento></p>
+          <button class="pulsante" type="button" data-apri-testo disabled>{{ etichetta_bottone }} <span aria-hidden="true">→</span></button>
+          <p role="alert" data-errore-strumento hidden></p>
+          <noscript>Per usare lo strumento, abilita JavaScript nel browser.</noscript>
+        </section>
+        {% endif %}
+{{ content | safe }}
+      </div>
+      {% include "faq.njk" %}
+      <nav class="altre-guide" aria-label="Altri strumenti" data-lettura>
+        <a href="/strumenti/">Tutti gli strumenti</a>
+        <a href="/guide/">Guide per chi scrive</a>
+      </nav>
+    </div>
+  </article>
+</main>
+<div class="comandi" role="group" aria-label="Impostazioni di lettura">
+  <button type="button" data-comando="lampada" aria-pressed="true">Lampada</button>
+</div>

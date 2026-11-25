@@ -1,0 +1,15 @@
+---
+layout: base.njk
+permalink: /strumenti/
+titolo: Strumenti per chi scrive
+seo_descrizione: Calcola le cartelle editoriali, trova le ripetizioni e scarica un modello di manoscritto Word da 1.800 battute. Strumenti gratuiti di Effinge.
+---
+<main id="contenuto" class="archivio-pagina">
+  <header class="sezione-testa"><h1>{{ titolo }}</h1></header>
+  <ul class="archivio">
+    {%- for t in collections.strumenti %}
+    <li><a href="{{ t.url }}"><span class="t">{{ t.data.titolo }}</span></a></li>
+    {%- endfor %}
+  </ul>
+  <p class="risorse-guide"><a href="/checkmanoscritto/">Controlla un file Word</a> · <a href="/guide/">Guide per chi scrive</a> · <a href="/scrivi/">Apri Foglio Effinge</a></p>
+</main>

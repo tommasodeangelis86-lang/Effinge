@@ -54,6 +54,8 @@ Incolla qui il testo: il conto avviene nel tuo browser e non viene inviato da ne
 </dl>
 </div>
 
+Nel [calcolatore di cartelle online](/strumenti/calcola-cartelle-editoriali/) trovi anche il tempo di lettura stimato e puoi aprire il testo direttamente nel Foglio per continuare a scriverlo.
+
 ## Quante battute sono 50, 100 o 200 cartelle?
 
 | Cartelle | Battute spazi inclusi, a 1.800 per cartella |

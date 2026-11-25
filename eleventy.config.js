@@ -4,6 +4,14 @@ const MESI = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'lug
 const isDraft = (data) => data && data.bozza === true;
 
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+
+const ORIGINE = 'https://www.effinge.it';
+function urlCanonico(path) {
+  const url = new URL(path || '/', ORIGINE);
+  const percorso = url.pathname.replace(/\/index\.html$/, '/');
+  return ORIGINE + (percorso.endsWith('/') || /\.[^/]+$/.test(percorso) ? percorso : percorso + '/');
+}
 
 // Regola di sicurezza (Content Security Policy) per ogni pagina: solo script del sito (gli inline
 // sono ammessi solo se identici a quelli generati qui, tramite il loro hash), connessioni solo al
@@ -46,6 +54,7 @@ export default function (config) {
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
   config.addPassthroughCopy({ 'assets/js/scrivi-cloud.js': 'assets/js/scrivi-cloud.js' });
+  config.addPassthroughCopy({ 'assets/js/strumenti.js': 'assets/js/strumenti.js', 'assets/css/strumenti.css': 'assets/css/strumenti.css', 'assets/templates': 'assets/templates' });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
   config.addPassthroughCopy({
     'assets/css/checkmanoscritto.css': 'assets/css/checkmanoscritto.css',
@@ -59,6 +68,8 @@ export default function (config) {
     api.getFilteredByGlob('src/testi/*.md').filter((p) => !isDraft(p.data)).sort((a, b) => b.date - a.date));
   config.addCollection('guide', (api) =>
     api.getFilteredByGlob('src/guide/*.md').sort((a, b) => (a.data.ordine || 0) - (b.data.ordine || 0)));
+  config.addCollection('strumenti', (api) =>
+    api.getFilteredByGlob('src/strumenti/*.md').sort((a, b) => a.data.ordine - b.data.ordine));
   config.addFilter('escludi', (arr, url) => (arr || []).filter((x) => x.url !== url));
   config.addCollection('pagine', (api) =>
     api.getFilteredByGlob('src/pagine/*.md').filter((p) => !isDraft(p.data)).sort((a, b) => (a.data.ordine || 0) - (b.data.ordine || 0)));
@@ -73,13 +84,23 @@ export default function (config) {
   config.addFilter('categorie', (testi) => [...new Set(testi.map((t) => t.data.categoria).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'it')));
   config.addFilter('inEvidenza', (testi, n) => { const f = testi.filter((t) => t.data.in_evidenza); return (f.length ? f : testi).slice(0, n); });
   config.addFilter('limita', (arr, n) => (arr || []).slice(0, n));
-  config.addFilter('assoluto', (path, base) => new URL(path, base || 'https://effinge.it').href);
+  config.addFilter('assoluto', (path) => new URL(path, ORIGINE).href);
+  config.addFilter('canonico', urlCanonico);
+  const revisioni = new Map();
+  config.addFilter('ultimaModifica', (path, data) => {
+    if (!revisioni.has(path)) {
+      let revisione = '';
+      try { revisione = execFileSync('git', ['log', '-1', '--format=%cs', '--', path], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim(); } catch {}
+      revisioni.set(path, revisione);
+    }
+    return revisioni.get(path) || (data ? new Date(data).toISOString().slice(0, 10) : '');
+  });
   config.addFilter('json', (v) => JSON.stringify(v));
   // Dati strutturati schema.org: rivista (homepage), articolo (testi), applicazione (Scrivi), raccolta (archivio)
   config.addFilter('jsonld', function (d, page, s) {
     d = d || {};
-    const base = (s.sito.indirizzo || 'https://www.effinge.it').replace(/\/$/, '');
-    const url = base + page.url;
+    const base = ORIGINE;
+    const url = urlCanonico(page.url);
     const editore = { '@type': 'Organization', name: s.sito.nome, url: base + '/' };
     let dati;
     if (page.url === '/') {
@@ -94,9 +115,8 @@ export default function (config) {
     } else if (d.layout === 'guida.njk') {
       dati = [{ '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
         inLanguage: 'it-IT', url, mainEntityOfPage: url, publisher: editore, image: base + '/assets/effinge-anteprima.png' }];
-      if (d.faq && d.faq.length) dati.push({ '@type': 'FAQPage', mainEntity: d.faq.map((q) => ({ '@type': 'Question', name: q.d, acceptedAnswer: { '@type': 'Answer', text: q.r } })) });
-    } else if (page.url === '/scrivi/') {
-      dati = { '@type': 'WebApplication', name: 'Foglio Effinge', url, applicationCategory: 'ProductivityApplication', operatingSystem: 'Web', inLanguage: 'it-IT',
+    } else if (page.url === '/scrivi/' || d.strumento) {
+      dati = { '@type': 'WebApplication', name: d.strumento ? d.titolo : 'Foglio Effinge', url, applicationCategory: 'ProductivityApplication', operatingSystem: 'Web', inLanguage: 'it-IT',
         description: d.seo_descrizione, isAccessibleForFree: true, offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' }, publisher: editore };
     } else if (page.url === '/archivio/') {
       dati = { '@type': 'CollectionPage', name: d.titolo_completo || d.titolo, url, inLanguage: 'it-IT', description: d.seo_descrizione, isPartOf: { '@type': 'WebSite', name: s.sito.nome, url: base + '/' } };
@@ -104,6 +124,7 @@ export default function (config) {
       dati = { '@type': 'WebPage', name: d.titolo, url, inLanguage: 'it-IT', isPartOf: { '@type': 'WebSite', name: s.sito.nome, url: base + '/' } };
     }
     const grafo = { '@context': 'https://schema.org', '@graph': [].concat(dati) };
+    if (d.faq?.length) grafo['@graph'].push({ '@type': 'FAQPage', '@id': url + '#faq', mainEntity: d.faq.map((q) => ({ '@type': 'Question', name: q.d, acceptedAnswer: { '@type': 'Answer', text: q.r } })) });
     // niente «</script>» possibile nel testo: si rende innocuo il carattere «<»
     return JSON.stringify(grafo).replace(/</g, '\\u003c');
   });

@@ -1,0 +1,16 @@
+.strumento-intro{max-width:29em;margin:1em auto 0;color:var(--inchiostro-2);font:400 clamp(1.125rem,1.05rem + .45vw,1.3125rem)/1.5 var(--lettura)}
+.strumento-pagina .calcolatore{margin-top:0}
+.strumento-pagina .corpo .pulsante{background:var(--inchiostro);color:var(--carta);justify-content:center;text-align:center;line-height:1.3}
+.strumento-pagina button:disabled{opacity:.65;cursor:default}
+.strumento-pagina .strumento-nota,.strumento-modello figcaption{font:450 .8125rem/1.45 var(--ui);color:var(--inchiostro-2);margin:.75rem 0}
+.strumento-pagina .strumento-risultati{margin:1rem 0 1.25rem}
+.strumento-pagina .strumento-risultati-titolo{margin:1em 0 .4em;font-size:1.35em}
+.strumento-anteprima{max-height:20rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:.8rem 1rem;border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);border-radius:8px;margin:.75rem 0 1rem}
+.strumento-anteprima mark{background:color-mix(in srgb,var(--luce) 60%,var(--carta));color:var(--inchiostro);border-radius:2px}
+.strumento-anteprima .avverbio{text-decoration:underline;text-underline-offset:.16em}
+.strumento-modello figure{margin:1em auto 0;text-align:center}
+.anteprima-30x60{width:min(100%,15rem);aspect-ratio:210/297;margin:auto;display:grid;place-items:center;background:color-mix(in srgb,var(--carta) 66%,white);border:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);box-shadow:0 8px 18px -10px var(--inchiostro)}
+.anteprima-30x60 div{width:72.9%;height:85.52%;background-image:linear-gradient(to right,color-mix(in srgb,var(--inchiostro) 10%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--inchiostro) 20%,transparent) 1px,transparent 1px);background-size:calc(100% / 60) 100%,100% calc(100% / 30);border:1px solid color-mix(in srgb,var(--inchiostro) 25%,transparent)}
+.strumento-azioni{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center}
+.strumento-foglio{display:block;margin-top:1rem;text-align:center}
+@media (max-width:420px){.strumento-pagina .calcolatore{padding:14px}.strumento-azioni .pulsante{width:100%}}

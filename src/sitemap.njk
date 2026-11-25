@@ -3,24 +3,34 @@ permalink: /sitemap.xml
 eleventyExcludeFromCollections: true
 ---
 <?xml version="1.0" encoding="utf-8"?>
+{%- macro voce(url, fonte, priorita, data) %}
+  {%- set ultima = fonte | ultimaModifica(data) %}
+  <url><loc>{{ url | canonico }}</loc>{% if ultima %}<lastmod>{{ ultima }}</lastmod>{% endif %}<priority>{{ priorita }}</priority></url>
+{%- endmacro %}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>{{ '/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/archivio/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/scrivi/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/guide/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/checkmanoscritto/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/art/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  <url><loc>{{ '/art/altre-opere/' | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  {%- if impostazioni.sito.indicizza %}
+  {{- voce('/', 'src/index.njk', '1.0') }}
+  {{- voce('/archivio/', 'src/archivio.njk', '0.7') }}
+  {{- voce('/scrivi/', 'src/scrivi.njk', '0.9') }}
+  {{- voce('/strumenti/', 'src/strumenti/index.njk', '0.9') }}
+  {{- voce('/guide/', 'src/guide/index.njk', '0.8') }}
+  {{- voce('/checkmanoscritto/', 'src/checkmanoscritto.njk', '0.9') }}
+  {{- voce('/art/', 'src/art/index.njk', '0.7') }}
+  {{- voce('/art/altre-opere/', 'src/art/altre-opere.njk', '0.7') }}
   {%- for opera in effingeArt.opere %}
-  <url><loc>{{ ('/art/opere/' + opera.slug + '/') | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
+  {{- voce('/art/opere/' + opera.slug + '/', 'src/_data/effingeArt.json', '0.7') }}
   {%- endfor %}
-  {%- for g in collections.guide %}
-  <url><loc>{{ g.url | assoluto(impostazioni.sito.indirizzo) }}</loc><lastmod>{{ g.date | dataIso }}</lastmod></url>
-  {%- endfor %}
-  {%- for p in collections.pagine %}
-  <url><loc>{{ p.url | assoluto(impostazioni.sito.indirizzo) }}</loc></url>
-  {%- endfor %}
-  {%- for t in collections.testi %}
-  <url><loc>{{ t.url | assoluto(impostazioni.sito.indirizzo) }}</loc><lastmod>{{ t.date | dataIso }}</lastmod></url>
-  {%- endfor %}
+  {%- for t in collections.strumenti %}{% if not t.data.noindex %}
+  {{- voce(t.url, t.inputPath, '0.9', t.date) }}
+  {%- endif %}{% endfor %}
+  {%- for g in collections.guide %}{% if not g.data.noindex %}
+  {{- voce(g.url, g.inputPath, '0.8', g.date) }}
+  {%- endif %}{% endfor %}
+  {%- for p in collections.pagine %}{% if not p.data.noindex %}
+  {{- voce(p.url, p.inputPath, '0.6', p.date) }}
+  {%- endif %}{% endfor %}
+  {%- for t in collections.testi %}{% if not t.data.noindex %}
+  {{- voce(t.url, t.inputPath, '0.7', t.date) }}
+  {%- endif %}{% endfor %}
+  {%- endif %}
 </urlset>

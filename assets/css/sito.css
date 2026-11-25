@@ -367,10 +367,14 @@ html:not(.js) .guida + .comandi{display:none}
 .altre-guide{max-width:34em;margin:32px auto 0;display:flex;flex-wrap:wrap;gap:8px 18px;font:400 .9375rem/1.4 var(--ui)}
 .altre-guide span{width:100%;font:500 .6875rem/1 var(--ui);letter-spacing:.08em;text-transform:uppercase;color:var(--inchiostro-2)}
 .altre-guide a{text-decoration:underline;text-underline-offset:3px}
+.barra-risorse{display:contents}
+.risorse-guide{color:var(--testo-2);margin:1rem 0 1.5rem;font:450 .875rem/1.65 var(--ui)}
+.risorse-guide a,.invito-strumento{text-decoration:underline;text-underline-offset:3px}
+.invito-strumento{display:inline-block;margin:.65em 0 .65em 1em;font:450 .875rem/1.5 var(--ui)}
 .scrivi-nota a{text-decoration:underline;text-underline-offset:3px;color:var(--testo-2)}
 @media (max-width:560px){.calcolatore-risultati{grid-template-columns:repeat(2,minmax(0,1fr))}}
 
-@media (max-width: 560px) {
+@media (max-width:700px){
   .barra-principale { min-width: 0; }
   .barra nav.barra-principale { gap: clamp(5px, 2vw, 11px); }
   .barra-principale a[href="/guide/"], .barra-principale .barra-checklist { text-align: center; text-wrap: balance; }
@@ -378,6 +382,9 @@ html:not(.js) .guida + .comandi{display:none}
   .barra-principale .sfondi { flex: none; }
   .barra-compatta { gap: 8px; padding-block: calc(7px + env(safe-area-inset-top,0px)) 7px; padding-inline: max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px)); }
   .barra-compatta .marchio { font-size: 1.1875rem; }
-  .barra-compatta nav.barra-principale { gap: clamp(5px, 1.5vw, 9px); font-size: clamp(.6875rem, 3.1vw, .8125rem); }
+  .barra-compatta nav.barra-principale { gap: clamp(5px, 1.5vw, 9px); font-size: clamp(.6875rem, 3.1vw, .8125rem); line-height:1.2; }
   .barra-compatta nav a:not(.barra-art), .barra-compatta nav button.barra-accesso { padding-block: 6px; }
+  .barra-risorse{display:grid;min-width:0;gap:2px;text-align:center}
+  .barra nav .barra-risorse a:not(.barra-art){padding-block:3px}
+  .barra-risorse a[href="/guide/"]{max-width:6.6em}
 }

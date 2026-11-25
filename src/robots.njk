@@ -7,4 +7,4 @@ User-agent: *
 Disallow: /anteprima/
 Disallow: /admin/
 
-Sitemap: {{ '/sitemap.xml' | assoluto(impostazioni.sito.indirizzo) }}{% else %}Disallow: /{% endif %}
+Sitemap: {{ '/sitemap.xml' | canonico }}{% else %}Disallow: /{% endif %}

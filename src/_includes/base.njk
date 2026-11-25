@@ -8,12 +8,13 @@
 {%- elif layout == 'testo.njk' -%}{%- set titoloGoogle = titoloPagina + (' — ' + categoria if categoria else '') + ' | ' + s.sito.nome -%}
 {%- elif titoloPagina -%}{%- set titoloGoogle = titoloPagina + ' | ' + s.sito.nome -%}
 {%- else -%}{%- set titoloGoogle = s.sito.nome -%}{%- endif -%}
-{%- set immagineSocial = (immagine or '/assets/effinge-anteprima.png') | assoluto(s.sito.indirizzo) -%}
+{%- set immagineSocial = (immagine or '/assets/effinge-anteprima.png') | assoluto -%}
+{%- set paginaStrumenti = page.url and page.url.indexOf('/strumenti/') == 0 -%}
 <!doctype html>
 <html lang="it" data-sfondo="{{ sfondoPagina or impostazioni.colori.sfondo or 'grafite' }}" style="--buio:{{ ((impostazioni.colori.buio if impostazioni.colori.buio is number else 55) / 100) }}">
 <head>
 <meta charset="utf-8">
-<!-- Google Tag Manager -->
+{% if not paginaStrumenti %}<!-- Google Tag Manager -->
 <script>
 (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({
 'gtm.start':new Date().getTime(),event:'gtm.js'
@@ -24,7 +25,7 @@ j.async=true;j.src=
 f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-MPW2T34Z');
 </script>
-<!-- End Google Tag Manager -->
+<!-- End Google Tag Manager -->{% endif %}
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="{{ s.colori.stanza | colore('#0A0A09') }}">
@@ -33,13 +34,13 @@ f.parentNode.insertBefore(j,f);
 {%- endif %}
 <title>{{ titoloGoogle }}</title>
 <meta name="description" content="{{ descr }}">
-<link rel="canonical" href="{{ page.url | assoluto(s.sito.indirizzo) }}">
-<meta property="og:type" content="{{ 'article' if layout == 'testo.njk' else 'website' }}">
+<link rel="canonical" href="{{ page.url | canonico }}">
+<meta property="og:type" content="{{ 'article' if layout == 'testo.njk' or layout == 'guida.njk' else 'website' }}">
 <meta property="og:site_name" content="{{ nomeSito }}">
 <meta property="og:title" content="{{ (titoloPagina if page.url != '/' else titoloGoogle) or s.sito.nome }}">
 <meta property="og:locale" content="it_IT">
 <meta property="og:description" content="{{ descr }}">
-<meta property="og:url" content="{{ page.url | assoluto(s.sito.indirizzo) }}">
+<meta property="og:url" content="{{ page.url | canonico }}">
 <meta property="og:image" content="{{ immagineSocial }}">
 {%- if not immagine %}
 <meta property="og:image:width" content="1200">
@@ -48,7 +49,7 @@ f.parentNode.insertBefore(j,f);
 {%- endif %}
 <meta name="twitter:card" content="summary_large_image">
 {%- if not noindex %}
-<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo, faq: faq } | jsonld(page, impostazioni) | safe }}</script>
+<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo, faq: faq, strumento: strumento } | jsonld(page, impostazioni) | safe }}</script>
 {%- endif %}
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
@@ -62,10 +63,10 @@ f.parentNode.insertBefore(j,f);
 <style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo-predefinito:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
 </head>
 <body{% if sezioneArt %} class="art-sito"{% endif %}>
-<!-- Google Tag Manager (noscript) -->
+{% if not paginaStrumenti %}<!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MPW2T34Z"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+<!-- End Google Tag Manager (noscript) -->{% endif %}
 <a class="salta" href="#contenuto">Vai al contenuto</a>
 {%- if sezioneArt %}
 <header class="barra piena art-barra">
@@ -80,7 +81,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </nav>
 </header>
 {%- else %}
-<header class="barra{% if page.url != '/' %} piena{% endif %}{% if supabase or page.url == '/scrivi/' %} barra-compatta{% endif %}">
+<header class="barra barra-compatta{% if page.url != '/' %} piena{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
   <nav class="barra-principale" aria-label="Principale">
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}
@@ -89,7 +90,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {%- if impostazioni.home.scrivi.nel_menu %}
     <a href="/scrivi/"{% if page.url == '/scrivi/' %} aria-current="page"{% endif %}>Scrivi</a>
     {%- endif %}
-    <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
+    <div class="barra-risorse">
+      <a href="/strumenti/"{% if page.url == '/strumenti/' %} aria-current="page"{% endif %}>Strumenti</a>
+      <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
+    </div>
     <a class="barra-checklist" href="/checkmanoscritto/"{% if page.url == '/checkmanoscritto/' %} aria-current="page"{% endif %}>Checklist manoscritto</a>
     {%- if supabase %}
     {%- if page.url == '/scrivi/' %}
@@ -110,7 +114,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <span><a href="mailto:{{ effingeArt.contatto }}">{{ effingeArt.contatto }}</a> · <a href="/">Effinge</a></span>
   {%- else %}
   {%- if s.sito.piede %}<span>{{ s.sito.piede }}</span>{% endif %}
-  <span><a href="/guide/">Guide per chi scrive</a> · <a href="/archivio/">Archivio</a></span>
+  <span><a href="/guide/">Guide per chi scrive</a> · <a href="/strumenti/">Strumenti</a> · <a href="/archivio/">Archivio</a></span>
   {%- endif %}
 </footer>
 <script src="/assets/js/sito.js?v={{ build.versione }}" defer></script>

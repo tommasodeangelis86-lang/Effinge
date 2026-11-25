@@ -27,6 +27,8 @@ Prima di tutto, però: **le indicazioni dell’editore vengono prima di qualsias
 
 Sostituisci i campi del frontespizio e incolla il testo mantenendo lo stile del modello. Per aggiungere un capitolo, copia uno dei titoli di esempio e rinominalo. Quando il file è pronto puoi aprirlo nella [Checklist manoscritto](/checkmanoscritto/).
 
+Se ti hanno chiesto un file a 30 righe da 60 battute, scarica il [modello da 1.800 battute in Word o ODT](/strumenti/modello-manoscritto-word/), in Courier New con interlinea doppia.
+
 ## La pagina
 
 - **Formato A4**, in verticale.
