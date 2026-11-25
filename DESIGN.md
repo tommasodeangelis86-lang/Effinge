@@ -161,6 +161,7 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 ## 12. Foglio Effinge (Scrivi)
 
 - Editor su carta sotto la lampada, con barra degli strumenti a destra e capitoli a sinistra.
+- «Riscrivi», «Cartella» e «Manoscritto» sono sopra il foglio. Il conteggio e lo stato di salvataggio hanno uno spazio riservato nella stessa area.
 - **Manoscritto**:
   - A4, margini **2,3 cm**, interlinea **1,5**, rientro **0,42 cm**;
   - esportazione Word in Times New Roman 12.

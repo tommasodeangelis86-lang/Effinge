@@ -100,7 +100,8 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   ok((await page.evaluate(() => document.documentElement.dataset.sfondo)) === 'blu-effinge', 'sfondo non ricordato dopo il ricaricamento');
   await page.click('.scrivi-editor'); await page.keyboard.press('Control+End');
   // focus totale: solo la pagina, comandi a icone che si dissolvono scrivendo, Esc per uscire
-  await page.click('[data-comando="focus"]'); await page.waitForTimeout(500);
+  await page.click('[data-comando="focus"]');
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.barra')).opacity === '0');
   const f1 = await page.evaluate(() => ({ on: document.documentElement.classList.contains('focus-totale'), barraSito: getComputedStyle(document.querySelector('.barra')).opacity, larghezzaFormato: Math.round(document.querySelector('.formato').getBoundingClientRect().width) }));
   ok(f1.on && f1.barraSito === '0' && f1.larghezzaFormato <= 64, 'focus: ' + JSON.stringify(f1));
   await page.click('.scrivi-editor'); await page.keyboard.type(' focus', { delay: 20 }); await page.waitForTimeout(300);
@@ -250,6 +251,25 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await pronto(page);
   await page.tap('.scrivi-editor');
   await page.keyboard.type('Dal telefono.', { delay: 20 });
+  await page.evaluate(() => document.fonts.ready);
+  const editor = page.locator('.scrivi-editor[contenteditable]');
+  const attendiSalvataggio = () => page.waitForFunction(() => / · salvato$/.test(document.querySelector('[data-stato]').textContent));
+  const posizione = () => editor.evaluate(el => el.getBoundingClientRect().top + scrollY);
+  await attendiSalvataggio();
+  const prima = await posizione();
+  await page.keyboard.insertText(' Continuo a scrivere.');
+  const durante = await posizione();
+  await attendiSalvataggio();
+  const dopo = await posizione();
+  ok(Math.abs(durante - prima) < 1 && Math.abs(dopo - prima) < 1, `telefono: il testo si sposta mentre cambia il conteggio (${prima}, ${durante}, ${dopo})`);
+  const comandi = '[data-riscrivi], [data-comando="cartella"], [data-comando="manoscritto"]';
+  ok(await page.locator('.scrivi-foglio').locator(comandi).count() === 0, 'i comandi devono stare fuori dal foglio');
+  const riscrivi = page.locator('[data-riscrivi]');
+  const testo = await editor.innerText();
+  await riscrivi.click();
+  ok(await riscrivi.textContent() === 'Interrompi', 'Riscrivi non parte');
+  await riscrivi.click();
+  ok(await editor.innerText() === testo && await riscrivi.textContent() === 'Riscrivi', 'Riscrivi non si interrompe o cambia il testo');
   await page.screenshot({ path: join(out, 'scrivi-tel.png') });
   await page.tap('[data-apri-capitoli]'); await page.waitForTimeout(500);
   await page.screenshot({ path: join(out, 'scrivi-tel-capitoli.png') });
