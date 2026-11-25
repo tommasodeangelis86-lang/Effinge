@@ -98,6 +98,13 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.screenshot({ path: join(out, 'scrivi-sfondo-blu.png') });
   await page.reload(); await page.evaluate(() => window.EffingeScrivi.pronto);
   ok((await page.evaluate(() => document.documentElement.dataset.sfondo)) === 'blu-effinge', 'sfondo non ricordato dopo il ricaricamento');
+  const normale = await page.evaluate(() => ({
+    nav: getComputedStyle(document.querySelector('.barra')).visibility,
+    capitoli: document.querySelector('.capitoli').getBoundingClientRect().left >= 0,
+    formato: Math.round(document.querySelector('.formato').getBoundingClientRect().width),
+    iconeFocus: [...document.querySelectorAll('[data-comando="focus"] > span')].filter(el => getComputedStyle(el).display !== 'none').length,
+  }));
+  ok(normale.nav === 'visible' && normale.capitoli && normale.formato <= 64 && normale.iconeFocus === 1, 'vista normale: ' + JSON.stringify(normale));
   await page.click('.scrivi-editor'); await page.keyboard.press('Control+End');
   // focus totale: solo la pagina, comandi a icone che si dissolvono scrivendo, Esc per uscire
   await page.click('[data-comando="focus"]');
@@ -109,6 +116,7 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   await page.screenshot({ path: join(out, 'scrivi-focus.png') });
   await page.keyboard.press('Escape'); await page.waitForTimeout(300);
   ok(!(await page.evaluate(() => document.documentElement.classList.contains('focus-totale'))), 'focus: Esc non fa uscire');
+  ok(await page.locator('.barra').isVisible(), 'vista normale: il menu non ricompare');
   // capitoli
   await page.click('[data-nuova="capitolo"]'); await page.keyboard.type('Secondo capitolo.', { delay: 5 });
   await page.click('[data-nuova="parte"]'); await page.keyboard.type('Parte II');
@@ -267,11 +275,12 @@ async function contaTipi(page) { return page.evaluate(() => { const n = { copert
   const riscrivi = page.locator('[data-riscrivi]');
   const testo = await editor.innerText();
   await riscrivi.click();
-  ok(await riscrivi.textContent() === 'Interrompi', 'Riscrivi non parte');
+  ok(await riscrivi.getAttribute('aria-label') === 'Interrompi', 'Riscrivi non parte');
   await riscrivi.click();
-  ok(await editor.innerText() === testo && await riscrivi.textContent() === 'Riscrivi', 'Riscrivi non si interrompe o cambia il testo');
+  ok(await editor.innerText() === testo && await riscrivi.getAttribute('aria-label') === 'Riscrivi', 'Riscrivi non si interrompe o cambia il testo');
   await page.screenshot({ path: join(out, 'scrivi-tel.png') });
   await page.tap('[data-apri-capitoli]'); await page.waitForTimeout(500);
+  ok(await page.locator('.capitoli.aperto').count() === 1, 'telefono: i capitoli non si aprono');
   await page.screenshot({ path: join(out, 'scrivi-tel-capitoli.png') });
   const x = await page.evaluate(() => { scrollTo(9999, scrollY); return scrollX; });
   ok(!x, 'telefono: scroll orizzontale ' + x);

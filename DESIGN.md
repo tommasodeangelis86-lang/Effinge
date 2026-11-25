@@ -160,8 +160,9 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 
 ## 12. Foglio Effinge (Scrivi)
 
-- Editor su carta sotto la lampada, con barra degli strumenti a destra e capitoli a sinistra.
-- «Riscrivi», «Cartella» e «Manoscritto» sono sopra il foglio. Il conteggio e lo stato di salvataggio hanno uno spazio riservato nella stessa area.
+- Editor su carta sotto la lampada. La vista normale usa le icone di Focus nella barra sopra il foglio e nella colonna di formattazione. Il menu del sito e il navigatore dei capitoli restano accessibili. Su schermi stretti la formattazione scorre in orizzontale e i capitoli si aprono dall’icona.
+- «Riscrivi», «Cartella» e «Manoscritto» sono sopra il foglio. «Cartella» mostra le battute impostate. Il conteggio e lo stato di salvataggio hanno uno spazio riservato nella stessa area.
+- Focus nasconde la navigazione del sito e lascia il foglio al centro. I comandi si attenuano mentre si scrive e ricompaiono al movimento del mouse o al tocco fuori dal foglio.
 - **Manoscritto**:
   - A4, margini **2,3 cm**, interlinea **1,5**, rientro **0,42 cm**;
   - esportazione Word in Times New Roman 12.

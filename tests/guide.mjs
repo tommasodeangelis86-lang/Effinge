@@ -21,11 +21,11 @@ for (const [nome, vp] of [['desk', { width: 1280, height: 900 }], ['tel', { widt
   await p.close();
 }
 const p = await b.newPage(); p.on('pageerror', e => errs.push(e.message));
-await p.goto('http://localhost:8765/scrivi/'); await p.waitForTimeout(800);
-const btn = p.locator('[data-comando="cartella"]'); ok((await btn.textContent()) === 'Cartella 2000', 'scrivi parte da 2000');
-await p.click('.scrivi-editor'); await p.keyboard.type('x'.repeat(36)); await p.waitForTimeout(400);
-const s1 = await p.textContent('.scrivi-stato'); await btn.click(); await p.waitForTimeout(200); const s2 = await p.textContent('.scrivi-stato');
-console.log(s1, '|', s2); ok((await btn.textContent()) === 'Cartella 1800' && s1 !== s2, 'scrivi passa a 1800');
-await p.reload(); await p.waitForTimeout(600); ok((await btn.textContent()) === 'Cartella 1800', 'preferenza ricordata');
+await p.goto('http://localhost:8765/scrivi/'); await p.evaluate(() => window.EffingeScrivi.pronto);
+const btn = p.locator('[data-comando="cartella"]'); ok((await btn.getAttribute('aria-label')) === 'Cartella da 2000 battute', 'scrivi parte da 2000');
+await p.locator('.scrivi-editor').fill('x'.repeat(95));
+const s1 = await p.textContent('.scrivi-stato'); await btn.click(); const s2 = await p.textContent('.scrivi-stato');
+console.log(s1, '|', s2); ok((await btn.getAttribute('aria-label')) === 'Cartella da 1800 battute' && s1.includes('0,0 cartelle') && s2.includes('0,1 cartelle'), 'scrivi passa a 1800');
+await p.reload(); await p.evaluate(() => window.EffingeScrivi.pronto); ok((await btn.locator('[data-battute-cartella]').textContent()) === '1800', 'preferenza ricordata');
 ok(errs.length === 0, 'nessun errore ' + errs.join(' / '));
 await b.close(); srv.close();
