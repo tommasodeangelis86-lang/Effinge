@@ -97,14 +97,14 @@ try {
   const accedi = menu.getByRole('button', { name: 'Accedi', exact: true });
   assert.equal(await accedi.isVisible(), true);
   assert.deepEqual(await accedi.evaluate(el => [el.previousElementSibling.textContent, el.nextElementSibling.textContent]), ['Checklist manoscritto', 'Art']);
-  for (const width of [320, 390]) {
+  for (const width of [320, 568, 390]) {
     await pagina.setViewportSize({ width, height: 844 });
     assert.equal(await pagina.evaluate(async () => {
       await document.fonts.ready;
       const header = document.querySelector('.barra').getBoundingClientRect();
-      const toolbar = document.querySelector('.scrivi-barra').getBoundingClientRect();
+      const toolbar = document.querySelector('.scrivi-barra');
       const ultimo = document.querySelector('.barra-principale .tondino').getBoundingClientRect();
-      return ultimo.right <= innerWidth && header.bottom <= toolbar.top;
+      return ultimo.right <= innerWidth && header.bottom <= toolbar.getBoundingClientRect().top && toolbar.scrollWidth <= toolbar.clientWidth;
     }), true, `Menu e comandi del foglio visibili a ${width}px`);
   }
   assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), false);

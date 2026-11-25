@@ -496,13 +496,20 @@
   }
 
   // La riproduzione usa una copia visiva. Salvataggio e annulla leggono sempre l’editor.
+  function segnaRiscrittura(attiva) {
+    var etichetta = attiva ? 'Interrompi' : 'Riscrivi';
+    riscrivi.classList.toggle('in-riproduzione', attiva);
+    riscrivi.setAttribute('aria-label', etichetta);
+    riscrivi.title = etichetta;
+  }
+
   function fermaRiscrittura() {
     if (!copia) return;
     clearTimeout(timerRiscrivi);
     copia.remove();
     copia = null;
     editor.classList.remove('in-riproduzione');
-    riscrivi.textContent = 'Riscrivi';
+    segnaRiscrittura(false);
   }
 
   riscrivi.addEventListener('click', function () {
@@ -526,7 +533,7 @@
     editor.after(copia);
     editor.classList.add('in-riproduzione');
     root.classList.remove('sta-scrivendo');
-    riscrivi.textContent = 'Interrompi';
+    segnaRiscrittura(true);
     var indice = 0, lettere, resto, precedente;
     function avanza() {
       if (!lettere) {
@@ -678,7 +685,12 @@
   preferenza('manoscritto', 'manoscritto', $('[data-comando="manoscritto"]'), false);
   // cartella editoriale da 2000 (scelta iniziale) o da 1800 battute (la più diffusa)
   var btnCartella = $('[data-comando="cartella"]');
-  function segnaCartella() { btnCartella.textContent = 'Cartella ' + cartella(); }
+  var battuteCartella = $('[data-battute-cartella]', btnCartella);
+  function segnaCartella() {
+    var battute = cartella();
+    battuteCartella.textContent = battute;
+    btnCartella.setAttribute('aria-label', 'Cartella da ' + battute + ' battute');
+  }
   btnCartella.addEventListener('click', function () {
     scriviPref('effinge-scrivi-cartella', cartella() === 2000 ? '1800' : '2000');
     segnaCartella(); aggiornaConteggioVivo(); totali();

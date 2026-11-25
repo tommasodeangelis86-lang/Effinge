@@ -1,14 +1,16 @@
 /* Effinge — Scrivi: capitoli a sinistra, il foglio al centro, la formattazione a destra. */
-.scrivi-pagina{padding:calc(76px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 30svh max(16px,env(safe-area-inset-left,0px))}
+.scrivi-pagina{--posizione-barra:calc(68px + env(safe-area-inset-top,0px));--altezza-barra:44px;--sfondo-comandi:color-mix(in srgb,var(--stanza) 84%,transparent);--bordo-comandi:color-mix(in srgb,var(--testo) 15%,transparent);
+  padding:calc(76px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 30svh max(16px,env(safe-area-inset-left,0px))}
 .ic{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .ic circle{fill:currentColor;stroke:none}
 
 /* ——— Barra dell'opera ——— */
-.scrivi-barra{position:sticky;top:calc(64px + env(safe-area-inset-top,0px));z-index:35;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  max-width:1560px;margin:0 auto 24px;padding:10px 0;background:color-mix(in srgb,var(--stanza) 88%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
-.barra-sx,.barra-centro,.barra-dx{display:flex;align-items:center;gap:6px;min-width:0}
-.barra-sx{flex:1 1 280px}
-.nome-opera{min-width:8ch;flex:0 1 auto;width:min(28rem,40vw);field-sizing:content;max-width:min(28rem,50vw);border:0;border-bottom:1px solid transparent;background:transparent;color:var(--testo);font:300 1.5rem/1.2 var(--display);padding:4px 2px;outline:none;transition:border-color .2s ease}
+.scrivi-barra{position:sticky;top:var(--posizione-barra);z-index:35;display:flex;align-items:center;justify-content:center;gap:3px;flex-wrap:wrap;
+  width:max-content;max-width:100%;margin:0 auto 16px;padding:4px;border:1px solid var(--bordo-comandi);border-radius:999px;
+  background:var(--sfondo-comandi);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.barra-sx,.barra-centro,.barra-dx{display:flex;align-items:center;gap:2px;min-width:0}
+.barra-centro{padding-inline:4px;border-inline:1px solid var(--bordo-comandi)}
+.nome-opera{min-width:8ch;field-sizing:content;max-width:min(14rem,36vw);border:0;border-bottom:1px solid transparent;background:transparent;color:var(--testo);font:300 1.375rem/1.2 var(--display);padding:3px 6px;transition:border-color .2s ease}
 .nome-opera:hover{border-color:var(--filo)}
 .nome-opera:focus{border-color:var(--testo-3)}
 .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--filo);background:transparent;border-radius:999px;padding:8px 13px;font:500 .75rem/1 var(--ui);letter-spacing:.01em;color:var(--testo-2);cursor:pointer;white-space:nowrap;transition:background-color .2s ease,color .2s ease,border-color .2s ease,transform .16s var(--ease)}
@@ -16,11 +18,20 @@
 .pill:active{transform:scale(.97)}
 .pill[aria-pressed="true"],.pill.primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
 .pill .ic{width:15px;height:15px}
+.scrivi-barra .pill,.scrivi-azioni .pill{width:34px;height:34px;padding:0;justify-content:center;border:0;flex:none}
+.scrivi-barra .pill .ic,.scrivi-azioni .pill .ic{width:17px;height:17px}
+.scrivi-barra .pill:hover,.scrivi-azioni .pill:hover{background:color-mix(in srgb,var(--testo) 9%,transparent)}
+.scrivi-barra .pill[aria-pressed="true"]:not(.focus),.scrivi-azioni .pill[aria-pressed="true"],.scrivi-azioni .pill.in-riproduzione{background:color-mix(in srgb,var(--carta) 18%,transparent);color:var(--testo)}
+.scrivi-barra .pill.focus[aria-pressed="true"]{background:var(--carta);color:var(--inchiostro)}
+.pill .ic-entra{display:inline-flex}
+.pill .ic-esci{display:none}
+.pill:is(.focus[aria-pressed="true"],.in-riproduzione) .ic-entra{display:none}
+.pill:is(.focus[aria-pressed="true"],.in-riproduzione) .ic-esci{display:inline-flex}
 .solo-mobile{display:none}
 
 /* ——— Tre colonne ——— */
-.scrivi-app{display:grid;grid-template-columns:232px minmax(0,1fr) 196px;gap:clamp(20px,2.4vw,40px);max-width:1560px;margin:0 auto;align-items:start}
-.capitoli,.formato{position:sticky;top:calc(132px + env(safe-area-inset-top,0px));max-height:calc(100svh - 150px);display:flex;flex-direction:column}
+.scrivi-app{display:grid;grid-template-columns:232px minmax(0,1fr) 58px;gap:clamp(20px,2.4vw,40px);max-width:1560px;margin:0 auto;align-items:start}
+.capitoli,.formato{position:sticky;top:calc(var(--posizione-barra) + var(--altezza-barra) + 6px);max-height:calc(100svh - 142px - env(safe-area-inset-top,0px));display:flex;flex-direction:column}
 
 /* ——— Capitoli (riquadro di spostamento) ——— */
 .capitoli-testa{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
@@ -57,27 +68,27 @@ li:hover .azioni-cap,li:focus-within .azioni-cap,.anteprima[aria-current="true"]
 .aggiungi button:hover{color:var(--testo);border-color:var(--testo-3)}
 .totali{margin:12px 0 0;font:450 .6875rem/1.5 var(--ui);color:var(--testo-3);font-variant-numeric:tabular-nums}
 
-/* ——— Formattazione ——— */
-.formato{gap:18px;overflow-y:auto}
-.formato .gruppo{display:grid;gap:9px}
-.stili{display:grid;gap:4px}
-.stili button,.icone button{border:1px solid var(--filo);background:transparent;color:var(--testo-2);cursor:pointer;transition:background-color .15s ease,color .15s ease,border-color .15s ease,transform .16s var(--ease)}
-.stili button{border-radius:9px;padding:8px 11px;text-align:left;font:400 .875rem/1.1 var(--ui)}
-.stili button[data-blocco="h2"]{font:400 1.125rem/1 var(--display)}
-.stili button[data-blocco="h3"]{font:600 .8125rem/1.1 var(--ui);letter-spacing:.02em}
-.stili button[data-blocco="blockquote"]{font:italic 400 1rem/1.1 var(--lettura)}
-.icone{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
-.icone button{display:grid;place-items:center;height:36px;border-radius:9px;padding:0}
-.stili button:hover,.icone button:hover{color:var(--testo);border-color:var(--testo-3)}
-.stili button:active,.icone button:active{transform:scale(.96)}
-.stili button[aria-pressed="true"],.icone button[aria-pressed="true"]{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
+/* ——— Formattazione e voce ——— */
+.formato{align-items:center;overflow-y:auto;overflow-x:hidden;padding:8px 0;border:1px solid var(--bordo-comandi);border-radius:18px;background:var(--sfondo-comandi);scrollbar-width:thin}
+.formato .gruppo{display:flex;flex-direction:column;align-items:center;gap:3px;flex:none;width:100%;padding:7px 0}
+.formato .gruppo + .gruppo{border-top:1px solid var(--bordo-comandi)}
+.formato h2{margin:0 0 3px;font:600 .5rem/1 var(--ui);letter-spacing:.08em;color:var(--testo-2)}
+.stili,.icone{display:flex;flex-direction:column;align-items:center;gap:2px}
+.formato .stili button,.formato .icone button{display:grid;place-items:center;width:34px;height:29px;flex:none;padding:0;background:none;border:0;border-radius:8px;color:var(--testo-2);cursor:pointer;font:500 .75rem/1 var(--ui);transition:background-color .15s ease,color .15s ease,transform .16s var(--ease)}
+.formato :is(.stili,.icone) button:hover{color:var(--testo);background:color-mix(in srgb,var(--testo) 9%,transparent)}
+.formato :is(.stili,.icone) button:active{transform:scale(.96)}
+.formato :is(.stili,.icone) button[aria-pressed="true"]{background:color-mix(in srgb,var(--carta) 20%,transparent);color:var(--testo)}
+.formato .ic{width:16px;height:16px}
+.stili .lungo{display:none}
+.stili .breve{display:inline-flex;align-items:center}
+.stili [data-blocco="h2"] .breve{font:400 .9375rem/1 var(--display)}
+.stili [data-blocco="h3"] .breve{font:700 .625rem/1 var(--ui);letter-spacing:.06em}
 
 /* ——— Il foglio ——— */
 .centro-foglio{min-width:0}
 .scrivi-info{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 14px;max-width:48rem;margin:0 auto 10px}
-.scrivi-azioni{display:flex;gap:6px}
-.scrivi-azioni .pill{padding-inline:10px}
-.scrivi-azioni [data-riscrivi]{min-inline-size:7.5em;justify-content:center}
+.scrivi-azioni{display:flex;gap:2px;justify-self:end;padding:2px;border:1px solid var(--bordo-comandi);border-radius:999px;background:var(--sfondo-comandi)}
+.scrivi-azioni [data-comando="cartella"]{width:62px;gap:3px;font-variant-numeric:tabular-nums}
 /* Due righe riservate al conteggio e al salvataggio tengono fermo il foglio. */
 .scrivi-stato{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;block-size:2.8em;font:450 .6875rem/1.4 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--testo-2);font-variant-numeric:tabular-nums}
 .scrivi-foglio{max-width:48rem;margin:0 auto;min-height:calc(100svh - 170px)}
@@ -157,32 +168,36 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 /* ——— Schermi medi: la formattazione diventa una riga sopra il foglio ——— */
 @media (max-width:1180px){
   .scrivi-app{grid-template-columns:220px minmax(0,1fr)}
-  .formato{grid-column:2;grid-row:1;position:sticky;top:calc(128px + env(safe-area-inset-top,0px));z-index:30;max-height:none;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:6px;padding:8px;border:1px solid var(--filo);border-radius:14px;background:color-mix(in srgb,var(--stanza-2) 92%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);scrollbar-width:none}
-  .formato h2{display:none}
-  .formato .gruppo,.stili,.icone{display:flex;gap:4px}
-  .formato .gruppo + .gruppo{padding-left:6px;border-left:1px solid var(--filo)}
-  .icone button{width:36px}
-  .stili button{white-space:nowrap}
+  html:not(.focus-totale) .formato{grid-column:2;grid-row:1;z-index:30;max-height:none;flex-direction:row;overflow-x:auto;overflow-y:hidden;gap:4px;padding:4px;border-radius:14px;scrollbar-width:thin}
+  html:not(.focus-totale) .formato h2{display:none}
+  html:not(.focus-totale) .formato .gruppo{flex-direction:row;width:auto;padding:0}
+  html:not(.focus-totale) .formato .gruppo + .gruppo{padding-inline-start:4px;border-top:0;border-inline-start:1px solid var(--bordo-comandi)}
+  html:not(.focus-totale) .formato :is(.stili,.icone){flex-direction:row}
   .centro-foglio{grid-column:2;grid-row:2}
   .capitoli{grid-row:1 / span 2}
 }
 /* ——— Telefono: i capitoli diventano un pannello che si apre ——— */
 @media (max-width:820px){
   .scrivi-pagina{padding-left:8px;padding-right:8px}
-  .scrivi-info{grid-template-columns:minmax(0,1fr)}
   .solo-mobile{display:inline-flex}
-  .scrivi-barra{gap:8px}
-  .barra-centro{order:3}
-  .barra-dx .pill span{display:none}
   .nome-opera{font-size:1.25rem}
   .scrivi-app{grid-template-columns:minmax(0,1fr);gap:12px}
-  .formato{grid-column:1;top:calc(118px + env(safe-area-inset-top,0px))}
+  html:not(.focus-totale) .formato{grid-column:1}
   .centro-foglio{grid-column:1}
   .capitoli{position:fixed;inset:0 auto 0 0;z-index:70;width:min(86vw,320px);max-height:none;padding:calc(18px + env(safe-area-inset-top,0px)) 14px calc(16px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));background:var(--stanza-2);border-right:1px solid var(--filo);transform:translateX(-102%);transition:transform .35s var(--ease);box-shadow:20px 0 60px rgba(0,0,0,.6)}
   .capitoli.aperto{transform:none}
   .chiudi-pannello{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--filo);border-radius:999px;background:transparent;color:var(--testo-2)}
   .azioni-cap{opacity:1}
 }
+@media (561px <= width <= 700px){.barra nav.barra-principale{gap:clamp(8px,1.8vw,13px)}}
+@media (max-width:560px){
+  .scrivi-pagina{--altezza-barra:81px}
+  html:not(.focus-totale) .scrivi-barra{display:grid;grid-template-columns:auto auto;border-radius:16px}
+  html:not(.focus-totale) .barra-sx{grid-column:1 / -1;justify-content:center}
+  html:not(.focus-totale) .barra-centro{border-inline-start:0}
+  .scrivi-info{column-gap:6px}
+}
+@media (max-width:360px){.scrivi-info{grid-template-columns:minmax(0,1fr);gap:4px}}
 @media (prefers-reduced-motion:reduce){.luce-lettera{display:none}}
 
 .scrivi-guasto{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:80;width:min(100% - 32px,34rem);padding:16px 18px;border-radius:14px;background:var(--carta);color:var(--inchiostro);font:400 .9375rem/1.5 var(--ui);box-shadow:0 20px 50px -15px rgba(0,0,0,.9)}
@@ -211,22 +226,11 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 .finestra-corpo code{font-size:.85em;padding:1px 5px;border-radius:5px;background:var(--stanza)}
 @media (max-width:520px){.campi-due{grid-template-columns:1fr}}
 
-/* ——— Focus totale: solo la pagina; i comandi diventano icone che si dissolvono mentre si scrive ——— */
-.pill .ic-esci,.stili .breve{display:none}
-.pill.focus[aria-pressed="true"] .ic-entra{display:none}
-.pill.focus[aria-pressed="true"] .ic-esci{display:inline-flex}
-.pill > span:not([class]),.pill .ic-entra,.pill .ic-esci{display:inline-flex;align-items:center}
-html.focus-totale .barra{transform:translateY(-110%);opacity:0;pointer-events:none;transition:transform .5s var(--ease),opacity .4s ease}
+/* ——— Focus totale: la pagina e i comandi a scomparsa ——— */
+html.focus-totale .barra{transform:translateY(-110%);opacity:0;visibility:hidden;pointer-events:none;transition:transform .5s var(--ease),opacity .4s ease,visibility 0s .5s}
 html.focus-totale .scrivi-pagina{padding-top:calc(78px + env(safe-area-inset-top,0px))}
-html.focus-totale .scrivi-barra{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:45;width:auto;max-width:calc(100vw - 24px);margin:0;padding:5px;gap:2px;flex-wrap:nowrap;border-radius:999px;background:rgba(14,13,12,.55);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 30px -12px rgba(0,0,0,.6)}
-html.focus-totale .barra-sx,html.focus-totale .barra-centro,html.focus-totale .barra-dx{flex:none;gap:2px;order:initial}
-html.focus-totale .barra-centro{padding:0 4px;margin:0 2px;border-left:1px solid rgba(255,255,255,.1);border-right:1px solid rgba(255,255,255,.1)}
+html.focus-totale .scrivi-barra{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:45;max-width:calc(100vw - 24px);margin:0;flex-wrap:nowrap}
 html.focus-totale .nome-opera{display:none}
-html.focus-totale .scrivi-barra .pill{width:34px;height:34px;padding:0;justify-content:center;border-color:transparent}
-html.focus-totale .scrivi-barra .pill > span:not([class]){display:none}
-html.focus-totale .scrivi-barra .pill .ic{width:17px;height:17px}
-html.focus-totale .scrivi-barra .pill[aria-pressed="true"]:not(.focus){background:color-mix(in srgb,var(--carta) 18%,transparent);color:var(--testo);border-color:transparent}
-html.focus-totale .scrivi-barra .pill.focus{background:var(--carta);color:var(--inchiostro)}
 html.focus-totale .solo-mobile{display:inline-flex}
 html.focus-totale .scrivi-app{grid-template-columns:minmax(0,1fr);max-width:none;gap:0}
 html.focus-totale .centro-foglio{grid-column:1;grid-row:1}
@@ -235,34 +239,24 @@ html.focus-totale .capitoli{position:fixed;inset:0 auto 0 0;z-index:70;width:min
 html.focus-totale .capitoli.aperto{transform:none}
 html.focus-totale .chiudi-pannello{display:grid;place-items:center;width:34px;height:34px;border:1px solid var(--filo);border-radius:999px;background:transparent;color:var(--testo-2)}
 /* formattazione: una colonna stretta di icone, come in Narrator */
-html.focus-totale .formato{position:fixed;top:50%;right:max(14px,env(safe-area-inset-right,0px));left:auto;bottom:auto;transform:translateY(-50%);z-index:44;width:58px;max-height:calc(100svh - 120px);overflow-y:auto;overflow-x:hidden;display:flex;flex-direction:column;align-items:center;gap:0;padding:10px 0;border-radius:18px;background:rgba(14,13,12,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08);box-shadow:0 10px 30px -12px rgba(0,0,0,.6);grid-column:auto;grid-row:auto;scrollbar-width:none}
-html.focus-totale .formato .gruppo{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;padding:8px 0;border:0;border-top:1px solid rgba(255,255,255,.07)}
-html.focus-totale .formato .gruppo:first-child{border-top:0;padding-top:2px}
-html.focus-totale .formato h2{display:block;margin:0 0 3px;font:600 7.5px/1 var(--ui);letter-spacing:.12em;color:var(--testo-3)}
-html.focus-totale .stili,html.focus-totale .icone{display:flex;flex-direction:column;align-items:center;gap:3px}
-html.focus-totale .stili button,html.focus-totale .icone button{width:34px;height:28px;padding:0;border-radius:8px;display:grid;place-items:center;border-color:transparent;font:500 .75rem/1 var(--ui)}
-html.focus-totale .stili .lungo{display:none}
-html.focus-totale .stili .breve{display:inline-flex;align-items:center}
-html.focus-totale .stili [data-blocco="h2"] .breve{font:400 .9375rem/1 var(--display)}
-html.focus-totale .stili [data-blocco="h3"] .breve{font:700 .625rem/1 var(--ui);letter-spacing:.06em}
-html.focus-totale .stili button .ic,html.focus-totale .icone button .ic{width:15px;height:15px}
-html.focus-totale .stili button[aria-pressed="true"],html.focus-totale .icone button[aria-pressed="true"]{background:color-mix(in srgb,var(--carta) 20%,transparent);color:var(--testo);border-color:transparent}
+html.focus-totale .formato{position:fixed;top:50%;right:max(14px,env(safe-area-inset-right,0px));transform:translateY(-50%);z-index:44;width:58px;max-height:calc(100svh - 120px);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);scrollbar-width:none}
 /* il foglio, protagonista */
 html.focus-totale .scrivi-foglio{box-shadow:0 2px 0 rgba(255,255,255,.03),0 50px 120px -30px rgba(0,0,0,.9),0 18px 40px -18px rgba(0,0,0,.75)}
 /* mentre si scrive i comandi quasi scompaiono; muovendo il mouse o passandoci sopra tornano */
-html.focus-totale .scrivi-barra,html.focus-totale .formato{transition:opacity .9s ease,transform .5s var(--ease)}
-html.focus-totale.focus-quiete .scrivi-barra,html.focus-totale.focus-quiete .formato{opacity:.06}
-html.focus-totale.focus-quiete .scrivi-barra:hover,html.focus-totale.focus-quiete .formato:hover,html.focus-totale.focus-quiete .scrivi-barra:focus-within{opacity:1;transition-duration:.2s}
+html.focus-totale :is(.scrivi-barra,.formato,.scrivi-info){transition:opacity .9s ease,transform .5s var(--ease)}
+html.focus-totale.focus-quiete :is(.scrivi-barra,.formato,.scrivi-info){opacity:.06}
+html.focus-totale.focus-quiete :is(.scrivi-barra,.formato,.scrivi-info):is(:hover,:focus-within){opacity:1;transition-duration:.2s}
 /* telefono: niente colonna di formattazione, solo la fila di icone in alto */
 @media (max-width:820px){
   html.focus-totale .formato{display:none}
   html.focus-totale .scrivi-pagina{padding-left:6px;padding-right:6px}
   html.focus-totale.focus-quiete .scrivi-barra{pointer-events:none}
 }
-@media (prefers-reduced-motion:reduce){html.focus-totale .barra,html.focus-totale .scrivi-barra,html.focus-totale .formato{transition:none}}
+@media (max-width:390px){html.focus-totale .scrivi-barra .pill{width:28px}}
+@media (prefers-reduced-motion:reduce){html.focus-totale :is(.barra,.scrivi-barra,.formato,.scrivi-info){transition:none}}
 /* nota discreta in fondo alla pagina (anche per Google) */
 .scrivi-nota{max-width:46rem;margin:0 auto;padding:28px 20px 8px;text-align:center;font:400 .8125rem/1.6 var(--ui);color:var(--testo-3)}
-html.focus-totale .scrivi-nota{display:none}
+html.focus-totale .scrivi-nota,html.focus-totale .piede{display:none}
 
 .scrivi-editor.in-riproduzione{opacity:0}
 .scrivi-editor.riscrittura{position:absolute;inset:0;visibility:hidden;pointer-events:none}
@@ -284,15 +278,13 @@ html.focus-totale .scrivi-nota{display:none}
 .ai-nota-perche{margin:0 0 10px;font:500 .8125rem/1.45 var(--ui);color:var(--testo-2)}
 .ai-nota-proposta{margin:0 0 14px;padding-left:12px;border-left:2px solid var(--luce);font:400 1.0625rem/1.55 var(--lettura);color:var(--testo)}
 .ai-nota-azioni{display:flex;gap:8px}
-.ai-elenco{display:flex;align-items:center;justify-content:space-between;gap:8px;font:500 .6875rem/1.3 var(--ui);color:var(--testo-2)}
+.ai-elenco{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;text-align:center;font:500 .6875rem/1.3 var(--ui);color:var(--testo-2)}
 .ai-elenco button{border:0;background:none;padding:4px 0;color:var(--testo-3);font:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
-.voce-stato{margin:0;min-height:1em;font:450 .6875rem/1.35 var(--ui);color:var(--testo-3)}
+.voce-stato{margin:0;min-height:1em;padding-inline:4px;text-align:center;overflow-wrap:anywhere;font:450 .6875rem/1.35 var(--ui);color:var(--testo-2)}
 .voce-stato:empty{display:none}
 html.voce-attiva [data-voce="leggi"]{color:var(--luce)}
 html.ai-lavora [data-suggerisci]{opacity:.45;pointer-events:none}
 html.ai-lavora .voce-stato{color:var(--luce)}
 @media (prefers-reduced-motion:reduce){.voce-parola{transition:none}}
-.formato h2 .h-breve{display:none}
-html.focus-totale .formato h2 .h-lungo{display:none}
-html.focus-totale .formato h2 .h-breve{display:inline}
+@media (max-width:1180px){html:not(.focus-totale) .voce-stato{inline-size:14ch}}
 html.focus-totale .ai-elenco,html.focus-totale .voce-stato{display:none}

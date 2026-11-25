@@ -64,7 +64,7 @@
   </nav>
 </header>
 {%- else %}
-<header class="barra{% if page.url != '/' %} piena{% endif %}{% if supabase %} barra-con-accesso{% endif %}">
+<header class="barra{% if page.url != '/' %} piena{% endif %}{% if supabase or page.url == '/scrivi/' %} barra-compatta{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
   <nav class="barra-principale" aria-label="Principale">
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}

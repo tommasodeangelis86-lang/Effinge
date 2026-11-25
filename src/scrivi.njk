@@ -29,6 +29,9 @@ eleventyExcludeFromCollections: true
 {%- elif nome == 'imp' %}<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
 {%- elif nome == 'esp' %}<path d="M12 15V3M7 8l5-5 5 5M5 21h14"/>
 {%- elif nome == 'salva' %}<path d="M5 3h12l4 4v14H3V3h2zM7 3v6h10V3M7 21v-7h10v7"/>
+{%- elif nome == 'riscrivi' %}<path d="M4 10a8 8 0 1 1 1.6 7.1M4 5v5h5m2-1 5 3-5 3z"/>
+{%- elif nome == 'cartella' %}<path d="M6 3h9l3 3v15H6zM9 10h6m-6 4h6m-6 4h4"/>
+{%- elif nome == 'manoscritto' %}<path d="M5 3h14v18H5zM8 8h8m-8 4h8m-8 4h5"/>
 {%- elif nome == 'cap' %}<rect x="4" y="3" width="7" height="8" rx="1.5"/><rect x="4" y="13" width="7" height="8" rx="1.5"/><path d="M14 6h6M14 9h4M14 16h6M14 19h4"/>
 {%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
 {%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
@@ -54,23 +57,23 @@ eleventyExcludeFromCollections: true
   <h1 class="sr">Foglio Effinge — editor di scrittura senza distrazioni</h1>
   <div class="scrivi-barra" role="toolbar" aria-label="Opera">
     <div class="barra-sx">
-      <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false" aria-label="Capitoli" title="Capitoli">{{ icona('cap') }}<span>Capitoli</span></button>
-      <button type="button" class="pill" data-comando="opere" aria-label="Opere" title="Opere">{{ icona('opere') }}<span>Opere</span></button>
+      <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false" aria-label="Capitoli" title="Capitoli">{{ icona('cap') }}</button>
+      <button type="button" class="pill" data-comando="opere" aria-label="Opere" title="Opere">{{ icona('opere') }}</button>
       <label class="sr" for="nome-opera">Titolo dell’opera</label>
       <input id="nome-opera" class="nome-opera" type="text" autocomplete="off" spellcheck="false">
     </div>
     <div class="barra-centro">
-      <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}<span>Concentrazione</span></button>
-      <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}<span>Lampada</span></button>
+      <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}</button>
+      <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}</button>
       {%- if supabase %}
-      <button type="button" class="pill" data-salva-archivio aria-haspopup="dialog" aria-controls="archivio-privato" title="Salva nell’archivio privato">{{ icona('salva') }}<span>Salva</span></button>
+      <button type="button" class="pill" data-salva-archivio aria-label="Salva" aria-haspopup="dialog" aria-controls="archivio-privato" title="Salva nell’archivio privato">{{ icona('salva') }}</button>
       {%- endif %}
     </div>
     <div class="barra-dx">
-      <button type="button" class="pill pubblica" data-comando="pubblica" aria-label="Pubblica sul sito" title="Pubblica sul sito" hidden>{{ icona('pub') }}<span>Pubblica sul sito</span></button>
-      <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word">{{ icona('imp') }}<span>Importa da Word</span></button>
-      <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word">{{ icona('esp') }}<span>Esporta in Word</span></button>
-      <button type="button" class="pill focus" data-comando="focus" aria-pressed="false" aria-label="Focus: solo la pagina (Esc per uscire)" title="Focus: solo la pagina (Esc per uscire)"><span class="ic-entra">{{ icona('focus') }}</span><span class="ic-esci">{{ icona('esci') }}</span><span>Focus</span></button>
+      <button type="button" class="pill pubblica" data-comando="pubblica" aria-label="Pubblica sul sito" title="Pubblica sul sito" hidden>{{ icona('pub') }}</button>
+      <button type="button" class="pill" data-comando="importa" aria-label="Importa da Word" title="Importa da Word">{{ icona('imp') }}</button>
+      <button type="button" class="pill" data-comando="esporta" aria-label="Esporta in Word" title="Esporta in Word">{{ icona('esp') }}</button>
+      <button type="button" class="pill focus" data-comando="focus" aria-pressed="false" aria-label="Focus: solo la pagina (Esc per uscire)" title="Focus: solo la pagina (Esc per uscire)"><span class="ic-entra">{{ icona('focus') }}</span><span class="ic-esci">{{ icona('esci') }}</span></button>
       <input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden data-file-word>
     </div>
   </div>
@@ -98,9 +101,9 @@ eleventyExcludeFromCollections: true
       <div class="scrivi-info">
         <span class="scrivi-stato" data-stato aria-live="polite"></span>
         <div class="scrivi-azioni" role="group" aria-label="Comandi del foglio">
-          <button type="button" class="pill" data-riscrivi disabled data-speed="{{ impostazioni.animazione.velocita }}" data-fade="{{ impostazioni.animazione.dissolvenza }}" data-color="{{ impostazioni.lampada.colore | colore('#F0CB8A') }}" data-intensity="{{ impostazioni.lampada.intensita / 100 }}">Riscrivi</button>
-          <button type="button" class="pill" data-comando="cartella" title="Battute per cartella: tocca per cambiare">Cartella 2000</button>
-          <button type="button" class="pill" data-comando="manoscritto" aria-pressed="false" title="A4 · margini 2,3 cm · interlinea 1,5 · rientro 0,42 cm">Manoscritto</button>
+          <button type="button" class="pill" data-riscrivi aria-label="Riscrivi" title="Riscrivi" disabled data-speed="{{ impostazioni.animazione.velocita }}" data-fade="{{ impostazioni.animazione.dissolvenza }}" data-color="{{ impostazioni.lampada.colore | colore('#F0CB8A') }}" data-intensity="{{ impostazioni.lampada.intensita / 100 }}"><span class="ic-entra">{{ icona('riscrivi') }}</span><span class="ic-esci">{{ icona('stop') }}</span></button>
+          <button type="button" class="pill" data-comando="cartella" aria-label="Cartella da 2000 battute" title="Battute per cartella: tocca per cambiare">{{ icona('cartella') }}<span data-battute-cartella>2000</span></button>
+          <button type="button" class="pill" data-comando="manoscritto" aria-label="Manoscritto" aria-pressed="false" title="Manoscritto A4 · margini 2,3 cm · interlinea 1,5 · rientro 0,42 cm">{{ icona('manoscritto') }}</button>
         </div>
       </div>
       <div class="foglio scrivi-foglio">
@@ -167,7 +170,7 @@ eleventyExcludeFromCollections: true
         </div>
       </div>
       <div class="gruppo gruppo-ai">
-        <h2><span class="h-lungo">Suggerimenti</span><span class="h-breve" aria-hidden="true">AI</span></h2>
+        <h2><span class="sr">Suggerimenti</span><span aria-hidden="true">AI</span></h2>
         <div class="stili">
           <button type="button" data-suggerisci="migliora" title="Migliora: refusi, ripetizioni, chiarezza" aria-label="Suggerimenti: migliora"><span class="breve" aria-hidden="true">{{ icona('migliora') }}</span><span class="lungo">Migliora</span></button>
           <button type="button" data-suggerisci="taglia" title="Taglia: ciò che è superfluo" aria-label="Suggerimenti: taglia"><span class="breve" aria-hidden="true">{{ icona('taglia') }}</span><span class="lungo">Taglia</span></button>

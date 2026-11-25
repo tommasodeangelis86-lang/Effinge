@@ -370,8 +370,8 @@ html:not(.js) .guida + .comandi{display:none}
   .barra-principale a[href="/guide/"], .barra-principale .barra-checklist { text-align: center; text-wrap: balance; }
   .barra-principale .barra-checklist { max-width: 6.5em; }
   .barra-principale .sfondi { flex: none; }
-  .barra-con-accesso { gap: 8px; padding-block: calc(7px + env(safe-area-inset-top,0px)) 7px; padding-inline: max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px)); }
-  .barra-con-accesso .marchio { font-size: 1.1875rem; }
-  .barra-con-accesso nav.barra-principale { gap: clamp(5px, 1.5vw, 9px); font-size: clamp(.6875rem, 3.1vw, .8125rem); }
-  .barra-con-accesso nav a:not(.barra-art), .barra-con-accesso nav button.barra-accesso { padding-block: 6px; }
+  .barra-compatta { gap: 8px; padding-block: calc(7px + env(safe-area-inset-top,0px)) 7px; padding-inline: max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px)); }
+  .barra-compatta .marchio { font-size: 1.1875rem; }
+  .barra-compatta nav.barra-principale { gap: clamp(5px, 1.5vw, 9px); font-size: clamp(.6875rem, 3.1vw, .8125rem); }
+  .barra-compatta nav a:not(.barra-art), .barra-compatta nav button.barra-accesso { padding-block: 6px; }
 }
