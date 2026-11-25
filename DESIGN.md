@@ -51,6 +51,8 @@ Tre famiglie, ognuna con un compito. I file sono in `assets/fonts/` e vengono se
 
 Le **guide** usano paragrafi separati da `.9em` di spazio, senza rientro. Nella tabella delle misure del romanzo, Inter Tight e cifre tabulari tengono allineati parole, battute e cartelle. Le celle vanno a capo su telefono.
 
+Gli **strumenti** usano lo stesso foglio e la stessa lampada delle guide. I campi di testo e i contatori riprendono il calcolatore delle cartelle. L’anteprima 30 × 60 mostra la gabbia A4 su carta, con linee sottili. Su schermi stretti le voci Strumenti e Guide si impilano nel menu.
+
 ## 4. Palette
 
 ### Colori base (`:root` in `sito.css`, sovrascrivibili dal pannello in `src/_data/impostazioni.json`)

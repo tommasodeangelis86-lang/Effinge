@@ -145,6 +145,17 @@
     sezioni: function (operaId) { return DB ? req('sezioni', 'readonly', function (s) { return s.index('opera').getAll(operaId); }) : Promise.resolve(valori(memoria.sezioni).filter(function (x) { return x.operaId === operaId; }).map(clonaArchivio)); },
     salvaOpera: function (o) { if (!DB) { registraMemoria('opere', o); return Promise.resolve(); } return req('opere', 'readwrite', function (s) { s.put(o); }); },
     salvaSezioni: function (list) { if (!DB) { list.forEach(function (x) { registraMemoria('sezioni', x); }); return Promise.resolve(); } return req('sezioni', 'readwrite', function (s) { list.forEach(function (x) { s.put(x); }); }); },
+    salvaNuovaOpera: function (opera, sezioni) {
+      if (!DB) return this.salvaSezioni(sezioni).then(function () { return archivio.salvaOpera(opera); });
+      return new Promise(function (ok, ko) {
+        var transazione = DB.transaction(['opere', 'sezioni'], 'readwrite');
+        transazione.oncomplete = function () { ok(); };
+        transazione.onabort = function () { ko(transazione.error); };
+        transazione.objectStore('opere').put(opera);
+        var store = transazione.objectStore('sezioni');
+        sezioni.forEach(function (sezione) { store.put(sezione); });
+      });
+    },
     elimina: function (store, ids) { if (!DB) { ids.forEach(function (i) { delete memoria[store][i]; }); if (ids.length) modificaCloud(); return Promise.resolve(); } return req(store, 'readwrite', function (s) { ids.forEach(function (i) { s.delete(i); }); }); }
   };
 
@@ -348,15 +359,16 @@
       apri(opera.ultima && sezioni[opera.ultima] ? opera.ultima : primo);
     });
   }
-  function creaOpera(tit, elenco) {
-    var o = { id: id('o'), titolo: tit, ordine: [], creata: Date.now(), aggiornata: Date.now() };
-    var lista = (elenco && elenco.length ? elenco : [{ tipo: 'capitolo', titolo: '', html: '' }]).map(function (x) {
+  function creaOpera(tit, elenco, idOpera) {
+    var o = { id: idOpera || id('o'), titolo: tit, ordine: [], creata: Date.now(), aggiornata: Date.now() };
+    var lista = (elenco && elenco.length ? elenco : [{ tipo: 'capitolo', titolo: '', html: '' }]).map(function (x, indice) {
       var s = nuovaSezione(x.tipo, { titolo: x.titolo || '', html: pulisci(x.html || '') }, o.id);
+      if (idOpera) s.id = 's' + idOpera.slice(1) + indice.toString(36);
       var c = conta(testoDi(s.html)); s.parole = c.parole; s.battute = c.battute;
       o.ordine.push(s.id);
       return s;
     });
-    return archivio.salvaSezioni(lista).then(function () { return archivio.salvaOpera(o); }).then(function () { return caricaOpera(o); });
+    return archivio.salvaNuovaOpera(o, lista).then(function () { return caricaOpera(o); });
   }
   function migraVecchiFogli() {
     if (leggi('effinge-fogli-migrati') === '1') return null;
@@ -1345,6 +1357,30 @@
   }
 
   /* ——— Avvio ——— */
+  async function importaTestoStrumenti() {
+    var url = new URL(location.href), richiesta = url.searchParams.get('testo');
+    if (richiesta === null) return;
+    var chiave = 'effinge-strumenti-bozza:' + richiesta;
+    try {
+      if (!/^[a-f0-9-]{36}$/.test(richiesta)) throw new Error('Collegamento non valido.');
+      var bozza = JSON.parse(localStorage.getItem(chiave));
+      if (!bozza || !Number.isFinite(bozza.data) || Date.now() - bozza.data > 600000 || typeof bozza.testo !== 'string' || !bozza.testo.trim()) {
+        localStorage.removeItem(chiave);
+        throw new Error('Il testo da importare non è più disponibile.');
+      }
+      var idOpera = 'o' + richiesta.replace(/-/g, '');
+      var esistente = (await archivio.opere()).find(function (o) { return o.id === idOpera; });
+      if (esistente) await caricaOpera(esistente);
+      else await creaOpera('Testo dagli strumenti', [{ tipo: 'capitolo', html: testoInHtml(bozza.testo) }], idOpera);
+      localStorage.removeItem(chiave);
+      avviso('Testo aperto in una nuova opera.');
+    } catch (errore) {
+      avviso('Importazione non riuscita. Torna allo strumento per riprovare.', 5500);
+    }
+    url.searchParams.delete('testo');
+    history.replaceState(history.state, '', url);
+  }
+
   window.EffingeScrivi.pronto = apriDB().then(async function (db) {
     if (!cloud) {
       DB = db;
@@ -1366,7 +1402,7 @@
     await creaOpera('La mia opera');
     caricandoArchivio = false;
     mostraStatoCloud();
-  });
+  }).then(importaTestoStrumenti);
   if (cloud) {
     var indirizzo = new URL(location.href);
     if (indirizzo.searchParams.has('accedi')) {

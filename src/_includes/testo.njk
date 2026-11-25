@@ -6,7 +6,7 @@ layout: base.njk
     <div class="contenuto">
       <header class="lettura-testa">
         {%- if bozza %}<div class="meta" style="color:#8a5a1c;margin-bottom:12px">Bozza · visibile solo con questo indirizzo</div>{% endif %}
-        <div class="meta">{% if categoria %}<a href="/archivio/#{{ categoria | slugify }}">{{ categoria }}</a> · {% endif %}<time datetime="{{ page.date | dataIso }}">{{ page.date | dataEstesa }}</time> · {% set min = content | minutiDiLettura %}{{ min }} {{ 'minuto' if min == 1 else 'minuti' }}</div>
+        <div class="meta">{% if categoria %}<a href="/archivio/">{{ categoria }}</a> · {% endif %}<time datetime="{{ page.date | dataIso }}">{{ page.date | dataEstesa }}</time> · {% set min = content | minutiDiLettura %}{{ min }} {{ 'minuto' if min == 1 else 'minuti' }}</div>
         <h1>{{ titolo }}</h1>
       </header>
       {%- if immagine %}

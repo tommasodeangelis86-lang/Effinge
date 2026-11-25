@@ -426,14 +426,23 @@
   }
 
   /* ——— Calcolatore di cartelle (guida): tutto nel browser ——— */
+  function misuraTesto(testo) {
+    var parole = testo.trim().match(/\S+/g);
+    return {
+      battute: Array.from(testo.replace(/\r?\n/g, '')).length,
+      senzaSpazi: Array.from(testo.replace(/\s/g, '')).length,
+      parole: parole ? parole.length : 0,
+    };
+  }
+  window.EffingeMisuraTesto = misuraTesto;
+
   function calcolatore(box) {
     var ta = box.querySelector('textarea');
     var it = new Intl.NumberFormat('it-IT'), it1 = new Intl.NumberFormat('it-IT', { maximumFractionDigits: 1 });
     function out(k, v) { var el = box.querySelector('[data-r="' + k + '"]'); if (el) el.textContent = v; }
     function conta() {
-      var t = ta.value, battute = Array.from(t.replace(/\r?\n/g, '')).length, senza = Array.from(t.replace(/\s/g, '')).length;
-      var m = t.trim().match(/\S+/g);
-      out('battute', it.format(battute)); out('senza', it.format(senza)); out('parole', it.format(m ? m.length : 0));
+      var misure = misuraTesto(ta.value), battute = misure.battute;
+      out('battute', it.format(battute)); out('senza', it.format(misure.senzaSpazi)); out('parole', it.format(misure.parole));
       out('c1800', it1.format(battute / 1800)); out('c2000', it1.format(battute / 2000)); out('c1500', it1.format(battute / 1500));
     }
     ta.addEventListener('input', conta);

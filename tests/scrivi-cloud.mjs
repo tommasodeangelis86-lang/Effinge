@@ -169,7 +169,19 @@ try {
   await pagina.locator('#archivio-privato [data-chiudi]').click();
   assert.equal(await editor.innerText(), 'Versione ancora nella scheda.');
   assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), true);
-  console.log('Ospite, esportazione, accesso, salvataggio, secondo browser, uscita, recupero locale e conflitto verificati.');
+
+  // Un’opera aperta dagli strumenti con una sessione attiva si aggiunge alle precedenti.
+  simulaConflitto = false;
+  await entra(altraPagina);
+  const numeroOpere = archivio.dati.opere.length;
+  await altraPagina.goto(indirizzo + '/strumenti/calcola-cartelle-editoriali/');
+  await altraPagina.getByRole('textbox', { name: 'Incolla o scrivi il tuo testo' }).fill('Testo importato con una sessione attiva.');
+  await altraPagina.getByRole('button', { name: 'Apri questo testo in Foglio Effinge' }).click();
+  await altraPagina.waitForURL(indirizzo + '/scrivi/');
+  await altraPagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('salvato nell’archivio'));
+  assert.equal(archivio.dati.opere.length, numeroOpere + 1);
+  assert.ok(archivio.dati.sezioni.some(s => s.html.includes('Testo importato con una sessione attiva.')));
+  console.log('Ospite, esportazione, accesso, importazione da strumenti, salvataggio, uscita, recupero locale e conflitto verificati.');
 } finally {
   await browser.close();
   server.close();

@@ -29,6 +29,8 @@ Scegli un sistema e usalo in tutto il manoscritto. Se hai ricevuto le norme reda
 
 Rileggi le scene con più voci. Un nuovo paragrafo a ogni cambio di interlocutore è spesso il modo più semplice per far capire chi ha preso la parola.
 
+Per incisi, lineette e attribuzioni trovi altri esempi nella [guida alla formattazione dei dialoghi](/guide/formattazione-dialoghi-narrativa/). Per le formule che tornano nella stessa scena, usa lo [strumento per trovare le ripetizioni](/strumenti/analizzatore-ripetizioni-testo/).
+
 ## Dove va la punteggiatura
 
 Metti il **punto interrogativo** o **esclamativo** prima della chiusura delle virgolette quando appartiene alla battuta. Se il verbo di dire prosegue la stessa frase, inizia con la minuscola.

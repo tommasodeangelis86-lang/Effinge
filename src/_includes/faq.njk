@@ -1,0 +1,11 @@
+{%- if faq and faq.length %}
+<section class="faq" id="faq" aria-labelledby="h-faq" data-lettura>
+  <h2 id="h-faq">Domande frequenti</h2>
+  {%- for q in faq %}
+  <details>
+    <summary>{{ q.d }}</summary>
+    <p>{{ q.r }}</p>
+  </details>
+  {%- endfor %}
+</section>
+{%- endif %}
