@@ -1,6 +1,6 @@
 # Archivio privato di Foglio Effinge
 
-La prima attivazione è per un solo autore, con accesso tramite email e password. Da ospite si scrive e si esporta in Word, e le nuove bozze restano nella scheda aperta. **Accedi** si trova nella barra sopra il foglio. Le opere e i capitoli vengono salvati automaticamente in Supabase. **Salva** apre l’archivio privato con il comando **Salva ora**. **Esci** nella barra chiude la sessione dopo aver salvato le modifiche in sospeso.
+La prima attivazione è per un solo autore, con accesso tramite email e password. Da ospite si scrive e si esporta in Word, e le nuove bozze restano nella scheda aperta. **Accedi** si trova nel menu di Effinge, tra **Checklist manoscritto** e **Art**. Le opere e i capitoli vengono salvati automaticamente in Supabase. **Salva** sopra il foglio apre l’archivio privato con il comando **Salva ora**. Nel menu di Scrivi **Esci** chiude la sessione dopo aver salvato le modifiche in sospeso.
 
 ## Attivazione
 

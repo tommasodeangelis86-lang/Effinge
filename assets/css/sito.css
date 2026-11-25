@@ -42,8 +42,9 @@ button{font:inherit;color:inherit}
 .barra.piena{background:color-mix(in srgb,var(--stanza) 72%,transparent);-webkit-backdrop-filter:saturate(1.2) blur(18px);backdrop-filter:saturate(1.2) blur(18px);border-color:var(--filo)}
 .marchio{font:400 1.375rem/1 var(--display);letter-spacing:.02em}
 .barra nav{display:flex;align-items:center;gap:clamp(18px,3vw,36px);font:450 .8125rem/1 var(--ui);letter-spacing:.01em;color:var(--testo-2)}
-.barra nav a{padding:8px 0;transition:color .2s ease}
-.barra nav a:hover,.barra nav a[aria-current]{color:var(--testo)}
+.barra nav a,.barra nav button.barra-accesso{padding:8px 0;transition:color .2s ease}
+.barra nav button.barra-accesso{border:0;background:none;letter-spacing:inherit;cursor:pointer}
+.barra nav a:hover,.barra nav a[aria-current],.barra nav button.barra-accesso:hover{color:var(--testo)}
 .barra-art {
   display: inline-grid;
   flex: none;
@@ -369,4 +370,8 @@ html:not(.js) .guida + .comandi{display:none}
   .barra-principale a[href="/guide/"], .barra-principale .barra-checklist { text-align: center; text-wrap: balance; }
   .barra-principale .barra-checklist { max-width: 6.5em; }
   .barra-principale .sfondi { flex: none; }
+  .barra-con-accesso { gap: 8px; padding-block: calc(7px + env(safe-area-inset-top,0px)) 7px; padding-inline: max(10px,env(safe-area-inset-left,0px)) max(10px,env(safe-area-inset-right,0px)); }
+  .barra-con-accesso .marchio { font-size: 1.1875rem; }
+  .barra-con-accesso nav.barra-principale { gap: clamp(5px, 1.5vw, 9px); font-size: clamp(.6875rem, 3.1vw, .8125rem); }
+  .barra-con-accesso nav a:not(.barra-art), .barra-con-accesso nav button.barra-accesso { padding-block: 6px; }
 }

@@ -64,7 +64,7 @@
   </nav>
 </header>
 {%- else %}
-<header class="barra{% if page.url != '/' %} piena{% endif %}">
+<header class="barra{% if page.url != '/' %} piena{% endif %}{% if supabase %} barra-con-accesso{% endif %}">
   <a class="marchio" href="/" aria-label="{{ s.sito.nome }}, home">{{ s.sito.nome }}</a>
   <nav class="barra-principale" aria-label="Principale">
     {%- for p in collections.pagine %}{% if p.data.nel_menu %}
@@ -75,6 +75,13 @@
     {%- endif %}
     <a href="/guide/"{% if page.url == '/guide/' %} aria-current="page"{% endif %}>Guide per chi scrive</a>
     <a class="barra-checklist" href="/checkmanoscritto/"{% if page.url == '/checkmanoscritto/' %} aria-current="page"{% endif %}>Checklist manoscritto</a>
+    {%- if supabase %}
+    {%- if page.url == '/scrivi/' %}
+    <button type="button" class="barra-accesso" data-menu-archivio aria-haspopup="dialog" aria-controls="archivio-privato">Accedi</button>
+    {%- else %}
+    <a class="barra-accesso" href="/scrivi/?accedi=1">Accedi</a>
+    {%- endif %}
+    {%- endif %}
     <a class="barra-art" href="/art/" aria-label="Effinge Art">Art</a>
     {% include "sfondi.njk" %}
   </nav>

@@ -29,8 +29,6 @@ eleventyExcludeFromCollections: true
 {%- elif nome == 'imp' %}<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>
 {%- elif nome == 'esp' %}<path d="M12 15V3M7 8l5-5 5 5M5 21h14"/>
 {%- elif nome == 'salva' %}<path d="M5 3h12l4 4v14H3V3h2zM7 3v6h10V3M7 21v-7h10v7"/>
-{%- elif nome == 'account' %}<path d="M4 21v-2a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v2"/><path d="M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/>
-{%- elif nome == 'logout' %}<path d="M10 4H4v16h6m5-4 4-4-4-4m4 4H9"/>
 {%- elif nome == 'cap' %}<rect x="4" y="3" width="7" height="8" rx="1.5"/><rect x="4" y="13" width="7" height="8" rx="1.5"/><path d="M14 6h6M14 9h4M14 16h6M14 19h4"/>
 {%- elif nome == 'su' %}<path d="m6 15 6-6 6 6"/>
 {%- elif nome == 'giu' %}<path d="m6 9 6 6 6-6"/>
@@ -65,8 +63,7 @@ eleventyExcludeFromCollections: true
       <button type="button" class="pill" data-comando="concentrazione" aria-pressed="true" aria-label="Concentrazione" title="Concentrazione">{{ icona('conc') }}<span>Concentrazione</span></button>
       <button type="button" class="pill" data-comando="lampada" aria-pressed="true" aria-label="Lampada" title="Lampada">{{ icona('lamp') }}<span>Lampada</span></button>
       {%- if supabase %}
-      <button type="button" class="pill" data-salva-archivio aria-label="Accedi" aria-haspopup="dialog" aria-controls="archivio-privato" title="Accedi all’archivio privato"><span class="ic-archivio" data-icona-accesso>{{ icona('account') }}</span><span class="ic-archivio" data-icona-salvataggio hidden>{{ icona('salva') }}</span><span data-testo-archivio>Accedi</span></button>
-      <button type="button" class="pill" data-uscita-archivio aria-label="Esci" aria-haspopup="dialog" aria-controls="archivio-privato" title="Esci dall’archivio privato" hidden>{{ icona('logout') }}<span>Esci</span></button>
+      <button type="button" class="pill" data-salva-archivio aria-haspopup="dialog" aria-controls="archivio-privato" title="Salva nell’archivio privato">{{ icona('salva') }}<span>Salva</span></button>
       {%- endif %}
     </div>
     <div class="barra-dx">
@@ -112,7 +109,7 @@ eleventyExcludeFromCollections: true
             <div class="scrivi-nome">
               <span class="scrivi-etichetta" data-etichetta></span>
               <label class="sr" for="titolo-sezione">Titolo</label>
-              <input id="titolo-sezione" class="scrivi-titolo" type="text" autocomplete="off" spellcheck="true">
+              <textarea id="titolo-sezione" class="scrivi-titolo" rows="1" wrap="off" autocomplete="off" spellcheck="true" aria-multiline="false"></textarea>
             </div>
           </div>
           <div class="scrivi-area">
@@ -208,7 +205,7 @@ eleventyExcludeFromCollections: true
 {% if supabase %}
 <dialog class="finestra" id="archivio-privato" aria-labelledby="h-archivio-privato">
   <div class="finestra-testa"><h2 id="h-archivio-privato">Accedi all’archivio</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
-  <form class="finestra-corpo modulo" data-accesso-archivio>
+  <form class="finestra-corpo modulo" method="post" data-accesso-archivio>
     <p>Usa l’email e la password del tuo account Effinge per salvare le opere nell’archivio privato. Le bozze di questa scheda verranno aggiunte all’archivio.</p>
     <label class="campo"><span>Email</span><input name="email" type="email" autocomplete="username" required></label>
     <label class="campo"><span>Password</span><input name="password" type="password" autocomplete="current-password" required></label>
@@ -236,19 +233,19 @@ eleventyExcludeFromCollections: true
 <dialog class="finestra" id="autore" aria-labelledby="h-autore">
   <div class="finestra-testa"><h2 id="h-autore">Pubblicazione GitHub</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <div class="finestra-corpo">
-    <div data-autore-fuori>
+    <form id="modulo-chiave-autore" method="post" data-autore-fuori>
       <p>Collega GitHub per attivare <strong>Pubblica sul sito</strong> e pubblicare il capitolo aperto su Effinge.</p>
       <p>Incolla qui la chiave personale che hai creato su GitHub (inizia con <code>github_pat_</code>). Resta solo in questo browser; va inserita una volta su ogni dispositivo.</p>
       <label class="campo"><span>Chiave GitHub</span><input type="password" id="chiave-autore" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
       <p class="esito" data-esito-autore aria-live="polite"></p>
-    </div>
+    </form>
     <div data-autore-dentro hidden>
       <p data-autore-chi></p>
       <p>Per toglierla da questo dispositivo usa «Scollega». Per revocarla ovunque, eliminala dalle impostazioni di GitHub.</p>
     </div>
   </div>
   <div class="finestra-piede">
-    <button type="button" class="pill primario" data-collega-autore>Collega</button>
+    <button type="submit" form="modulo-chiave-autore" class="pill primario" data-collega-autore>Collega</button>
     <button type="button" class="pill" data-scollega-autore hidden>Scollega</button>
   </div>
 </dialog>
@@ -307,7 +304,7 @@ eleventyExcludeFromCollections: true
 
 <dialog class="finestra" id="chiavi-ai" aria-labelledby="h-chiavi">
   <div class="finestra-testa"><h2 id="h-chiavi">Le mie chiavi AI</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
-  <div class="finestra-corpo modulo">
+  <form class="finestra-corpo modulo" method="post" autocomplete="off">
     <p>Voci premium e suggerimenti usano le <strong>tue</strong> chiavi API: paghi tu il consumo, direttamente al fornitore. Le chiavi restano in questo browser e vengono inviate solo al fornitore, mai a Effinge. L’abbonamento a ChatGPT o a Claude non include le chiavi API: si creano a parte, nelle console dei fornitori.</p>
     <label class="campo"><span>Suggerimenti con</span><select id="ai-fornitore"><option value="anthropic">Claude (Anthropic)</option><option value="openai">OpenAI</option><option value="gemini">Gemini (Google)</option></select></label>
     <div class="campi-due">
@@ -324,7 +321,7 @@ eleventyExcludeFromCollections: true
     </div>
     <label class="campo"><span>Chiave ElevenLabs <small>solo voci</small></span><input type="password" id="chiave-elevenlabs" autocomplete="off" spellcheck="false" data-esempio="…"></label>
     <label class="spunta"><input type="checkbox" id="chiavi-ricorda" checked> Ricorda in questo browser <small>se lo togli, le chiavi si cancellano chiudendo la scheda</small></label>
-  </div>
+  </form>
   <div class="finestra-piede"><button type="button" class="pill primario" data-salva-chiavi>Salva</button><button type="button" class="pill" data-cancella-chiavi>Cancella tutte</button></div>
   <p class="finestra-nota">Un campo lasciato vuoto non cambia la chiave già salvata. Su un computer condiviso togli «Ricorda» o usa «Cancella tutte» quando hai finito.</p>
 </dialog>

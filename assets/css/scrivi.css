@@ -16,7 +16,6 @@
 .pill:active{transform:scale(.97)}
 .pill[aria-pressed="true"],.pill.primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
 .pill .ic{width:15px;height:15px}
-.ic-archivio{display:flex}
 .solo-mobile{display:none}
 
 /* ——— Tre colonne ——— */
@@ -89,7 +88,7 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 .scrivi-testa{margin-bottom:clamp(26px,5vw,44px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
 .scrivi-nome{flex:1;min-width:0;display:grid;gap:6px}
 .scrivi-etichetta{font:500 .6875rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--inchiostro-2)}
-.scrivi-titolo{width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font:300 clamp(1.875rem,4.5vw,2.75rem)/1.1 var(--display);color:var(--inchiostro);outline:none;caret-color:var(--inchiostro)}
+.scrivi-titolo{display:block;width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font:300 clamp(1.875rem,4.5vw,2.75rem)/1.1 var(--display);color:var(--inchiostro);outline:none;caret-color:var(--inchiostro);resize:none;overflow:hidden}
 .scrivi-titolo::placeholder{color:color-mix(in srgb,var(--inchiostro) 38%,transparent)}
 
 /* ——— L'editor ——— */
@@ -174,8 +173,6 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
   .solo-mobile{display:inline-flex}
   .scrivi-barra{gap:8px}
   .barra-centro{order:3}
-  html:not(.focus-totale) .scrivi-pagina[data-archivio-url] .barra-centro{flex-wrap:wrap}
-  html:not(.focus-totale) .scrivi-pagina[data-archivio-url] .barra-centro .pill{padding-inline:9px;gap:5px}
   .barra-dx .pill span{display:none}
   .nome-opera{font-size:1.25rem}
   .scrivi-app{grid-template-columns:minmax(0,1fr);gap:12px}
