@@ -16,6 +16,7 @@ function regolaDiSicurezza(html) {
     hash.add("'sha256-" + createHash('sha256').update(corpo, 'utf8').digest('base64') + "'");
     return m;
   });
+  const archivio = /data-scrivi-app data-archivio-url="(https:\/\/[a-z0-9]{20}\.supabase\.co)"/.exec(html)?.[1];
   return [
     "default-src 'self'",
     "script-src 'self' " + [...hash].join(' '),
@@ -23,7 +24,7 @@ function regolaDiSicurezza(html) {
     "img-src 'self' data: blob:",
     "font-src 'self'",
     // Solo in Scrivi: il Narratore parla direttamente con i fornitori scelti da chi scrive, con le sue chiavi.
-    "connect-src 'self' https://api.github.com" + (/data-scrivi-app/.test(html) ? ' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://generativelanguage.googleapis.com' : ''),
+    "connect-src 'self' https://api.github.com" + (/data-scrivi-app/.test(html) ? ' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://generativelanguage.googleapis.com' : '') + (archivio ? ' ' + archivio : ''),
     "media-src 'self'" + (/data-scrivi-app/.test(html) ? ' blob:' : ''),
     "object-src 'none'",
     "frame-src 'none'",
@@ -44,6 +45,7 @@ export default function (config) {
   });
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
+  config.addPassthroughCopy({ 'assets/js/scrivi-cloud.js': 'assets/js/scrivi-cloud.js' });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
   config.addPassthroughCopy({
     'assets/css/checkmanoscritto.css': 'assets/css/checkmanoscritto.css',

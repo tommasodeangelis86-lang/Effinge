@@ -8,7 +8,7 @@
  *   che non tocca il testo (annulla/ripeti e correttore restano quelli del browser).
  * - La lampada segue il mouse; mentre scrivi segue il cursore di testo.
  * - Concentrazione: mentre scrivi, il paragrafo corrente resta acceso e gli altri si attenuano.
- * Niente lascia il dispositivo: nessun account, nessun invio.
+ * Da ospite il testo resta nella scheda quando l’archivio privato è attivo.
  */
 (function () {
   'use strict';
@@ -131,9 +131,9 @@
       r.onblocked = function () { ok(null); };
     });
   }
-  function req(store, mode, fn) {
+  function req(store, mode, fn, database) {
     return new Promise(function (ok, ko) {
-      var t = DB.transaction(store, mode), s = t.objectStore(store), out = fn(s);
+      var t = (database || DB).transaction(store, mode), s = t.objectStore(store), out = fn(s);
       t.oncomplete = function () { ok(out && out.result !== undefined ? out.result : undefined); };
       t.onerror = function () { ko(t.error); };
       t.onabort = function () { ko(t.error); };
@@ -141,11 +141,11 @@
   }
   function valori(o) { return Object.keys(o).map(function (k) { return o[k]; }); }
   var archivio = {
-    opere: function () { return DB ? req('opere', 'readonly', function (s) { return s.getAll(); }) : Promise.resolve(valori(memoria.opere)); },
-    sezioni: function (operaId) { return DB ? req('sezioni', 'readonly', function (s) { return s.index('opera').getAll(operaId); }) : Promise.resolve(valori(memoria.sezioni).filter(function (x) { return x.operaId === operaId; })); },
-    salvaOpera: function (o) { if (!DB) { memoria.opere[o.id] = o; return Promise.resolve(); } return req('opere', 'readwrite', function (s) { s.put(o); }); },
-    salvaSezioni: function (list) { if (!DB) { list.forEach(function (x) { memoria.sezioni[x.id] = x; }); return Promise.resolve(); } return req('sezioni', 'readwrite', function (s) { list.forEach(function (x) { s.put(x); }); }); },
-    elimina: function (store, ids) { if (!DB) { ids.forEach(function (i) { delete memoria[store][i]; }); return Promise.resolve(); } return req(store, 'readwrite', function (s) { ids.forEach(function (i) { s.delete(i); }); }); }
+    opere: function () { return DB ? req('opere', 'readonly', function (s) { return s.getAll(); }) : Promise.resolve(valori(memoria.opere).map(clonaArchivio)); },
+    sezioni: function (operaId) { return DB ? req('sezioni', 'readonly', function (s) { return s.index('opera').getAll(operaId); }) : Promise.resolve(valori(memoria.sezioni).filter(function (x) { return x.operaId === operaId; }).map(clonaArchivio)); },
+    salvaOpera: function (o) { if (!DB) { registraMemoria('opere', o); return Promise.resolve(); } return req('opere', 'readwrite', function (s) { s.put(o); }); },
+    salvaSezioni: function (list) { if (!DB) { list.forEach(function (x) { registraMemoria('sezioni', x); }); return Promise.resolve(); } return req('sezioni', 'readwrite', function (s) { list.forEach(function (x) { s.put(x); }); }); },
+    elimina: function (store, ids) { if (!DB) { ids.forEach(function (i) { delete memoria[store][i]; }); if (ids.length) modificaCloud(); return Promise.resolve(); } return req(store, 'readwrite', function (s) { ids.forEach(function (i) { s.delete(i); }); }); }
   };
 
   /* ——— Stato ——— */
@@ -172,11 +172,14 @@
   var timerSalva = 0, timerMini = 0;
   function aggiornaCorrenteDaEditor() {
     var s = sezioni[corrente]; if (!s) return null;
-    s.html = pulisci(editor.innerHTML);
+    s.html = htmlDaEditor();
     s.titolo = titolo.value.trim();
     var c = conta(testoDi(s.html));
     s.parole = c.parole; s.battute = c.battute; s.aggiornata = Date.now();
     return s;
+  }
+  function htmlDaEditor() {
+    return cloud && editor.classList.contains('vuoto') ? '' : pulisci(editor.innerHTML);
   }
   function salva(subito) {
     clearTimeout(timerSalva);
@@ -185,14 +188,14 @@
       opera.aggiornata = Date.now();
       totali();
       return Promise.all([archivio.salvaSezioni([s]), archivio.salvaOpera(opera)]).then(function () {
-        if (s.id === corrente) stato.textContent = riassunto(s) + ' · salvato';
+        if (s.id === corrente) stato.textContent = riassunto(s) + ' · ' + (cloud ? statoCloud : 'salvato');
       }, function () { stato.textContent = riassunto(s) + ' · non salvato: memoria del browser piena o bloccata'; });
     };
     if (subito) return go();
     timerSalva = setTimeout(go, 500);
     return Promise.resolve();
   }
-  function aggiornaConteggioVivo() { stato.textContent = riassunto(conta(editor.innerText || '')); }
+  function aggiornaConteggioVivo() { stato.textContent = riassunto(conta(editor.innerText || '')) + (cloud && !account ? ' · bozza in questa scheda' : ''); }
 
   /* ——— Anteprime a sinistra ——— */
   function miniHtml(s) {
@@ -338,7 +341,7 @@
       opera.ordine = (opera.ordine || []).filter(function (x) { return sezioni[x]; });
       list.forEach(function (s) { if (opera.ordine.indexOf(s.id) < 0) opera.ordine.push(s.id); });
       if (!opera.ordine.length) { var s = nuovaSezione('capitolo'); sezioni[s.id] = s; opera.ordine.push(s.id); archivio.salvaSezioni([s]); }
-      scriviPref(CORR, opera.id);
+      scriviPref(chiaveOpera(), opera.id);
       nomeOpera.value = opera.titolo || '';
       corrente = null;
       var primo = opera.ordine.filter(function (x) { return sezioni[x].tipo === 'capitolo'; })[0] || opera.ordine[0];
@@ -1014,18 +1017,306 @@
     document.head.appendChild(s);
   })();
 
+  /* ——— Archivio privato: avanza di una versione alla volta ——— */
+  var cloud = null;
+  if (app.dataset.archivioUrl) {
+    try {
+      cloud = window.EffingeCloud(app.dataset.archivioUrl, app.dataset.archivioChiave);
+    } catch (errore) {
+      var archivioNonDisponibile = function () {
+        return Promise.reject(new Error('L’archivio non si è caricato. Puoi continuare a scrivere ed esportare in Word.'));
+      };
+      cloud = { apri: archivioNonDisponibile, entra: archivioNonDisponibile };
+    }
+  }
+  var dbLocale = null, account = null, versioneCloud = 0, modifica = 0, salvata = 0;
+  var timerCloud = 0, scritturaCloud = null, caricandoArchivio = !!cloud, accessoScaduto = false;
+  var statoCloud = 'bozza in questa scheda';
+  var dialogoCloud = $('#archivio-privato'), formCloud = $('[data-accesso-archivio]');
+  var esitoCloud = $('[data-esito-archivio]');
+
+  function memoriaVuota() { return { opere: Object.create(null), sezioni: Object.create(null) }; }
+  function clonaArchivio(x) { return cloud ? JSON.parse(JSON.stringify(x)) : x; }
+  function chiaveOpera() { return account ? CORR + '-' + account.utente : CORR; }
+
+  function equivalenti(a, b) {
+    if (!b) return false;
+    var campi = a.operaId ? ['operaId', 'tipo', 'titolo', 'html', 'parole', 'battute'] : ['titolo', 'ordine', 'ultima'];
+    return campi.every(function (c) { return JSON.stringify(a[c]) === JSON.stringify(b[c]); });
+  }
+
+  function registraMemoria(store, x) {
+    if (cloud && equivalenti(x, memoria[store][x.id])) return;
+    memoria[store][x.id] = clonaArchivio(x);
+    modificaCloud();
+  }
+
+  function modificaCloud() {
+    if (!cloud || caricandoArchivio) return;
+    modifica++;
+    if (account) statoCloud = 'modifiche in attesa';
+    if (account && !accessoScaduto) {
+      clearTimeout(timerCloud);
+      timerCloud = setTimeout(function () { salvaCloud().catch(mostraErroreCloud); }, 1400);
+    }
+  }
+
+  function mostraStatoCloud() {
+    if (corrente && sezioni[corrente]) {
+      stato.textContent = riassunto(sezioni[corrente]) + ' · ' + statoCloud;
+    }
+  }
+
+  function mostraErroreCloud(errore) {
+    if (errore.accesso) {
+      accessoScaduto = true;
+      mostraAccount();
+    }
+    statoCloud = 'salvataggio da riprovare';
+    mostraStatoCloud();
+    esitoCloud.textContent = errore.message;
+    if (!dialogoCloud.open) avviso(errore.message, 5500);
+  }
+
+  function snapshot(m) { return { opere: valori(m.opere), sezioni: valori(m.sezioni) }; }
+
+  function salvaCloud() {
+    clearTimeout(timerCloud);
+    if (!account) return Promise.resolve();
+    if (scritturaCloud) {
+      return scritturaCloud.then(function () {
+        if (modifica !== salvata) return salvaCloud();
+      });
+    }
+    if (modifica === salvata && versioneCloud) return Promise.resolve();
+    var correnteModifiche = modifica;
+    var dati = snapshot(memoria);
+    statoCloud = 'salvataggio…';
+    mostraStatoCloud();
+    scritturaCloud = cloud.salva(account.utente, versioneCloud, dati).then(function (v) {
+      versioneCloud = v;
+      salvata = correnteModifiche;
+      statoCloud = modifica === salvata ? 'salvato nell’archivio' : 'modifiche in attesa';
+      mostraStatoCloud();
+      esitoCloud.textContent = modifica === salvata ? 'Salvato nell’archivio privato.' : '';
+    }).finally(function () { scritturaCloud = null; });
+    return scritturaCloud;
+  }
+
+  function leggiArchivio(dati) {
+    var m = memoriaVuota();
+    if (!dati) return m;
+    var idOpera = /^o[a-z0-9]+$/, idSezione = /^s[a-z0-9]+$/;
+    dati.opere.forEach(function (o) {
+      if (!o || !idOpera.test(o.id) || typeof o.titolo !== 'string' || !Array.isArray(o.ordine)) return;
+      m.opere[o.id] = { id: o.id, titolo: o.titolo, ultima: o.ultima, ordine: o.ordine.slice(), creata: Number(o.creata) || 0, aggiornata: Number(o.aggiornata) || 0 };
+    });
+    dati.sezioni.forEach(function (s) {
+      if (!s || !idSezione.test(s.id) || !m.opere[s.operaId] || !/^(capitolo|parte|copertina)$/.test(s.tipo)) return;
+      var html = pulisci(typeof s.html === 'string' ? s.html : '');
+      var numeri = conta(testoDi(html));
+      m.sezioni[s.id] = {
+        id: s.id, operaId: s.operaId, tipo: s.tipo, titolo: typeof s.titolo === 'string' ? s.titolo : '',
+        html: html, parole: numeri.parole, battute: numeri.battute, aggiornata: Number(s.aggiornata) || 0,
+      };
+    });
+    valori(m.opere).forEach(function (o) {
+      o.ordine = o.ordine.filter(function (s, i, lista) { return m.sezioni[s]?.operaId === o.id && lista.indexOf(s) === i; });
+    });
+    return m;
+  }
+
+  function copiaOpera(dest, src, o) {
+    var conservata = dest.opere[o.id];
+    if (conservata && o.titolo === conservata.titolo && JSON.stringify(o.ordine) === JSON.stringify(conservata.ordine) && o.ordine.every(function (sid) {
+      return src.sezioni[sid] && equivalenti(src.sezioni[sid], dest.sezioni[sid]);
+    })) return null;
+    var nuova = { ...o, id: conservata ? id('o') : o.id, ordine: [], ultima: null };
+    o.ordine.forEach(function (sid) {
+      if (!src.sezioni[sid]) return;
+      var s = { ...src.sezioni[sid], id: dest.sezioni[sid] ? id('s') : sid, operaId: nuova.id };
+      dest.sezioni[s.id] = s;
+      nuova.ordine.push(s.id);
+      if (o.ultima === sid) nuova.ultima = s.id;
+    });
+    if (conservata) nuova.titolo += ' (copia)';
+    dest.opere[nuova.id] = nuova;
+    return nuova;
+  }
+
+  function scopriBozze() {
+    if (!dbLocale) return Promise.resolve(memoriaVuota());
+    return Promise.all([
+      req('opere', 'readonly', function (s) { return s.getAll(); }, dbLocale),
+      req('sezioni', 'readonly', function (s) { return s.getAll(); }, dbLocale),
+    ]).then(function (ris) { return leggiArchivio({ opere: ris[0], sezioni: ris[1] }); });
+  }
+
+  function mostraAccount() {
+    if (!cloud) return;
+    formCloud.hidden = !!account && !accessoScaduto;
+    $('[data-sessione-archivio]').hidden = !account || accessoScaduto;
+    $('[data-account-archivio]').textContent = account ? account.email : '';
+  }
+
+  function apriUltima(lista, preferita) {
+    var scelta = lista.find(function (o) { return o.id === (preferita || leggi(chiaveOpera())); }) ||
+      lista.sort(function (a, b) { return (b.aggiornata || 0) - (a.aggiornata || 0); })[0];
+    return scelta ? caricaOpera(scelta) : creaOpera('La mia opera');
+  }
+
+  async function attivaCloud(informazioni, prendiBozze) {
+    if (!informazioni) throw new Error('La sessione non è disponibile. Accedi di nuovo.');
+    var bozze = memoria, scelta = null, aggiunte = false;
+    if (prendiBozze) await salva(true);
+    var nuovaMemoria = leggiArchivio(informazioni.dati);
+    if (prendiBozze) valori(bozze.opere).forEach(function (o) {
+      var contenuto = o.titolo !== 'La mia opera' || o.ordine.length > 1 ||
+        o.ordine.some(function (sid) { var s = bozze.sezioni[sid]; return s && (s.titolo || s.battute); });
+      if (!contenuto) return;
+      var copiata = copiaOpera(nuovaMemoria, bozze, o);
+      if (!copiata) return;
+      aggiunte = true;
+      if (opera && o.id === opera.id) scelta = copiata.id;
+    });
+    clearTimeout(timerSalva);
+    clearTimeout(timerMini);
+    clearTimeout(timerCloud);
+    caricandoArchivio = true;
+    account = informazioni;
+    accessoScaduto = false;
+    memoria = nuovaMemoria;
+    versioneCloud = informazioni.versione || 0;
+    modifica = salvata = 0;
+    statoCloud = versioneCloud ? 'salvato nell’archivio' : 'pronto per il salvataggio';
+    await apriUltima(valori(memoria.opere), scelta);
+    caricandoArchivio = false;
+    if (aggiunte) modificaCloud();
+    mostraStatoCloud();
+    mostraAccount();
+  }
+
+  if (cloud) {
+    $('[data-salva-archivio]').addEventListener('click', async function () {
+      await window.EffingeScrivi.pronto;
+      mostraAccount();
+      dialogoCloud.showModal();
+    });
+    formCloud.addEventListener('submit', async function (evento) {
+      evento.preventDefault();
+      var invio = formCloud.querySelector('[type=submit]');
+      invio.disabled = true;
+      esitoCloud.textContent = 'Accesso in corso…';
+      try {
+        var email = formCloud.elements.email.value.trim();
+        await cloud.entra(email, formCloud.elements.password.value);
+        var informazioni = await cloud.apri();
+        if (account) {
+          if (informazioni?.utente !== account.utente) throw new Error('Per ritrovare le modifiche aperte, usa lo stesso account.');
+          accessoScaduto = false;
+          mostraAccount();
+        } else {
+          await attivaCloud(informazioni, true);
+        }
+        esitoCloud.textContent = 'Accesso riuscito.';
+        if (modifica !== salvata) await salvaCloud();
+      } catch (errore) {
+        esitoCloud.textContent = errore.message;
+      } finally {
+        formCloud.elements.password.value = '';
+        invio.disabled = false;
+      }
+    });
+
+    $('[data-salva-ora]').addEventListener('click', function () {
+      salva(true).then(salvaCloud).then(function () {
+        esitoCloud.textContent = 'Salvato nell’archivio privato.';
+      }).catch(mostraErroreCloud);
+    });
+
+    $('[data-esci-archivio]').addEventListener('click', async function (evento) {
+      var bottone = evento.currentTarget;
+      bottone.disabled = true;
+      try {
+        await salva(true);
+        if (modifica !== salvata || scritturaCloud) await salvaCloud();
+        await cloud.esci();
+        clearTimeout(timerSalva);
+        clearTimeout(timerMini);
+        clearTimeout(timerCloud);
+        account = null;
+        versioneCloud = modifica = salvata = 0;
+        memoria = memoriaVuota();
+        statoCloud = 'bozza in questa scheda';
+        caricandoArchivio = true;
+        await creaOpera('La mia opera');
+        caricandoArchivio = false;
+        mostraStatoCloud();
+        mostraAccount();
+        esitoCloud.textContent = 'Disconnesso. Puoi continuare a scrivere come ospite.';
+      } catch (errore) {
+        mostraErroreCloud(errore);
+      } finally {
+        bottone.disabled = false;
+      }
+    });
+
+    $('[data-apri-bozze-locali]').addEventListener('click', async function () {
+      var bozze = await scopriBozze().catch(memoriaVuota);
+      var elenco = $('[data-elenco-bozze-locali]');
+      elenco.replaceChildren();
+      valori(bozze.opere).forEach(function (o) {
+        var li = document.createElement('li');
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'apri';
+        b.textContent = o.titolo || 'Senza titolo';
+        b.addEventListener('click', async function () {
+          await salva(true);
+          var nuova = copiaOpera(memoria, bozze, o);
+          if (nuova) modificaCloud();
+          await caricaOpera(clonaArchivio(nuova || memoria.opere[o.id]));
+          $('#bozze-locali').close();
+        });
+        li.append(b);
+        elenco.append(li);
+      });
+      if (!elenco.children.length) elenco.textContent = 'Nessuna bozza in questo browser.';
+      dlgOpere.close();
+      $('#bozze-locali').showModal();
+    });
+
+    addEventListener('beforeunload', function (e) {
+      var sezione = sezioni[corrente];
+      if (modifica === salvata && (!sezione || (htmlDaEditor() === sezione.html && titolo.value.trim() === sezione.titolo))) return;
+      e.preventDefault();
+      e.returnValue = '';
+    });
+  }
+
   /* ——— Avvio ——— */
-  window.EffingeScrivi.pronto = apriDB().then(function (db) {
-    DB = db;
-    if (!DB) avviso('Questo browser non permette di salvare: quello che scrivi si perde chiudendo la pagina.', 5000);
-    return archivio.opere();
-  }).then(function (list) {
-    var mig = migraVecchiFogli();
-    if (mig) return creaOpera('I miei fogli', mig);
-    if (!list.length) return creaOpera('La mia opera');
-    var scelta = list.filter(function (o) { return o.id === leggi(CORR); })[0] || list.sort(function (a, b) { return (b.aggiornata || 0) - (a.aggiornata || 0); })[0];
-    return caricaOpera(scelta);
+  window.EffingeScrivi.pronto = apriDB().then(async function (db) {
+    if (!cloud) {
+      DB = db;
+      if (!DB) avviso('Questo browser non permette di salvare: quello che scrivi si perde chiudendo la pagina.', 5000);
+      var mig = migraVecchiFogli();
+      return mig ? creaOpera('I miei fogli', mig) : apriUltima(await archivio.opere());
+    }
+    dbLocale = db;
+    memoria = memoriaVuota();
+    scopriBozze().then(function (bozze) {
+      $('[data-apri-bozze-locali]').hidden = !valori(bozze.opere).length;
+    }).catch(function () {});
+    try {
+      var informazioni = await cloud.apri();
+      if (informazioni) return await attivaCloud(informazioni, false);
+    } catch (errore) {
+      esitoCloud.textContent = errore.message;
+    }
+    await creaOpera('La mia opera');
+    caricandoArchivio = false;
+    mostraStatoCloud();
   });
   // ricorda l'ultima sezione aperta
-  setInterval(function () { if (opera && corrente && opera.ultima !== corrente) { opera.ultima = corrente; archivio.salvaOpera(opera); } }, 4000);
+  if (!cloud) setInterval(function () { if (opera && corrente && opera.ultima !== corrente) { opera.ultima = corrente; archivio.salvaOpera(opera); } }, 4000);
 })();

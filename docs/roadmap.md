@@ -35,8 +35,8 @@ repository).
 - **Limiti noti**: su iPhone la voce parte solo dopo un primo tocco su Play; alcune voci Google in
   Chrome non segnalano la parola letta (evidenziazione stimata).
 
-## Fase 3 — Accedi e registrazione
-Rimandata perché i rischi superano, per ora, i vantaggi.
+## Fase 3 — Archivio privato
+Per il primo accesso riservato all’autore, vedi [Archivio privato di Foglio Effinge](archivio-privato.md). La registrazione pubblica resta una fase successiva.
 
 - **Tecnica**: Supabase (UE, Francoforte) per accesso e database con regole per cui ognuno vede
   solo i propri testi; email da @effinge.it con Resend o Brevo e record SPF/DKIM/DMARC su Aruba;

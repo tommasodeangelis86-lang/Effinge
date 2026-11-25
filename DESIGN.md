@@ -174,6 +174,8 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 
 ## 13. Tecnica e sicurezza (vincoli)
 
+- **Archivio privato**: quando è configurato Supabase, «Salva» apre l’accesso in Scrivi. Il client Auth è servito in locale e solo Scrivi può contattare il progetto Supabase configurato.
+
 - **Checklist manoscritto** (`/checkmanoscritto/`): parte da Blu Effinge, con titoli Cormorant e riquadri apribili a bordo sottile. Il verde salvia identifica la spunta dei controlli completati. DOCX e correzioni sono elaborati nel browser, con il supporto ZIP locale di fflate (`assets/vendor/fflate-0.8.2.js`).
 
 - Eleventy 3: i sorgenti sono in `src/`, il risultato in `_site/`. Si pubblica su GitHub Pages con `.github/workflows/pubblica.yml`.
