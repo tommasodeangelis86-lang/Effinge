@@ -13,6 +13,18 @@
 <html lang="it" data-sfondo="{{ sfondoPagina or impostazioni.colori.sfondo or 'grafite' }}" style="--buio:{{ ((impostazioni.colori.buio if impostazioni.colori.buio is number else 55) / 100) }}">
 <head>
 <meta charset="utf-8">
+<!-- Google Tag Manager -->
+<script>
+(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({
+'gtm.start':new Date().getTime(),event:'gtm.js'
+});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';
+j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;
+f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-NM7SXMLZ');
+</script>
+<!-- End Google Tag Manager -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <meta name="theme-color" content="{{ s.colori.stanza | colore('#0A0A09') }}">
@@ -50,6 +62,10 @@
 <style>:root{--stanza:{{ s.colori.stanza | colore('#0A0A09') }};--carta:{{ (colore_carta or s.colori.carta) | colore(s.colori.carta | colore('#ECE7DC')) }};--inchiostro:{{ s.colori.inchiostro | colore('#1A1916') }};--testo-predefinito:{{ s.colori.testo | colore('#E9E5DB') }};--luce:{{ s.lampada.colore | colore('#F0CB8A') }}}</style>
 </head>
 <body{% if sezioneArt %} class="art-sito"{% endif %}>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-NM7SXMLZ"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <a class="salta" href="#contenuto">Vai al contenuto</a>
 {%- if sezioneArt %}
 <header class="barra piena art-barra">
