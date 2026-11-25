@@ -30,8 +30,9 @@ In **Settings → Pages**, la fonte di pubblicazione è **GitHub Actions** e il 
 
 Il dominio principale `effinge.it` punta a GitHub Pages con quattro record **A** per `@`
 (`185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`).
-Il record **CNAME** di `www` punta a `tommasodeangelis86-lang.github.io`. I record **MX**
-gestiscono la posta e sono indipendenti dalla pubblicazione del sito.
+Il record **CNAME** di `www` punta all’host GitHub Pages dell’account proprietario del repository,
+composto dal nome utente GitHub seguito da `.github.io`. I record **MX** gestiscono la posta e sono
+indipendenti dalla pubblicazione del sito.
 
 ---
 

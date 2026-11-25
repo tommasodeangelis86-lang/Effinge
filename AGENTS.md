@@ -9,4 +9,5 @@ Regole fisse:
 - Rispetta `prefers-reduced-motion`, il focus da tastiera e il contrasto WCAG 2.2 AA. Verifica che non compaia uno scorrimento orizzontale su telefono (390px).
 - Prima di consegnare: `npx @11ty/eleventy` e i test in `tests/` (`node tests/sito.mjs`, `tests/guide.mjs`, `tests/art.mjs`, `tests/scrivi.mjs`, `tests/voce.mjs`).
 - Non pubblicare file personali (manoscritti, documenti con dati di contatto) nel repository: è pubblico.
+- Usa «Effinge» come nome autore dei commit e l’indirizzo `noreply` di GitHub.
 - Un agente alla volta: se un'altra sessione sta lavorando sul sito, aspetta che abbia finito.
