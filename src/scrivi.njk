@@ -2,8 +2,8 @@
 layout: base.njk
 permalink: /scrivi/
 titolo: Scrivi
-titolo_completo: Editor di scrittura senza distrazioni online — ritrova l'ispirazione
-seo_descrizione: Scrivi al buio con una lampada che segue la penna. Un editor minimalista e gratuito online per ritrovare l'ispirazione. Concentrarti solo sulle parole, senza distrazioni.
+titolo_completo: Editor di scrittura senza distrazioni | Foglio Effinge
+seo_descrizione: Scrivi sotto una lampada in un editor online gratuito. Conta parole, battute e cartelle editoriali, organizza i capitoli e importa o esporta in Word.
 script: /assets/js/scrivi.js
 stile: /assets/css/scrivi.css
 eleventyExcludeFromCollections: true
@@ -55,7 +55,7 @@ eleventyExcludeFromCollections: true
 
 <main id="contenuto" class="scrivi-pagina" data-scrivi-app{% if supabase %} data-archivio-url="{{ supabase.url }}" data-archivio-chiave="{{ supabase.chiave }}"{% endif %}>
   <h1 class="sr">Foglio Effinge — editor di scrittura senza distrazioni</h1>
-  <div class="scrivi-barra" role="toolbar" aria-label="Opera">
+  <div class="scrivi-barra" role="toolbar" aria-label="Opera" data-nosnippet>
     <div class="barra-sx">
       <button type="button" class="pill solo-mobile" data-apri-capitoli aria-controls="capitoli" aria-expanded="false" aria-label="Capitoli" title="Capitoli">{{ icona('cap') }}</button>
       <button type="button" class="pill" data-comando="opere" aria-label="Opere" title="Opere">{{ icona('opere') }}</button>
@@ -78,7 +78,7 @@ eleventyExcludeFromCollections: true
     </div>
   </div>
 
-  <div class="scrivi-app">
+  <div class="scrivi-app" data-nosnippet>
     <!-- Sinistra: un’anteprima per ogni copertina, parte e capitolo, in ordine -->
     <aside class="capitoli" id="capitoli" aria-label="Capitoli">
       <div class="capitoli-testa">
@@ -192,12 +192,13 @@ eleventyExcludeFromCollections: true
   </div>
 </main>
 
-<div class="scrivi-guasto" id="scrivi-guasto" role="alert" hidden>
+<div class="scrivi-guasto" id="scrivi-guasto" role="alert" data-nosnippet hidden>
   <p><strong>La pagina non si è caricata del tutto.</strong> Ricaricala tenendo premuto Maiusc (sul computer: Ctrl + Maiusc + R, su Mac: Cmd + Maiusc + R). Se il problema resta, scrivimi.</p>
 </div>
 
-<p class="scrivi-nota">Foglio Effinge è uno strumento gratuito di scrittura immersiva online: ogni lettera si illumina mentre digiti, aiutandoti a superare il blocco dello scrittore. {% if supabase %}Puoi scrivere ed esportare in Word liberamente. L’accesso serve per salvare nell’archivio privato.{% else %}Quello che scrivi resta nel tuo browser.{% endif %} Guide: <a href="/guide/cartelle-editoriali/">contare le cartelle editoriali</a> · <a href="/guide/impaginare-manoscritto/">impaginare un manoscritto</a>.</p>
+<p class="scrivi-nota">Foglio Effinge è un editor di scrittura online gratuito. La lampada segue il cursore mentre scrivi. Puoi organizzare il testo in capitoli, <a href="/guide/cartelle-editoriali/">contare le cartelle editoriali</a>, <a href="/guide/impaginare-manoscritto/">impaginare il manoscritto</a> ed esportarlo in Word. {% if supabase %}Con un account abilitato puoi salvarlo nell’archivio privato.{% else %}Le bozze vengono salvate nel browser.{% endif %}</p>
 
+<div data-nosnippet>
 <dialog class="finestra" id="opere" aria-labelledby="h-opere">
   <div class="finestra-testa"><h2 id="h-opere">Le mie opere</h2><button type="button" class="pill" data-chiudi>Chiudi</button></div>
   <ul class="finestra-elenco" data-elenco-opere></ul>
@@ -335,3 +336,4 @@ eleventyExcludeFromCollections: true
   <div class="finestra-piede"><button type="button" class="pill primario" data-conferma-import>Crea l’opera</button></div>
   <p class="finestra-nota">Il file resta sul tuo dispositivo: viene letto dal browser e non viene inviato a nessuno.</p>
 </dialog>
+</div>

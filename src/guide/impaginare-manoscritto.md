@@ -1,7 +1,7 @@
 ---
 titolo: "Come impaginare un manoscritto da inviare a un editore"
 titolo_completo: "Come impaginare un manoscritto per una casa editrice | Effinge"
-seo_descrizione: "Formato, carattere, interlinea, margini, rientri, capitoli e frontespizio: le regole pratiche per impaginare un manoscritto da inviare a editori e agenzie."
+seo_descrizione: "Come impaginare un manoscritto in Word con formato A4, margini, interlinea e capitoli. Scarica il modello Word gratuito con frontespizio e numeri di pagina."
 date: 2026-11-21
 ordine: 2
 faq:
@@ -20,6 +20,12 @@ faq:
 Chi legge manoscritti ne riceve molti. Un testo impaginato con ordine non garantisce niente, ma **si fa leggere**: pagine pulite, regolari, senza sorprese. Ecco le regole pratiche più diffuse in Italia.
 
 Prima di tutto, però: **le indicazioni dell’editore vengono prima di qualsiasi guida.** Molte case editrici e agenzie pubblicano le loro norme nella pagina dedicata all’invio dei manoscritti. Se ci sono, seguile alla lettera.
+
+## Modello Word per il manoscritto
+
+<a href="/media/effinge-modello-manoscritto.docx" download>Scarica il modello Word gratuito (.docx)</a>. Trovi un frontespizio, due capitoli di esempio su pagine separate e la numerazione nel piè di pagina. Il documento è in A4, Times New Roman 12, con margini di 2,3 cm, interlinea 1,5 e rientro della prima riga di 0,42 cm.
+
+Sostituisci i campi del frontespizio e incolla il testo mantenendo lo stile del modello. Per aggiungere un capitolo, copia uno dei titoli di esempio e rinominalo. Quando il file è pronto puoi aprirlo nella [Checklist manoscritto](/checkmanoscritto/).
 
 ## La pagina
 

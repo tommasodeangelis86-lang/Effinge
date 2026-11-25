@@ -41,7 +41,7 @@ Prima di un preventivo, di un contratto o di un invio, **chiedi sempre quale mis
 
 Incolla qui il testo: il conto avviene nel tuo browser e non viene inviato da nessuna parte.
 
-<div class="calcolatore" data-calcolatore>
+<div class="calcolatore" id="calcolatore" data-calcolatore>
 <label class="calcolatore-campo" for="calcola-testo">Il tuo testo</label>
 <textarea id="calcola-testo" rows="7" placeholder="Incolla qui il testo…"></textarea>
 <dl class="calcolatore-risultati" aria-live="polite">
