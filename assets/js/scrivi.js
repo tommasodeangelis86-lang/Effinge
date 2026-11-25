@@ -685,7 +685,11 @@
   $('[data-comando="opere"]').addEventListener('click', function () { salva(true); renderOpere(); dlgOpere.showModal(); });
   $('[data-nuova-opera]').addEventListener('click', function () { salva(true); creaOpera('Nuova opera').then(function () { dlgOpere.close(); nomeOpera.focus(); nomeOpera.select(); }); });
   $$('dialog [data-chiudi]').forEach(function (b) { b.addEventListener('click', function () { b.closest('dialog').close(); }); });
-  $$('dialog').forEach(function (d) { d.addEventListener('click', function (e) { if (e.target === d) d.close(); }); });
+  $$('dialog').forEach(function (d) {
+    d.addEventListener('click', function (e) {
+      if (e.target === d && !d.querySelector('[data-chiudi]:disabled')) d.close();
+    });
+  });
 
   /* ——— Word: importa ed esporta (il modulo si carica solo quando serve) ——— */
   function word() {
@@ -786,7 +790,7 @@
       scriviPref(KEY_AUTORE, JSON.stringify(autore));
       $('#chiave-autore').value = '';
       mostraAutore();
-      avviso('Accesso autore attivo su questo dispositivo');
+      avviso('Pubblicazione GitHub attiva su questo dispositivo');
     }).catch(function (e) {
       esito(out, e.status === 401 ? 'GitHub non riconosce questa chiave: forse è scaduta o copiata male.' : e.message, 'errore');
     });
@@ -951,7 +955,7 @@
       btn.disabled = false;
     }).catch(function (e) {
       btn.disabled = false;
-      esito(out, e.status === 401 || e.status === 403 ? 'GitHub ha rifiutato la chiave: forse è scaduta o non ha il permesso di scrittura. Rifai «Accesso autore».' : 'Pubblicazione non riuscita: ' + e.message, 'errore');
+      esito(out, e.status === 401 || e.status === 403 ? 'GitHub ha rifiutato la chiave: forse è scaduta o non ha il permesso di scrittura. Apri «Pubblicazione GitHub» per sostituirla.' : 'Pubblicazione non riuscita: ' + e.message, 'errore');
     });
   });
   mostraAutore();
@@ -1034,6 +1038,7 @@
   var statoCloud = 'bozza in questa scheda';
   var dialogoCloud = $('#archivio-privato'), formCloud = $('[data-accesso-archivio]');
   var esitoCloud = $('[data-esito-archivio]');
+  var tastoArchivio = $('[data-salva-archivio]'), tastoUscita = $('[data-uscita-archivio]');
 
   function memoriaVuota() { return { opere: Object.create(null), sezioni: Object.create(null) }; }
   function clonaArchivio(x) { return cloud ? JSON.parse(JSON.stringify(x)) : x; }
@@ -1154,9 +1159,20 @@
 
   function mostraAccount() {
     if (!cloud) return;
-    formCloud.hidden = !!account && !accessoScaduto;
-    $('[data-sessione-archivio]').hidden = !account || accessoScaduto;
+    var connesso = !!account && !accessoScaduto;
+    var azione = connesso ? 'Salva' : 'Accedi';
+    formCloud.hidden = connesso;
+    $('[data-sessione-archivio]').hidden = !connesso;
     $('[data-account-archivio]').textContent = account ? account.email : '';
+    $('#h-archivio-privato').textContent = connesso ? 'Archivio privato' : 'Accedi all’archivio';
+    tastoArchivio.setAttribute('aria-label', azione);
+    tastoArchivio.title = connesso ? 'Salva nell’archivio privato' : 'Accedi all’archivio privato';
+    $('[data-testo-archivio]').textContent = azione;
+    $('[data-icona-accesso]').hidden = connesso;
+    $('[data-icona-salvataggio]').hidden = !connesso;
+    $('[data-nota-ospite]').hidden = !!account;
+    $('[data-nota-connesso]').hidden = !connesso;
+    tastoUscita.hidden = !account;
   }
 
   function apriUltima(lista, preferita) {
@@ -1197,10 +1213,10 @@
   }
 
   if (cloud) {
-    $('[data-salva-archivio]').addEventListener('click', async function () {
+    tastoArchivio.addEventListener('click', async function () {
       await window.EffingeScrivi.pronto;
       mostraAccount();
-      dialogoCloud.showModal();
+      if (!dialogoCloud.open) dialogoCloud.showModal();
     });
     formCloud.addEventListener('submit', async function (evento) {
       evento.preventDefault();
@@ -1228,15 +1244,24 @@
       }
     });
 
-    $('[data-salva-ora]').addEventListener('click', function () {
+    var tastoSalvaOra = $('[data-salva-ora]');
+    tastoSalvaOra.addEventListener('click', function () {
       salva(true).then(salvaCloud).then(function () {
         esitoCloud.textContent = 'Salvato nell’archivio privato.';
       }).catch(mostraErroreCloud);
     });
 
-    $('[data-esci-archivio]').addEventListener('click', async function (evento) {
-      var bottone = evento.currentTarget;
-      bottone.disabled = true;
+    var tastoEsciDialogo = $('[data-esci-archivio]');
+    var chiudiCloud = $('[data-chiudi]', dialogoCloud);
+    dialogoCloud.addEventListener('cancel', function (evento) {
+      if (tastoUscita.disabled) evento.preventDefault();
+    });
+
+    async function esciArchivio() {
+      if (!account || tastoUscita.disabled) return;
+      if (!dialogoCloud.open) dialogoCloud.showModal();
+      tastoUscita.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = true;
+      esitoCloud.textContent = 'Uscita in corso…';
       try {
         await salva(true);
         if (modifica !== salvata || scritturaCloud) await salvaCloud();
@@ -1257,9 +1282,12 @@
       } catch (errore) {
         mostraErroreCloud(errore);
       } finally {
-        bottone.disabled = false;
+        tastoUscita.disabled = tastoEsciDialogo.disabled = chiudiCloud.disabled = tastoSalvaOra.disabled = false;
+        chiudiCloud.focus();
       }
-    });
+    }
+    tastoEsciDialogo.addEventListener('click', esciArchivio);
+    tastoUscita.addEventListener('click', esciArchivio);
 
     $('[data-apri-bozze-locali]').addEventListener('click', async function () {
       var bozze = await scopriBozze().catch(memoriaVuota);

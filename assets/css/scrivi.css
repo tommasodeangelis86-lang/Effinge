@@ -16,6 +16,7 @@
 .pill:active{transform:scale(.97)}
 .pill[aria-pressed="true"],.pill.primario{background:var(--carta);border-color:var(--carta);color:var(--inchiostro)}
 .pill .ic{width:15px;height:15px}
+.ic-archivio{display:flex}
 .solo-mobile{display:none}
 
 /* ——— Tre colonne ——— */
@@ -173,6 +174,8 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
   .solo-mobile{display:inline-flex}
   .scrivi-barra{gap:8px}
   .barra-centro{order:3}
+  html:not(.focus-totale) .scrivi-pagina[data-archivio-url] .barra-centro{flex-wrap:wrap}
+  html:not(.focus-totale) .scrivi-pagina[data-archivio-url] .barra-centro .pill{padding-inline:9px;gap:5px}
   .barra-dx .pill span{display:none}
   .nome-opera{font-size:1.25rem}
   .scrivi-app{grid-template-columns:minmax(0,1fr);gap:12px}

@@ -58,7 +58,7 @@ async function prepara(ctx) {
 }
 
 async function entra(pagina) {
-  await pagina.locator('[data-salva-archivio]').click();
+  await pagina.getByRole('button', { name: 'Accedi', exact: true }).click();
   await pagina.getByRole('textbox', { name: 'Email' }).fill(autore.email);
   await pagina.getByLabel('Password', { exact: true }).fill('password di prova');
   await pagina.getByRole('button', { name: 'Accedi per salvare' }).click();
@@ -84,6 +84,8 @@ try {
   }));
   await pagina.reload();
   await pagina.evaluate(() => window.EffingeScrivi.pronto);
+  assert.equal(await pagina.getByRole('button', { name: 'Accedi', exact: true }).isVisible(), true);
+  assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), false);
   await editor.fill('Testo scritto come ospite.');
   await pagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('bozza in questa scheda'));
   const download = pagina.waitForEvent('download');
@@ -97,6 +99,9 @@ try {
   assert.match(archivio.dati.sezioni[0].html, /Testo scritto come ospite\./);
   assert.equal(archivio.dati.opere.length, 1, 'L’accesso non importa altre opere locali');
   await pagina.locator('#archivio-privato [data-chiudi]').click();
+  assert.equal(await pagina.getByRole('button', { name: 'Salva', exact: true }).isVisible(), true);
+  assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), true);
+  assert.equal(await pagina.evaluate(() => document.querySelector('[data-uscita-archivio]').getBoundingClientRect().right <= innerWidth), true);
   await editor.fill('Testo aggiornato nell’archivio.');
   await pagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('salvato nell’archivio'));
   assert.ok(scritture > 1);
@@ -106,9 +111,14 @@ try {
   const altraPagina = await prepara(altroCtx);
   await entra(altraPagina);
   assert.equal(await altraPagina.locator('.scrivi-editor[contenteditable]').innerText(), 'Testo aggiornato nell’archivio.');
-  await altraPagina.locator('[data-esci-archivio]').click();
+  await altraPagina.reload();
+  await altraPagina.evaluate(() => window.EffingeScrivi.pronto);
+  await altraPagina.getByRole('button', { name: 'Esci', exact: true }).click();
   await altraPagina.getByRole('button', { name: 'Accedi per salvare' }).waitFor();
   assert.equal((await altraPagina.locator('.scrivi-editor[contenteditable]').innerText()).trim(), '');
+  await altraPagina.reload();
+  await altraPagina.evaluate(() => window.EffingeScrivi.pronto);
+  assert.equal(await altraPagina.getByRole('button', { name: 'Accedi', exact: true }).isVisible(), true);
 
   await pagina.locator('[data-comando="opere"]').click();
   await pagina.locator('[data-apri-bozze-locali]').click();
@@ -122,6 +132,11 @@ try {
   await pagina.waitForFunction(() => document.querySelector('[data-stato]').textContent.includes('da riprovare'));
   assert.equal(await editor.innerText(), 'Versione ancora nella scheda.');
   assert.match(archivio.dati.sezioni[0].html, /Testo aggiornato/);
+  await pagina.getByRole('button', { name: 'Esci', exact: true }).click();
+  await pagina.waitForFunction(() => document.querySelector('[data-esito-archivio]').textContent.includes('un’altra scheda'));
+  await pagina.locator('#archivio-privato [data-chiudi]').click();
+  assert.equal(await editor.innerText(), 'Versione ancora nella scheda.');
+  assert.equal(await pagina.getByRole('button', { name: 'Esci', exact: true }).isVisible(), true);
   console.log('Ospite, esportazione, accesso, salvataggio, secondo browser, uscita, recupero locale e conflitto verificati.');
 } finally {
   await browser.close();

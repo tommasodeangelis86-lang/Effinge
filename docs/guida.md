@@ -137,14 +137,14 @@ pagina nuova con lo stile «Titolo 1». Il file si può reimportare con la stess
 a piè di pagina diventano note in fondo al capitolo, non note di Word.
 
 **Pubblica sul sito (solo per te).** Dal foglio puoi pubblicare il capitolo aperto come testo di
-Effinge, senza passare dal pannello. Serve una volta sola, su ogni dispositivo, l’«Accesso autore»:
+Effinge, senza passare dal pannello. Il collegamento «Pubblicazione GitHub» va fatto una volta per dispositivo.
 
 1. Su GitHub crea una chiave personale: vai su **github.com/settings/personal-access-tokens/new**.
    - *Token name*: `Effinge Scrivi`; *Expiration*: la durata che preferisci (alla scadenza ne crei un’altra).
    - *Repository access*: **Only select repositories** → **Effinge**.
    - *Permissions* → *Repository permissions* → **Contents: Read and write**.
    - **Generate token** e copia la chiave (inizia con `github_pat_`; GitHub la mostra una volta sola).
-2. In Scrivi: **Opere** → **Accesso autore** → incolla la chiave → **Collega**.
+2. In Scrivi apri **Opere → Pubblicazione GitHub**, incolla la chiave e premi **Collega**.
 3. In alto compare **Pubblica sul sito**: scegli titolo, categoria, data ed estratto, «Pubblica subito» o
    «Salva come bozza», e conferma. Dopo circa un minuto il testo è online (le bozze solo in anteprima).
    Ripubblicando lo stesso capitolo, il testo sul sito viene aggiornato.
