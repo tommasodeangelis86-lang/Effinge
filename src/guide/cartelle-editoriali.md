@@ -69,7 +69,7 @@ La formula è sempre la stessa: **battute spazi inclusi ÷ battute per cartella*
 - **Word**: scheda *Revisione* → *Conteggio parole* → «Caratteri (spazi inclusi)».
 - **LibreOffice Writer**: menu *Strumenti* → *Conteggio parole* → «Caratteri inclusi spazi».
 - **Google Documenti**: menu *Strumenti* → *Conteggio parole* → «Caratteri».
-- **Foglio Effinge**: sotto il titolo di ogni capitolo trovi parole, battute e cartelle mentre scrivi, e nel pannello dei capitoli il totale dell’opera. Puoi scegliere cartelle da 1800 o da 2000.
+- **Foglio Effinge**: sopra il foglio trovi parole, battute e cartelle del capitolo mentre scrivi, e nel pannello dei capitoli il totale dell’opera. Puoi scegliere cartelle da 1800 o da 2000.
 
 Esempio: un racconto di 45.000 battute spazi inclusi fa 25 cartelle da 1800 (45.000 ÷ 1800), oppure 22,5 cartelle da 2000.
 

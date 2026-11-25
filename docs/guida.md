@@ -119,8 +119,8 @@ programma di scrittura per libri, sotto la lampada.
   (*), annulla, ripeti e cancella formattazione. Funzionano anche Ctrl/Cmd + B, I, U, Z.
 - **In alto**: il titolo dell’opera (si modifica toccandolo), **Opere** per passare da un’opera
   all’altra o crearne una nuova, **Importa da Word** ed **Esporta in Word**.
-- Sotto il titolo di ogni capitolo: parole, battute e cartelle (2000 battute spazi inclusi) e il
-  pulsante **Manoscritto** (A4, margini 2,3 cm, interlinea 1,5, rientro 0,42 cm).
+- Sopra il foglio trovi i conteggi del capitolo in parole, battute e cartelle e i comandi **Riscrivi**,
+  **Cartella** e **Manoscritto** (A4, margini 2,3 cm, interlinea 1,5, rientro 0,42 cm).
 
 **Importa da Word.** Scegli un file .docx: il programma ti mostra cosa ha trovato (copertina, parti,
 capitoli, parole) e, se confermi, crea una nuova opera senza toccare quella aperta. Ogni paragrafo

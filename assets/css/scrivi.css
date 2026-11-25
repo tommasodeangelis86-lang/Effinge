@@ -74,22 +74,22 @@ li:hover .azioni-cap,li:focus-within .azioni-cap,.anteprima[aria-current="true"]
 
 /* ——— Il foglio ——— */
 .centro-foglio{min-width:0}
+.scrivi-info{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 14px;max-width:48rem;margin:0 auto 10px}
+.scrivi-azioni{display:flex;gap:6px}
+.scrivi-azioni .pill{padding-inline:10px}
+.scrivi-azioni [data-riscrivi]{min-inline-size:7.5em;justify-content:center}
+/* Due righe riservate al conteggio e al salvataggio tengono fermo il foglio. */
+.scrivi-stato{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;block-size:2.8em;font:450 .6875rem/1.4 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--testo-2);font-variant-numeric:tabular-nums}
 .scrivi-foglio{max-width:48rem;margin:0 auto;min-height:calc(100svh - 170px)}
 .scrivi-foglio .contenuto{padding:clamp(36px,6vw,84px) clamp(22px,7vw,92px) clamp(80px,12vw,140px)}
 .scrivi-foglio .lampada.buio{width:420cqw;height:420cqw}
 .scrivi-foglio .lampada.calore{width:150cqw;height:150cqw}
 html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transition:opacity .6s ease}
-.scrivi-testa{display:grid;gap:14px;margin-bottom:clamp(26px,5vw,44px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
+.scrivi-testa{margin-bottom:clamp(26px,5vw,44px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
 .scrivi-nome{flex:1;min-width:0;display:grid;gap:6px}
 .scrivi-etichetta{font:500 .6875rem/1 var(--ui);letter-spacing:.12em;text-transform:uppercase;color:var(--inchiostro-2)}
 .scrivi-titolo{width:100%;min-width:0;border:0;background:transparent;padding:0;margin:0;font:300 clamp(1.875rem,4.5vw,2.75rem)/1.1 var(--display);color:var(--inchiostro);outline:none;caret-color:var(--inchiostro)}
 .scrivi-titolo::placeholder{color:color-mix(in srgb,var(--inchiostro) 38%,transparent)}
-.scrivi-info{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px}
-.scrivi-stato{font:450 .6875rem/1.4 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--inchiostro-2);font-variant-numeric:tabular-nums}
-.scrivi-manoscritto{border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);background:transparent;color:var(--inchiostro-2);border-radius:999px;padding:7px 12px;font:500 .6875rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .2s ease,color .2s ease,transform .16s var(--ease)}
-.scrivi-manoscritto:hover{color:var(--inchiostro)}
-.scrivi-manoscritto:active{transform:scale(.97)}
-.scrivi-manoscritto[aria-pressed="true"]{background:var(--inchiostro);border-color:var(--inchiostro);color:var(--carta)}
 
 /* ——— L'editor ——— */
 .scrivi-area{position:relative}
@@ -127,7 +127,7 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 @keyframes luce-lettera{0%{opacity:0}8%{opacity:1}35%{opacity:1}100%{opacity:0}}
 
 /* ——— Manoscritto: A4, margini 2,3 cm, interlinea 1,5, rientro 0,42 cm ——— */
-.manoscritto .scrivi-foglio{max-width:21cm}
+.manoscritto .scrivi-info,.manoscritto .scrivi-foglio{max-width:21cm}
 .manoscritto .scrivi-foglio .contenuto{padding:10.952cqw}
 .manoscritto .scrivi-editor{font-size:max(1rem,2.0155cqw);line-height:1.5}
 .manoscritto .scrivi-editor p{text-indent:.9921em}
@@ -169,6 +169,7 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
 /* ——— Telefono: i capitoli diventano un pannello che si apre ——— */
 @media (max-width:820px){
   .scrivi-pagina{padding-left:8px;padding-right:8px}
+  .scrivi-info{grid-template-columns:minmax(0,1fr)}
   .solo-mobile{display:inline-flex}
   .scrivi-barra{gap:8px}
   .barra-centro{order:3}

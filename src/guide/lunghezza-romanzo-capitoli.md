@@ -14,7 +14,7 @@ faq:
   - d: "Che differenza c’è tra una pagina di Word e una cartella?"
     r: "Sono due misure diverse. Il numero di pagine cambia con carattere, margini e interlinea. Le cartelle si ricavano dal conteggio delle battute spazi inclusi."
   - d: "Come tengo d’occhio la lunghezza mentre scrivo?"
-    r: "In Foglio Effinge trovi parole, battute e cartelle sotto il titolo del capitolo, e il totale dell’opera nel pannello dei capitoli. Puoi scegliere cartelle da 1800 o da 2000 battute."
+    r: "In Foglio Effinge trovi parole, battute e cartelle del capitolo sopra il foglio, e il totale dell’opera nel pannello dei capitoli. Puoi scegliere cartelle da 1800 o da 2000 battute."
 ---
 
 La lunghezza di un romanzo si valuta in due momenti. Mentre scrivi, ti aiuta a vedere quanto spazio dai alle scene e ai personaggi. Quando prepari l’invio, ti serve per verificare se il manoscritto rientra nelle misure richieste da un editore, un’agenzia o un concorso.
@@ -58,4 +58,4 @@ Un capitolo di **6.000 battute** occupa circa **3,3 cartelle da 1800**. Uno di *
 
 ## Controllare il ritmo mentre scrivi
 
-In [Foglio Effinge](/scrivi/) trovi **parole, battute e cartelle** sotto il titolo del capitolo e il totale dell’opera nel pannello dei capitoli. Il pulsante **Cartella** ti fa passare da 2000 a 1800 battute. Usa questi numeri durante la rilettura per individuare i capitoli che meritano attenzione, poi guarda che cosa succede in quelle pagine.
+In [Foglio Effinge](/scrivi/) trovi **parole, battute e cartelle** del capitolo sopra il foglio e il totale dell’opera nel pannello dei capitoli. Il pulsante **Cartella** ti fa passare da 2000 a 1800 battute. Usa questi numeri durante la rilettura per individuare i capitoli che meritano attenzione, poi guarda che cosa succede in quelle pagine.
