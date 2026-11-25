@@ -190,6 +190,7 @@ html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transit
   .azioni-cap{opacity:1}
 }
 @media (561px <= width <= 700px){.barra nav.barra-principale{gap:clamp(8px,1.8vw,13px)}}
+@media (max-width:700px){.scrivi-pagina{--posizione-barra:calc(76px + env(safe-area-inset-top,0px))}}
 @media (max-width:560px){
   .scrivi-pagina{--altezza-barra:81px}
   html:not(.focus-totale) .scrivi-barra{display:grid;grid-template-columns:auto auto;border-radius:16px}

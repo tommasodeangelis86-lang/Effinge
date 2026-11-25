@@ -112,6 +112,14 @@ try {
           (!barra || fineMenu <= barra.getBoundingClientRect().top);
       });
       assert.ok(entra, `${percorso} entra nello schermo a ${width}px`);
+      if (percorso === '/scrivi/') {
+        const barreSeparate = await pagina.evaluate(() => {
+          scrollTo(0, 600);
+          const menu = document.querySelector('header.barra').getBoundingClientRect();
+          return menu.bottom <= document.querySelector('.scrivi-barra').getBoundingClientRect().top;
+        });
+        assert.ok(barreSeparate, `Menu e barra del Foglio separati a ${width}px durante lo scorrimento`);
+      }
     }
   }
   assert.deepEqual(errori, []);

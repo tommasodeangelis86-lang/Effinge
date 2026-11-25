@@ -13,14 +13,14 @@ stile: /assets/css/strumenti.css
       <div class="corpo" data-lettura>
         {% if strumento == 'modello' %}
         <section id="strumento" class="calcolatore strumento-modello" aria-label="Scarica il modello">
-          <figure>
-            <div class="anteprima-30x60" aria-hidden="true"><div></div></div>
-            <figcaption>Anteprima A4 con 30 righe da 60 posizioni</figcaption>
-          </figure>
           <div class="strumento-azioni">
             <a class="pulsante" href="/assets/templates/manoscritto-1800-effinge.docx" download>Scarica Word (.docx)</a>
             <a class="pulsante" href="/assets/templates/manoscritto-1800-effinge.odt" download>Scarica OpenDocument (.odt)</a>
           </div>
+          <figure>
+            <div class="anteprima-30x60" aria-hidden="true"><div></div></div>
+            <figcaption>Anteprima A4 con 30 righe da 60 posizioni</figcaption>
+          </figure>
           <a class="strumento-foglio" href="/scrivi/">Inizia a scrivere direttamente nel browser con Foglio Effinge →</a>
         </section>
         {% else %}

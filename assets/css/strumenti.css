@@ -8,7 +8,7 @@
 .strumento-anteprima{max-height:20rem;overflow:auto;white-space:pre-wrap;overflow-wrap:anywhere;padding:.8rem 1rem;border:1px solid color-mix(in srgb,var(--inchiostro) 22%,transparent);border-radius:8px;margin:.75rem 0 1rem}
 .strumento-anteprima mark{background:color-mix(in srgb,var(--luce) 60%,var(--carta));color:var(--inchiostro);border-radius:2px}
 .strumento-anteprima .avverbio{text-decoration:underline;text-underline-offset:.16em}
-.strumento-modello figure{margin:0 auto 1em;text-align:center}
+.strumento-modello figure{margin:1em auto 0;text-align:center}
 .anteprima-30x60{width:min(100%,15rem);aspect-ratio:210/297;margin:auto;display:grid;place-items:center;background:color-mix(in srgb,var(--carta) 66%,white);border:1px solid color-mix(in srgb,var(--inchiostro) 18%,transparent);box-shadow:0 8px 18px -10px var(--inchiostro)}
 .anteprima-30x60 div{width:72.9%;height:85.52%;background-image:linear-gradient(to right,color-mix(in srgb,var(--inchiostro) 10%,transparent) 1px,transparent 1px),linear-gradient(to bottom,color-mix(in srgb,var(--inchiostro) 20%,transparent) 1px,transparent 1px);background-size:calc(100% / 60) 100%,100% calc(100% / 30);border:1px solid color-mix(in srgb,var(--inchiostro) 25%,transparent)}
 .strumento-azioni{display:flex;flex-wrap:wrap;gap:.55rem;justify-content:center}
