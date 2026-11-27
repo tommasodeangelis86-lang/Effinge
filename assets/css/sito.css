@@ -63,38 +63,42 @@ button{font:inherit;color:inherit}
 }
 
 /* ——— Il foglio ——— */
-.foglio{position:relative;container-type:inline-size;background:var(--carta);color:var(--inchiostro);overflow:hidden;border-radius:2px;
+.foglio{position:relative;isolation:isolate;container-type:inline-size;color-scheme:only light;background:var(--carta);color:var(--inchiostro);overflow:hidden;border-radius:2px;
   box-shadow:0 1px 0 rgba(255,255,255,.04),0 30px 80px -20px rgba(0,0,0,.85),0 12px 30px -12px rgba(0,0,0,.7)}
 /* grana appena percettibile: carta vera, non carta antica */
 .foglio::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;opacity:.5;mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .42 0 0 0 0 .38 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 /* La lampada: il buio intorno al cono di luce e il calore al centro. Si muovono solo con transform. */
-.lampada{position:absolute;left:0;top:0;width:260cqw;height:260cqw;pointer-events:none;z-index:3;border-radius:50%;will-change:transform,opacity;
-  transform:translate3d(var(--lx,50cqw),var(--ly,30cqw),0) translate(-50%,-50%)}
+.lampada{--lampada-larghezza:260%;position:absolute;left:0;top:0;width:var(--lampada-larghezza);height:0;padding-top:var(--lampada-larghezza);
+  pointer-events:none;z-index:3;border-radius:50%;will-change:transform,opacity}
 .lampada.buio{background:radial-gradient(closest-side,rgba(9,8,7,0) 0%,rgba(9,8,7,.12) 9%,rgba(9,8,7,.5) 24%,rgba(9,8,7,.82) 44%,rgba(9,8,7,.95) 100%);opacity:var(--buio,.94)}
 /* oltre il cerchio il buio continua (fogli molto alti, telefono): un'ombra dello stesso colore del bordo */
 .lampada.buio{border-radius:0;box-shadow:0 0 0 300vmax rgba(9,8,7,.95)}
-.lampada.calore{width:110cqw;height:110cqw;mix-blend-mode:multiply;opacity:var(--calore,.9);
+.lampada.calore{--lampada-larghezza:110%;mix-blend-mode:multiply;opacity:var(--calore,.9);
+  background:radial-gradient(closest-side,rgba(240,203,138,.35),rgba(240,203,138,.15) 40%,transparent 75%);
   background:radial-gradient(closest-side,color-mix(in srgb,var(--luce) 42%,#fff),color-mix(in srgb,var(--luce) 22%,#fff) 40%,rgba(255,255,255,0) 75%)}
 .foglio > .contenuto{position:relative;z-index:1}
 /* Senza JavaScript la lampada è ferma e generosa; tutto resta leggibile. */
 html:not(.js) .lampada.buio{opacity:.35}
 
 /* ——— Il foglio d'apertura ——— */
-.apertura .palco{position:relative;display:grid;place-items:center;min-height:100svh;
+.apertura .palco{position:relative;display:grid;place-items:center;min-height:100vh;min-height:100svh;
   padding:calc(88px + env(safe-area-inset-top,0px)) 0 calc(84px + env(safe-area-inset-bottom,0px))}
-.apertura .foglio{width:min(88vw,clamp(16rem,calc((100svh - 172px) / 1.414),35rem))}
-.apertura .contenuto{min-height:141.4cqw;display:flex;flex-direction:column;justify-content:center;padding:15cqw 11cqw;overflow-wrap:anywhere}
+.apertura .foglio{width:88vw;max-width:35rem;width:min(88vw,clamp(16rem,calc((100svh - 172px) / 1.414),35rem))}
+.apertura .contenuto{min-height:min(124vw,49.5rem);min-height:141.4cqw;display:flex;flex-direction:column;justify-content:center;
+  padding:3rem 11%;padding:15cqw 11cqw;overflow-wrap:break-word;overflow-wrap:anywhere}
 .apertura .lampada.buio{background:radial-gradient(closest-side,transparent,rgba(9,8,7,.06) 9%,rgba(9,8,7,.15) 24%,rgba(9,8,7,.27) 55%,rgba(9,8,7,.36));
-  box-shadow:0 0 0 300vmax rgba(9,8,7,.36)}
-.intestazione{position:absolute;top:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:500 1.75cqw/1 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--inchiostro-2)}
-.titolo{margin:0 0 0 -.06em;font:300 19cqw/.9 var(--display);letter-spacing:-.01em}
-.apertura-progetto{margin:6cqw 0 0;font:300 6.4cqw/1.18 var(--display)}
+  box-shadow:none}
+.intestazione{position:absolute;top:6%;top:8cqw;left:11%;left:11cqw;right:11%;right:11cqw;display:flex;justify-content:space-between;
+  font:500 .625rem/1 var(--ui);font-size:1.75cqw;letter-spacing:.18em;text-transform:uppercase;color:var(--inchiostro-2)}
+.titolo{margin:0 0 0 -.06em;font:300 clamp(3rem,16.7vw,6.65rem)/.9 var(--display);font-size:19cqw;letter-spacing:-.01em}
+.apertura-progetto{margin:1.25rem 0 0;margin-top:6cqw;font:300 clamp(1.25rem,5.6vw,2.24rem)/1.18 var(--display);font-size:6.4cqw}
 .apertura-progetto p{margin:0}
 .apertura-progetto p + p{font-style:italic}
-.sottotitolo{margin:5cqw 0 0;font:italic 300 5.4cqw/1.25 var(--display);max-width:24ch}
+.sottotitolo{margin:1rem 0 0;margin-top:5cqw;font:italic 300 clamp(1.05rem,4.75vw,1.89rem)/1.25 var(--display);font-size:5.4cqw;max-width:24ch}
 .apertura .intestazione,.apertura .firma{color:var(--inchiostro)}
-.firma{position:absolute;bottom:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:400 1.75cqw/1 var(--ui);letter-spacing:.06em;color:var(--inchiostro-2)}
+.firma{position:absolute;bottom:6%;bottom:8cqw;left:11%;left:11cqw;right:11%;right:11cqw;display:flex;justify-content:space-between;
+  font:400 .625rem/1 var(--ui);font-size:1.75cqw;letter-spacing:.06em;color:var(--inchiostro-2)}
 .indizio{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:450 .75rem/1 var(--ui);letter-spacing:.08em;color:var(--testo-2)}
 .indizio i{display:block;width:1px;height:36px;background:linear-gradient(var(--testo-3),transparent)}
 .riaccendi{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));background:none;border:0;padding:8px 0;font:450 .75rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-2);cursor:pointer;transition:color .2s ease}
@@ -233,9 +237,9 @@ html:not(.js) .lampada.buio{opacity:.35}
 .pulsante:active{transform:scale(.97)}
 .scrivi-anteprima{display:block;aspect-ratio:1.414/1;transition:transform .6s var(--ease)}
 .scrivi-anteprima:hover{transform:translateY(-3px) rotate(-.4deg)}
-.scrivi-anteprima .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 9cqw}
-.scrivi-anteprima .intestazione{left:9cqw;right:9cqw;top:6.5cqw;font-size:1.5cqw}
-.scrivi-anteprima-frase{margin:0;font:italic 300 6.4cqw/1.2 var(--display);color:var(--inchiostro);white-space:nowrap}
+.scrivi-anteprima .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 9%}
+.scrivi-anteprima .intestazione{left:9%;right:9%;top:9%;top:6.5cqw;font-size:1.5cqw}
+.scrivi-anteprima-frase{margin:0;font:italic 300 1.5rem/1.2 var(--display);font-size:6.4cqw;color:var(--inchiostro);white-space:nowrap}
 .scrivi-anteprima-righe{display:grid;gap:3.6cqw;margin-top:6cqw}
 .scrivi-anteprima-righe i{display:block;height:1px;background:color-mix(in srgb,var(--inchiostro) 14%,transparent)}
 .scrivi-anteprima-righe i:nth-child(2){width:86%}.scrivi-anteprima-righe i:nth-child(3){width:58%}
@@ -302,8 +306,8 @@ html[data-sfondo] body::after{content:"";position:fixed;top:0;right:0;bottom:0;l
 .buio input:focus-visible{outline:1.5px solid var(--luce);outline-offset:4px;border-radius:6px}
 /* Pagina di lettura: lampada sul foglio e comandi in basso a sinistra. */
 .lettura-pagina .foglio{overflow:hidden}
-.lettura-pagina .foglio .lampada.buio{width:520cqw;height:520cqw}
-.lettura-pagina .foglio .lampada.calore{width:170cqw;height:170cqw}
+.lettura-pagina .foglio .lampada.buio{--lampada-larghezza:520%}
+.lettura-pagina .foglio .lampada.calore{--lampada-larghezza:170%}
 html:not(.lampada-accesa) .lettura-pagina .foglio .lampada{opacity:0!important;transition:opacity .6s ease}
 .lampada-accesa .vignetta{opacity:0}
 .comandi{right:auto;left:max(16px,env(safe-area-inset-left,0px))}

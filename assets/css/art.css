@@ -168,8 +168,8 @@ body.art-sito {
   height: auto;
 }
 
-.art-lampada > .lampada.buio { width: 150cqw; height: 150cqw; filter: opacity(.9); }
-.art-lampada > .lampada.calore { width: 75cqw; height: 75cqw; filter: opacity(.55); }
+.art-lampada > .lampada.buio { --lampada-larghezza: 150%; filter: opacity(.9); }
+.art-lampada > .lampada.calore { --lampada-larghezza: 75%; filter: opacity(.55); }
 .art-lampada > .lampada { transition: filter .6s ease; }
 html.art-luce-piena .art-lampada > .lampada { filter: opacity(0); }
 

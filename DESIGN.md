@@ -95,8 +95,8 @@ Le sezioni nuove **non** devono avere un fondo proprio: ereditano lo sfondo e il
 
 Componente `Lampada` in `assets/js/sito.js` (`window.EffingeLampada`). Due strati dentro un contenitore con `position:relative; overflow:hidden; container-type:inline-size`:
 
-- **`.lampada.buio`**: un gradiente radiale trasparente al centro, che diventa `rgba(9,8,7,.95)` ai bordi. Misura `260cqw`, con `box-shadow: 0 0 0 300vmax rgba(9,8,7,.95)` perché il buio continui oltre il cono. Opacità da `.99` (spenta) a `.86` (intensità piena).
-- **`.lampada.calore`**: la luce calda `--luce` in `mix-blend-mode: multiply`. Misura `110cqw`.
+- **`.lampada.buio`**: un gradiente radiale trasparente al centro, che diventa `rgba(9,8,7,.95)` ai bordi. Misura il 260% della larghezza del foglio. Sui fogli lunghi un’ombra estende il buio oltre il cono. Opacità da `.99` (spenta) a `.86` (intensità piena).
+- **`.lampada.calore`**: la luce calda `--luce` in `mix-blend-mode: multiply`. Misura il 110% della larghezza del foglio.
 - Si muove **solo con `transform`** e un inseguimento morbido esponenziale (`lag` 220 ms di base, 900 ms a riposo, 140 ms col mouse).
 
 Come si comporta:
@@ -121,7 +121,7 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 ## 7. Il foglio
 
 - `.foglio`: fondo `--carta`, testo `--inchiostro`, `border-radius:2px`, ombra profonda e scura (mai colorata).
-- In apertura il foglio è piatto, con proporzioni A4 e spazio per far crescere il testo quando serve.
+- In apertura il foglio è piatto, con proporzioni A4 e spazio per far crescere il testo quando serve. Le misure di riserva in `vw`, `vh` e `rem` tengono visibile il foglio anche sui browser che ignorano `svh` o `cqw`.
 - Intestazioni e piedi del foglio: maiuscoletto `--ui` piccolissimo, `--inchiostro-2`.
 
 ## 8. Componenti
