@@ -187,9 +187,9 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 - Eleventy 3: i sorgenti sono in `src/`, il risultato in `_site/`. Si pubblica su GitHub Pages con `.github/workflows/pubblica.yml`.
 - I contenuti modificabili stanno in `src/_data/*.json` e `src/testi/*.md`, gestiti dal pannello Pages CMS (`.pages.yml`). Un campo nuovo va aggiunto anche lì.
 - **CSP** generata dal transform `sicurezza` in `eleventy.config.js`:
-  - script solo locali; script inline solo nel `<head>` (calcolati automaticamente);
-  - nessuna risorsa esterna (font, script, immagini, iframe).
-- Niente librerie o CDN esterne. Il codice è JavaScript semplice in `sito.js` (un solo IIFE, ES5 compatibile).
+  - gli script inline del `<head>` sono autorizzati per hash. I font sono locali;
+  - le pagine pubbliche con il pannello «Preferenze statistiche» ammettono i domini di Tag Manager e Analytics. `statistiche.js` carica il contenitore soltanto con un consenso esplicito. In Scrivi, Checklist manoscritto e Strumenti non compaiono né il pannello né le eccezioni CSP.
+- Il pannello delle statistiche usa gli stessi colori e pulsanti del sito. «Rifiuta» e «Consenti» hanno lo stesso peso visivo. Il piè di pagina riapre il pannello anche dopo la prima scelta.
 - Test: `npx @11ty/eleventy`, poi `node tests/sito.mjs`, `node tests/guide.mjs`, `node tests/art.mjs`, `node tests/scrivi.mjs` e `node tests/voce.mjs` (Playwright; le API dei fornitori sono simulate).
 - `node tests/checkmanoscritto.mjs` prova analisi, correzioni, esportazione e riapertura con un DOCX sintetico.
 - **Chiavi AI** di chi scrive: solo nel suo browser (`localStorage`, oppure `sessionStorage` se toglie «Ricorda»), inviate solo al fornitore. La CSP apre `api.anthropic.com`, `api.openai.com`, `api.elevenlabs.io`, `generativelanguage.googleapis.com` e `media-src blob:` **solo nella pagina Scrivi**. Claude si chiama con l'SDK ufficiale (`assets/vendor/anthropic-1.12.0.js`, rigenerabile con `npm run vendor:anthropic`), caricato solo quando servono i suggerimenti.
