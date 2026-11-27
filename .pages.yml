@@ -269,11 +269,11 @@ content:
             type: string
             pattern: { regex: "^#[0-9a-fA-F]{6}$", message: "Scrivi un codice colore come #E9E5DB." }
       - name: progetto
-        label: Il progetto (le righe che si accendono)
+        label: Presentazione sul foglio d’apertura
         type: object
         fields:
-          - { name: mostra, label: Mostra questa scena, type: boolean }
-          - { name: titolo, label: Titolo, type: string }
+          - { name: mostra, label: Mostra la presentazione, type: boolean }
+          - { name: titolo, label: Titolo per lettori di schermo, type: string }
           - { name: righe, label: Righe, type: string, list: true }
       - name: home
         label: Homepage

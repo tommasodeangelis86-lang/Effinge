@@ -4,45 +4,41 @@ permalink: /
 ---
 {%- set s = impostazioni -%}
 {%- set a = s.animazione -%}
+{%- macro parametriScrittura(velocita, ritardo) -%}
+data-enabled="{{ 'true' if a.attiva else 'false' }}" data-speed="{{ velocita }}" data-delay="{{ ritardo }}" data-fade="{{ a.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if a.cursore else 'false' }}"
+{%- endmacro -%}
 {%- macro scritturaAllaVista() -%}
-data-scrittura-alla-vista data-enabled="{{ 'true' if a.attiva else 'false' }}" data-speed="{{ a.velocita }}" data-delay="{{ a.ritardo }}" data-fade="{{ a.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if a.cursore else 'false' }}"
+data-scrittura-alla-vista {{ parametriScrittura(a.velocita, a.ritardo) }}
+{%- endmacro -%}
+{%- macro scritturaRiga() -%}
+data-scrittura {{ parametriScrittura((a.velocita or 85) / 3, 0) }}
 {%- endmacro -%}
 <main id="contenuto">
-  <section class="scena apertura" aria-label="Apertura">
+  <section class="apertura" aria-label="Apertura">
     <div class="palco">
       <div class="foglio">
         <div class="contenuto">
           <div class="intestazione"><span aria-hidden="true">{{ s.apertura.intestazione_sinistra }}</span><h2 class="intestazione-h">{{ s.apertura.intestazione_destra }}</h2></div>
-          <h1 class="titolo" data-scrittura data-enabled="{{ 'true' if a.attiva else 'false' }}" data-speed="{{ a.velocita }}" data-delay="{{ a.ritardo }}" data-fade="{{ a.dissolvenza }}" data-intensity="{{ (s.lampada.intensita or 80) / 100 }}" data-color="{{ s.lampada.colore | colore('#F0CB8A') }}" data-cursor="{{ 'true' if a.cursore else 'false' }}" data-repeat="{{ a.ripetizione or 'sempre' }}">{{ s.apertura.scritta }}</h1>
+          <h1 class="titolo" data-scrittura {{ parametriScrittura(a.velocita, a.ritardo) }} data-repeat="{{ a.ripetizione or 'sempre' }}">{{ s.apertura.scritta }}</h1>
+          {%- if s.progetto.mostra and s.progetto.righe.length %}
+          <div class="apertura-progetto" id="progetto"{% if s.progetto.titolo %} role="group" aria-label="{{ s.progetto.titolo }}"{% endif %}>
+            {%- for r in s.progetto.righe %}
+            <p {{ scritturaRiga() }}>{{ r }}</p>
+            {%- endfor %}
+          </div>
+          {%- endif %}
           {%- if s.apertura.sottotitolo %}
-          <p class="sottotitolo">{{ s.apertura.sottotitolo }}</p>
+          <p class="sottotitolo" {{ scritturaRiga() }}>{{ s.apertura.sottotitolo }}</p>
           {%- endif %}
           <div class="firma" aria-hidden="true"><span>{{ s.apertura.firma_sinistra }}</span><span>{{ s.apertura.firma_destra }}</span></div>
         </div>
       </div>
       <div class="indizio" aria-hidden="true">Scorri<i></i></div>
       {%- if a.attiva %}
-      <button class="riaccendi" type="button" data-riaccendi>Riscrivi</button>
+      <button class="riaccendi" type="button" data-riaccendi hidden>Riscrivi</button>
       {%- endif %}
     </div>
   </section>
-
-  {%- if s.progetto.mostra and s.progetto.righe.length %}
-  <section class="scena progetto" id="progetto" aria-labelledby="h-progetto">
-    <div class="palco">
-      <div class="foglio">
-        <div class="contenuto">
-          <div class="intestazione"><h2 id="h-progetto" style="margin:0;font:inherit;letter-spacing:inherit">{{ s.progetto.titolo }}</h2><span aria-hidden="true">{{ s.sito.nome }}</span></div>
-          <ol class="righe">
-            {%- for r in s.progetto.righe %}
-            <li>{{ r }}</li>
-            {%- endfor %}
-          </ol>
-        </div>
-      </div>
-    </div>
-  </section>
-  {%- endif %}
 
   {%- set ultimo = collections.testi[0] %}
   {%- set sc = s.home.scrivi %}

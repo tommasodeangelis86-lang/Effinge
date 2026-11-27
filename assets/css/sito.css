@@ -1,6 +1,6 @@
 /* Effinge — «La pagina e la lampada»
    Una stanza buia, un foglio vero, una lampada fioca che scorre sulla scrittura.
-   Layout: scene a scorrimento fissate (sticky), una per schermo; tutto il resto è quieto. */
+   Un solo foglio in apertura, poi le sezioni della homepage. */
 :root{
   --stanza:#0A0A09;
   --stanza-2:#121110;
@@ -80,21 +80,24 @@ button{font:inherit;color:inherit}
 /* Senza JavaScript la lampada è ferma e generosa; tutto resta leggibile. */
 html:not(.js) .lampada.buio{opacity:.35}
 
-/* ——— Scena 1: apertura ——— */
-.scena{position:relative}
-.scena > .palco{position:sticky;top:0;height:100svh;display:grid;place-items:center;overflow:hidden}
-.apertura{height:280svh}
-.apertura .palco{perspective:1600px;background:radial-gradient(60% 55% at 50% 42%,#171512 0%,var(--stanza) 70%)}
-.apertura .foglio{width:min(86vw,58svh);aspect-ratio:1/1.414;transform-origin:50% 60%;
-  transform:translateY(var(--ty,0)) rotateX(var(--rx,0deg)) scale(var(--s,1))}
-.apertura .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 11cqw}
+/* ——— Il foglio d'apertura ——— */
+.apertura .palco{position:relative;display:grid;place-items:center;min-height:100svh;
+  padding:calc(88px + env(safe-area-inset-top,0px)) 0 calc(84px + env(safe-area-inset-bottom,0px))}
+.apertura .foglio{width:min(88vw,clamp(16rem,calc((100svh - 172px) / 1.414),35rem))}
+.apertura .contenuto{min-height:141.4cqw;display:flex;flex-direction:column;justify-content:center;padding:15cqw 11cqw;overflow-wrap:anywhere}
+.apertura .lampada.buio{background:radial-gradient(closest-side,transparent,rgba(9,8,7,.06) 9%,rgba(9,8,7,.15) 24%,rgba(9,8,7,.27) 55%,rgba(9,8,7,.36));
+  box-shadow:0 0 0 300vmax rgba(9,8,7,.36)}
 .intestazione{position:absolute;top:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:500 1.75cqw/1 var(--ui);letter-spacing:.18em;text-transform:uppercase;color:var(--inchiostro-2)}
-.titolo{margin:0;font:300 19cqw/.9 var(--display);letter-spacing:-.01em;color:var(--inchiostro);white-space:nowrap;margin-left:-.06em}
-.sottotitolo{margin:5cqw 0 0;font:italic 300 5.4cqw/1.25 var(--display);color:var(--inchiostro-2);max-width:20ch}
+.titolo{margin:0 0 0 -.06em;font:300 19cqw/.9 var(--display);letter-spacing:-.01em}
+.apertura-progetto{margin:6cqw 0 0;font:300 6.4cqw/1.18 var(--display)}
+.apertura-progetto p{margin:0}
+.apertura-progetto p + p{font-style:italic}
+.sottotitolo{margin:5cqw 0 0;font:italic 300 5.4cqw/1.25 var(--display);max-width:24ch}
+.apertura .intestazione,.apertura .firma{color:var(--inchiostro)}
 .firma{position:absolute;bottom:8cqw;left:11cqw;right:11cqw;display:flex;justify-content:space-between;font:400 1.75cqw/1 var(--ui);letter-spacing:.06em;color:var(--inchiostro-2)}
-.indizio{position:absolute;bottom:calc(28px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;font:450 .75rem/1 var(--ui);letter-spacing:.08em;color:var(--testo-3);opacity:var(--indizio,1);transition:opacity .3s ease}
+.indizio{position:absolute;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;font:450 .75rem/1 var(--ui);letter-spacing:.08em;color:var(--testo-2)}
 .indizio i{display:block;width:1px;height:36px;background:linear-gradient(var(--testo-3),transparent)}
-.riaccendi{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));background:none;border:0;padding:8px 0;font:450 .75rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-3);cursor:pointer;transition:color .2s ease}
+.riaccendi{position:absolute;right:max(24px,env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px));background:none;border:0;padding:8px 0;font:450 .75rem/1 var(--ui);letter-spacing:.04em;color:var(--testo-2);cursor:pointer;transition:color .2s ease}
 .riaccendi:hover{color:var(--testo)}
 
 /* Accensione delle lettere durante la scrittura */
@@ -102,27 +105,19 @@ html:not(.js) .lampada.buio{opacity:.35}
 .scrivendo .glifo:not(.acceso){opacity:0}
 .cursore{display:inline-block;width:.035em;height:.72em;margin-left:.04em;background:var(--inchiostro);vertical-align:-.02em;opacity:0}
 .scrivendo .cursore{opacity:.85}
-[data-scrittura-alla-vista] .glifo{display:inline;white-space:normal}
+.apertura .glifo,[data-scrittura-alla-vista] .glifo{display:inline;white-space:normal}
 .nascosto{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-[data-scrittura-alla-vista] .cursore{position:absolute;margin-top:.12em;background:var(--luce)}
-@media (prefers-reduced-motion:no-preference){.scrittura-attesa{opacity:0}}
-
-/* ——— Scena 2: il progetto, riga per riga ——— */
-.progetto{height:360svh}
-.progetto .palco{background:var(--stanza)}
-.progetto .foglio{width:min(90vw,72svh,820px);aspect-ratio:1.414/1}
-.progetto .contenuto{height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 9cqw}
-.progetto .intestazione{left:9cqw;right:9cqw;top:6cqw;font-size:1.35cqw}
-.righe{margin:0;padding:0;list-style:none}
-.righe li{font:300 6.4cqw/1.18 var(--display);letter-spacing:-.005em;opacity:.16;transition:opacity .6s var(--ease),color .6s ease}
-.righe li.attiva{opacity:1}
-.righe li.letta{opacity:.38}
-.righe li:first-child{font-style:normal}
-.righe li + li{font-style:italic}
-html:not(.js) .righe li{opacity:1}
+.apertura .cursore,[data-scrittura-alla-vista] .cursore{position:absolute;margin-top:.12em;background:var(--luce)}
+@media (prefers-reduced-motion:no-preference){
+  .scrittura-attesa{opacity:0}
+  /* Se lo script non parte, il testo torna visibile da solo. */
+  .js [data-scrittura]:not([data-enabled="false"]):not(.pronto){opacity:0;animation:effinge-mostra 0s 2.5s forwards}
+  @keyframes effinge-mostra{to{opacity:1}}
+}
 
 /* ——— Sezioni normali ——— */
 .sezione{padding:clamp(110px,18vh,190px) max(24px,env(safe-area-inset-right,0px)) 0 max(24px,env(safe-area-inset-left,0px))}
+.apertura + #scrivi{padding-top:clamp(36px,8vh,80px)}
 .sezione-testa{max-width:1180px;margin:0 auto clamp(40px,7vh,72px);display:flex;justify-content:space-between;align-items:baseline;gap:24px}
 .sezione-testa h2{margin:0;font:300 clamp(2.5rem,5.5vw,4.75rem)/1 var(--display);letter-spacing:-.01em;text-wrap:balance}
 .sezione-testa a{font:450 .875rem/1 var(--ui);color:var(--testo-2);padding:8px 0;white-space:nowrap;transition:color .2s ease}
@@ -186,11 +181,6 @@ html:not(.js) .righe li{opacity:1}
 
 @media (max-width:760px){
   .barra nav .facoltativo{display:none}
-  .apertura .foglio{width:min(88vw,62svh)}
-  .progetto .foglio{width:90vw;aspect-ratio:1/1.3}
-  .progetto .contenuto{padding:0 8cqw}
-  .righe li{font-size:10.5cqw}
-  .progetto .intestazione{font-size:2.6cqw}
   .ultimo .foglio{aspect-ratio:auto}
   .ultimo .contenuto{grid-template-columns:1fr;gap:28px;padding:44px 28px}
   .ultimo h3{font-size:2.75rem}.ultimo p{font-size:1.125rem}.ultimo .meta{font-size:.75rem}.ultimo .leggi{font-size:.9375rem}
@@ -200,16 +190,9 @@ html:not(.js) .righe li{opacity:1}
 }
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}
-  .apertura,.progetto{height:auto}
-  .scena > .palco{position:relative;height:auto;min-height:100svh;padding:110px 0 80px}
-  .apertura .foglio{transform:none}
   .indizio{display:none}
-  .righe li{opacity:1!important}
   .js .sale{opacity:1;transform:none}
 }
-/* Il titolo resta nascosto solo finché lo script lo prepara (al massimo 2,5 s). */
-.js [data-scrittura]:not(.pronto){opacity:0;animation:effinge-mostra 0s 2.5s forwards}
-@keyframes effinge-mostra{to{opacity:1}}
 
 /* ——— Archivio completo ——— */
 .archivio-pagina{padding:calc(130px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) 120px max(24px,env(safe-area-inset-left,0px));min-height:80svh}
@@ -275,8 +258,7 @@ html:not(.js) .righe li{opacity:1}
 html[data-sfondo] body{background:transparent}
 html[data-sfondo] body::before{content:"";position:fixed;top:0;right:0;bottom:0;left:0;z-index:-1;background:var(--sfondo);background-blend-mode:var(--sfondo-blend)}
 html[data-sfondo] .barra.piena,html[data-sfondo] .scrivi-barra{background:rgba(0,0,0,.18);-webkit-backdrop-filter:blur(16px) saturate(1.1);backdrop-filter:blur(16px) saturate(1.1);border-color:rgba(255,255,255,.08)}
-html[data-sfondo] .apertura .palco{background:radial-gradient(60% 55% at 50% 42%,rgba(255,236,200,.05) 0%,transparent 70%)}
-html[data-sfondo] .progetto .palco{background:transparent}
+.apertura .palco{background:radial-gradient(60% 55% at 50% 42%,rgba(255,236,200,.05) 0%,transparent 70%)}
 html[data-sfondo] .piede,html[data-sfondo] .archivio,html[data-sfondo] .archivio li{border-color:rgba(255,255,255,.1)}
 html[data-sfondo] .pill:not([aria-pressed="true"]):not(.primario),html[data-sfondo] .stili button,html[data-sfondo] .icone button,html[data-sfondo] .aggiungi button,html[data-sfondo] .filtri button:not([aria-pressed="true"]){border-color:rgba(255,255,255,.16)}
 .sfondi{position:relative;display:flex;align-items:center}

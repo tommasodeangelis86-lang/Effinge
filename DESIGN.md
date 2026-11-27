@@ -8,7 +8,7 @@ Guida per chi modifica il sito (persone o agenti come Codex). I valori qui sotto
 
 - Un solo gesto memorabile: **la luce che accende le lettere**. Non aggiungerne altri.
 - Il colore lo portano **la luce calda** e, in Effinge Art, **i quadri**. L'interfaccia resta in carta, inchiostro e buio.
-- Lo scorrimento è a **scene** (sticky), una per schermo. In Effinge Art è invece **diretto**: le opere scorrono subito.
+- Lo scorrimento è diretto. La home si apre con un solo foglio e prosegue con Scrivi.
 - Il tono è letterario, sobrio e italiano.
 
 ## 2. Da non fare mai
@@ -53,7 +53,7 @@ Le **guide** usano paragrafi separati da `.9em` di spazio, senza rientro. Nella 
 
 Gli **strumenti** usano lo stesso foglio e la stessa lampada delle guide. I campi di testo e i contatori riprendono il calcolatore delle cartelle. L’anteprima 30 × 60 mostra la gabbia A4 su carta, con linee sottili. Su schermi stretti le voci Strumenti e Guide si impilano nel menu.
 
-Nella home, dopo **Scrivi** vengono **Checklist manoscritto**, **Strumenti** e **Guide per chi scrive**. L’anteprima della checklist e le schede degli strumenti riprendono la lampada dei fogli della home.
+Nella home, «Effinge», le righe di presentazione e il sottotitolo si scrivono in sequenza sullo stesso foglio. **Riscrivi** ripete l’intera apertura. Dopo **Scrivi** vengono **Checklist manoscritto**, **Strumenti** e **Guide per chi scrive**. L’anteprima della checklist e le schede degli strumenti riprendono la lampada dei fogli della home.
 
 ## 4. Palette
 
@@ -100,7 +100,8 @@ Componente `Lampada` in `assets/js/sito.js` (`window.EffingeLampada`). Due strat
 - Si muove **solo con `transform`** e un inseguimento morbido esponenziale (`lag` 220 ms di base, 900 ms a riposo, 140 ms col mouse).
 
 Come si comporta:
-- **Apertura e foglietto Scrivi**: segue le lettere mentre si scrivono, poi il mouse.
+- **Apertura**: segue tutte le righe mentre si scrivono, poi si ferma al centro della carta. Il buio è più lieve per mantenere leggibile l’intero foglio.
+- **Foglietto Scrivi**: segue le lettere mentre si scrivono, poi il mouse.
 - **Pagina di lettura**: segue il mouse (solo con `(hover:hover) and (pointer:fine)`) oppure il paragrafo a fuoco. Gli strati sono più grandi (buio `520cqw`, calore `170cqw`).
 - **Effinge Art, quadri**: `data-lampada-scorrimento` segue lo scorrimento e il mouse. Sui quadri il buio è `150cqw` a opacità `.9` e il calore `75cqw` a `.55`.
 - **Effinge Art, mosaico d'apertura**: niente strati. Ogni tessera ha una luminosità `--luce-t = .26 + .78·e^(−d²/.07)`, dove d è la distanza dalla lampada, che gira piano da sola o segue il mouse. Il quadro sotto il cursore si accende del tutto (`brightness(1.02)`) e gli altri scendono a `.22`.
@@ -120,7 +121,7 @@ Componente `Scrittura` in `sito.js`. Ogni lettera (o parola) diventa uno `<span 
 ## 7. Il foglio
 
 - `.foglio`: fondo `--carta`, testo `--inchiostro`, `border-radius:2px`, ombra profonda e scura (mai colorata).
-- In apertura è inclinato in prospettiva (`perspective:1600px`, `rotateX` e scala legati allo scorrimento) con formato A4 (`aspect-ratio: 1/1.414`).
+- In apertura il foglio è piatto, con proporzioni A4 e spazio per far crescere il testo quando serve.
 - Intestazioni e piedi del foglio: maiuscoletto `--ui` piccolissimo, `--inchiostro-2`.
 
 ## 8. Componenti

@@ -2,9 +2,9 @@
  * Effinge — la pagina e la lampada.
  *
  * 1. Lampada: un cono di luce fioca che si muove su un foglio con uno smorzamento morbido.
- * 2. Scrittura: la scritta d'apertura compare lettera per lettera; ogni lettera si
+ * 2. Scrittura: il testo d'apertura compare lettera per lettera; ogni lettera si
  *    accende sotto la lampada e poi torna inchiostro.
- * 3. Scene: l'apertura e il progetto reagiscono allo scorrimento della pagina.
+ * 3. Apertura: la lampada accompagna il titolo e le righe sullo stesso foglio.
  * 4. Lettura: il paragrafo che si sta leggendo resta acceso, gli altri si attenuano.
  *
  * Impostazioni della scritta (collegabili al CMS) come attributi sull'<h1 data-scrittura>:
@@ -21,7 +21,6 @@
 
   function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
-  function ease(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
   function num(v, d, a, b) { var n = parseFloat(v); return clamp(isFinite(n) ? n : d, a, b); }
   function bool(v, d) { return v == null || v === '' ? d : !/^(false|0|no|off)$/i.test(v); }
   function store(k, v) { try { if (v === undefined) return localStorage.getItem(k); localStorage.setItem(k, v); } catch (e) { return null; } }
@@ -96,7 +95,7 @@
   function Scrittura(h1, lampada) {
     this.el = h1; this.lampada = lampada; this.timers = [];
     this.allaVista = h1.hasAttribute('data-scrittura-alla-vista');
-    var spazio = this.allaVista ? ' ' : ' ';
+    var spazio = this.allaVista || h1.closest('.apertura') ? ' ' : ' ';
     var text = h1.textContent.replace(/\s+/g, ' ').trim();
     h1.textContent = '';
     if (/^H[1-6]$/.test(h1.tagName)) h1.setAttribute('aria-label', text);
@@ -180,66 +179,44 @@
     });
   }
 
-  /* ——— 3. Scene a scorrimento ——— */
+  /* ——— 3. Fogli e lampada ——— */
   var scene = [];
-  function progress(sec) {
-    var r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight;
-    return span > 0 ? clamp(-r.top / span, 0, 1) : (r.top < 0 ? 1 : 0);
-  }
 
-  function scenaApertura(sec) {
+  function apertura(sec) {
+    if (reduce) return;
     var foglio = sec.querySelector('.foglio');
-    var L = new Lampada(foglio);
-    var h1 = sec.querySelector('[data-scrittura]');
-    var sub = sec.querySelector('.sottotitolo');
-    var indizio = sec.querySelector('.indizio');
-    var scrittura = new Scrittura(h1, L);
-    var written = false;
-    var start = function () { scrittura.play(false, function () { written = true; }); };
-    if (document.fonts && document.fonts.ready) { var once = false; var go = function () { if (!once) { once = true; start(); } }; document.fonts.ready.then(go); setTimeout(go, 900); } else start();
+    var parti = Array.prototype.filter.call(foglio.querySelectorAll('[data-scrittura]'), function (el) {
+      return bool(el.dataset.enabled, true) && el.textContent.trim();
+    });
+    var L = new Lampada(foglio, !parti.length);
+    L.jump(foglio.clientWidth * .5, foglio.clientHeight * .5);
+    if (!parti.length) return;
+    var scritture = parti.map(function (el) { return new Scrittura(el, L); });
+
+    function continua(i) {
+      if (i === scritture.length) {
+        L.to(foglio.clientWidth * .5, foglio.clientHeight * .5, 900);
+        return;
+      }
+      var scrittura = scritture[i];
+      scrittura.el.classList.remove('scrittura-attesa');
+      scrittura.play(true, function () { continua(i + 1); });
+    }
+
+    function avvia() {
+      scritture.forEach(function (scrittura) {
+        scrittura.stop();
+        scrittura.el.classList.add('scrittura-attesa');
+      });
+      continua(0);
+    }
+
     var replay = sec.querySelector('[data-riaccendi]');
-    if (replay) replay.addEventListener('click', function () { written = false; scrittura.play(true, function () { written = true; }); });
-
-    var tilt = !reduce;
-    return function () {
-      var p = progress(sec);
-      var a = ease(clamp(p / .55, 0, 1));
-      if (tilt) {
-        foglio.style.setProperty('--rx', lerp(26, 0, a).toFixed(2) + 'deg');
-        foglio.style.setProperty('--s', lerp(.84, 1, ease(clamp(p / .9, 0, 1))).toFixed(4));
-        foglio.style.setProperty('--ty', lerp(4, 2.5, a).toFixed(2) + 'svh');
-      }
-      if (indizio) indizio.style.setProperty('--indizio', String(1 - clamp(p * 6, 0, 1)));
-      // Dopo la scrittura la lampada scende lentamente verso il sottotitolo e poi si abbassa.
-      if (written) {
-        var t = L.at(h1, .5, .5), s = L.at(sub, .3, .5);
-        var k = ease(clamp((p - .15) / .5, 0, 1));
-        L.to(lerp(t.x, s.x, k), lerp(t.y, s.y, k));
-        L.intensity = lerp(scrittura.opts().intensity, .25, ease(clamp((p - .7) / .3, 0, 1)));
-      }
-    };
-  }
-
-  function scenaProgetto(sec) {
-    var foglio = sec.querySelector('.foglio');
-    var L = new Lampada(foglio);
-    L.lag = 420;
-    var righe = Array.prototype.slice.call(sec.querySelectorAll('.righe li'));
-    var last = -1;
-    var first = L.at(righe[0], .35, .5); L.jump(first.x, first.y);
-    return function () {
-      var p = progress(sec);
-      var i = clamp(Math.floor(p * righe.length * 1.08), 0, righe.length - 1);
-      if (i !== last) {
-        righe.forEach(function (r, n) { r.classList.toggle('attiva', n === i); r.classList.toggle('letta', n < i); });
-        last = i;
-      }
-      // la lampada scorre lungo la riga mentre la si legge
-      var local = clamp(p * righe.length * 1.08 - i, 0, 1);
-      var pos = L.at(righe[i], lerp(.15, .7, local), .5);
-      L.to(pos.x, pos.y);
-      L.intensity = p < .02 ? .5 : .85;
-    };
+    if (replay) {
+      replay.addEventListener('click', avvia);
+      replay.hidden = false;
+    }
+    if (scritture[0].opts().repeat !== 'sessione' || store(KEY) !== '1') avvia();
   }
 
   function lampadaAlPuntatore(foglio) {
@@ -507,8 +484,7 @@
     // Scrivi: se dopo qualche secondo l'editor non è partito, avvisa invece di restare muto
     if (document.querySelector('[data-scrivi-app]')) setTimeout(function () { if (!window.EffingeScrivi) { var g = document.getElementById('scrivi-guasto'); if (g) g.hidden = false; } }, 5000);
     var s;
-    if ((s = document.querySelector('.apertura'))) scene.push(scenaApertura(s));
-    if ((s = document.querySelector('.progetto'))) scene.push(scenaProgetto(s));
+    if ((s = document.querySelector('.apertura'))) apertura(s);
     Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-puntatore]'), lampadaAlPuntatore);
     if (!reduce) Array.prototype.forEach.call(document.querySelectorAll('[data-lampada-scorrimento]'), function (foglio) {
       scene.push(lampadaAlloScorrimento(foglio));
