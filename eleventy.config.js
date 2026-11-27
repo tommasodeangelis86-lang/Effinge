@@ -13,9 +13,8 @@ function urlCanonico(path) {
   return ORIGINE + (percorso.endsWith('/') || /\.[^/]+$/.test(percorso) ? percorso : percorso + '/');
 }
 
-// Regola di sicurezza (Content Security Policy) per ogni pagina: solo script del sito (gli inline
-// sono ammessi solo se identici a quelli generati qui, tramite il loro hash), connessioni solo al
-// sito e all'API di GitHub (per «Pubblica sul sito»), niente plugin, form o iframe esterni.
+// Gli script inline sono ammessi solo se il loro hash corrisponde al modello generato.
+// Le eccezioni per Scrivi e per le statistiche sono limitate alle pagine che le usano.
 function regolaDiSicurezza(html) {
   const hash = new Set();
   // solo gli script dell'intestazione, scritti nei modelli: mai quelli dentro i contenuti (<body>)
@@ -25,14 +24,17 @@ function regolaDiSicurezza(html) {
     return m;
   });
   const archivio = /data-scrivi-app data-archivio-url="(https:\/\/[a-z0-9]{20}\.supabase\.co)"/.exec(html)?.[1];
+  const statistiche = /<script src="\/assets\/js\/statistiche\.js\?v=[^"]+" defer><\/script>/.test(html);
+  const tagManager = statistiche ? ' https://www.googletagmanager.com' : '';
+  const raccolta = statistiche ? tagManager + ' https://*.google-analytics.com' : '';
   return [
     "default-src 'self'",
-    "script-src 'self' " + [...hash].join(' '),
+    "script-src 'self' " + [...hash].join(' ') + tagManager,
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob:" + raccolta,
     "font-src 'self'",
     // Solo in Scrivi: il Narratore parla direttamente con i fornitori scelti da chi scrive, con le sue chiavi.
-    "connect-src 'self' https://api.github.com" + (/data-scrivi-app/.test(html) ? ' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://generativelanguage.googleapis.com' : '') + (archivio ? ' ' + archivio : ''),
+    "connect-src 'self' https://api.github.com" + (/data-scrivi-app/.test(html) ? ' https://api.anthropic.com https://api.openai.com https://api.elevenlabs.io https://generativelanguage.googleapis.com' : '') + (archivio ? ' ' + archivio : '') + raccolta,
     "media-src 'self'" + (/data-scrivi-app/.test(html) ? ' blob:' : ''),
     "object-src 'none'",
     "frame-src 'none'",
@@ -53,6 +55,7 @@ export default function (config) {
   });
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
+  config.addPassthroughCopy('assets/js/statistiche.js');
   config.addPassthroughCopy({ 'assets/js/scrivi-cloud.js': 'assets/js/scrivi-cloud.js' });
   config.addPassthroughCopy({ 'assets/js/strumenti.js': 'assets/js/strumenti.js', 'assets/css/strumenti.css': 'assets/css/strumenti.css', 'assets/templates': 'assets/templates' });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });

@@ -1,6 +1,7 @@
 // Verifica visiva del sito: fotogrammi della scrittura e delle sezioni della home,
 // su desktop e smartphone, più controlli senza JavaScript e con movimento ridotto.
 //   node tests/sito.mjs        (OUT=cartella per cambiare destinazione)
+import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
 import { join, resolve } from 'node:path';
@@ -97,6 +98,49 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   await page.evaluate(() => scrollTo(0, innerHeight * .9)); await page.waitForTimeout(900);
   await page.screenshot({ path: join(out, `${tag}-07-lettura.png`) });
   await noSideScroll(page, tag + ' lettura');
+  await ctx.close();
+}
+{
+  const ctx = await b.newContext({ viewport: { width: 390, height: 844 } });
+  const page = await ctx.newPage();
+  let richiesteTagManager = 0;
+  await ctx.route('https://www.googletagmanager.com/**', async route => {
+    richiesteTagManager++;
+    await route.fulfill({ contentType: 'application/javascript', body: 'window.tagManagerTest = true;' });
+  });
+  const pannello = page.getByRole('region', { name: 'Statistiche di navigazione' });
+  const preferenze = page.getByRole('button', { name: 'Preferenze statistiche' });
+  await page.goto(home);
+  await pannello.waitFor();
+  await noSideScroll(page, 'statistiche');
+  assert.equal(richiesteTagManager, 0, 'Prima del consenso');
+  await pannello.getByRole('button', { name: 'Rifiuta' }).click();
+  await page.reload();
+  assert.equal(await pannello.isVisible(), false);
+  assert.equal(richiesteTagManager, 0, 'Dopo un rifiuto già salvato');
+
+  await preferenze.click();
+  await pannello.getByRole('button', { name: 'Consenti' }).click();
+  await page.waitForFunction(() => window.tagManagerTest);
+  assert.equal(richiesteTagManager, 1);
+  assert.deepEqual(await page.evaluate(() => Array.from(window.dataLayer[1])), ['consent', 'update', { analytics_storage: 'granted' }]);
+  assert.equal(await page.evaluate(() => window.dataLayer[0][2].ad_storage), 'denied');
+
+  for (const percorso of ['/scrivi/', '/checkmanoscritto/', '/strumenti/']) {
+    await page.goto(base + percorso);
+    assert.equal(richiesteTagManager, 1, percorso);
+    assert.equal(await preferenze.count(), 0, percorso);
+    assert.doesNotMatch(await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content'), /googletagmanager|google-analytics/);
+  }
+  await page.goto(home);
+  await page.waitForFunction(() => window.tagManagerTest);
+  assert.equal(richiesteTagManager, 2, 'Consenso ricordato');
+  await page.evaluate(() => { document.cookie = '_ga=prova; Path=/'; });
+  await preferenze.click();
+  await Promise.all([page.waitForURL(home, { waitUntil: 'load' }), pannello.getByRole('button', { name: 'Rifiuta' }).click()]);
+  await page.waitForFunction(() => document.readyState === 'complete' && !window.tagManagerTest);
+  assert.equal(richiesteTagManager, 2, 'Dopo la revoca');
+  assert.equal((await ctx.cookies()).some(cookie => cookie.name === '_ga'), false);
   await ctx.close();
 }
 for (const [label, opts] of [['nojs', { javaScriptEnabled: false }], ['ridotto', { reducedMotion: 'reduce' }]]) {
