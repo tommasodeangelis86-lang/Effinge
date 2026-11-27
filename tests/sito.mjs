@@ -156,6 +156,23 @@ for (const [label, opts] of [['nojs', { javaScriptEnabled: false }], ['ridotto',
   await ctx.close();
 }
 {
+  const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, reducedMotion: 'reduce' });
+  const page = await ctx.newPage();
+  // Simula un browser che scarta le dichiarazioni con unità viewport e contenitore recenti.
+  await ctx.route('**/assets/css/sito.css?*', async route => {
+    const risposta = await route.fetch();
+    const css = (await risposta.text()).replace(/(?<=[{;])\s*[\w-]+:[^{};]*\d(?:[sd]vh|cqw)\b[^{};]*;?/g, '');
+    await route.fulfill({ response: risposta, body: css });
+  });
+  await page.goto(home);
+  const foglio = await page.locator('.apertura .foglio').boundingBox();
+  const titolo = await page.locator('.apertura h1').boundingBox();
+  assert.ok(foglio.width >= 300 && foglio.y + foglio.height <= 844, 'Foglio visibile senza unità recenti');
+  assert.ok(titolo.width <= foglio.width && titolo.height >= 36, 'Titolo leggibile nel foglio');
+  await noSideScroll(page, 'compatibilità mobile');
+  await ctx.close();
+}
+{
   const ctx = await b.newContext({ viewport: { width: 1024, height: 900 } });
   const page = await ctx.newPage();
   page.on('pageerror', e => problems.push(`archivio: ${e.message}`));

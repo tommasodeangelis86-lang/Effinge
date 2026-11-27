@@ -93,8 +93,8 @@ li:hover .azioni-cap,li:focus-within .azioni-cap,.anteprima[aria-current="true"]
 .scrivi-stato{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;block-size:2.8em;font:450 .6875rem/1.4 var(--ui);letter-spacing:.06em;text-transform:uppercase;color:var(--testo-2);font-variant-numeric:tabular-nums}
 .scrivi-foglio{max-width:48rem;margin:0 auto;min-height:calc(100svh - 170px)}
 .scrivi-foglio .contenuto{padding:clamp(36px,6vw,84px) clamp(22px,7vw,92px) clamp(80px,12vw,140px)}
-.scrivi-foglio .lampada.buio{width:420cqw;height:420cqw}
-.scrivi-foglio .lampada.calore{width:150cqw;height:150cqw}
+.scrivi-foglio .lampada.buio{--lampada-larghezza:420%}
+.scrivi-foglio .lampada.calore{--lampada-larghezza:150%}
 html:not(.scrittura-lampada) .scrivi-foglio .lampada{opacity:0!important;transition:opacity .6s ease}
 .scrivi-testa{margin-bottom:clamp(26px,5vw,44px);padding-bottom:16px;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 14%,transparent)}
 .scrivi-nome{flex:1;min-width:0;display:grid;gap:6px}
