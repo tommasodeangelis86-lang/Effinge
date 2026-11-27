@@ -1,4 +1,4 @@
-// Verifica visiva del sito: fotogrammi della scrittura e delle scene a scorrimento,
+// Verifica visiva del sito: fotogrammi della scrittura e delle sezioni della home,
 // su desktop e smartphone, più controlli senza JavaScript e con movimento ridotto.
 //   node tests/sito.mjs        (OUT=cartella per cambiare destinazione)
 import { createRequire } from 'node:module';
@@ -13,6 +13,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { extname } from 'node:path';
 const site = join(root, '_site');
+const impostazioni = JSON.parse(await readFile(join(root, 'src/_data/impostazioni.json'), 'utf8'));
 const types = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.woff2': 'font/woff2', '.xml': 'application/xml', '.txt': 'text/plain' };
 const server = createServer(async (req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]);
@@ -26,14 +27,6 @@ const arch = base + '/archivio/';
 const problems = [];
 const b = await chromium.launch();
 
-async function scrollTo(page, sel, p) {
-  await page.evaluate(([sel, p]) => {
-    const s = document.querySelector(sel);
-    const top = s.getBoundingClientRect().top + scrollY;
-    scrollTo(0, top + (s.offsetHeight - innerHeight) * p);
-  }, [sel, p]);
-  await page.waitForTimeout(1300);
-}
 async function noSideScroll(page, tag) {
   const x = await page.evaluate(() => { scrollTo(9999, scrollY); const x = scrollX; scrollTo(0, scrollY); return x; });
   if (x) problems.push(`${tag}: scroll orizzontale ${x}px`);
@@ -46,7 +39,7 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
   await page.goto(home);
   // SEO: titolo, descrizione, immagine di anteprima e dati strutturati leggibili
   const seo = await page.evaluate(() => { let jsonOk = true; document.querySelectorAll('script[type="application/ld+json"]').forEach(x => { try { JSON.parse(x.textContent); } catch (e) { jsonOk = false; } }); return { t: document.title, d: (document.querySelector('meta[name=description]') || {}).content || '', og: (document.querySelector('meta[property="og:image"]') || {}).content || '', jsonOk, h2: !!document.querySelector('.apertura h2') }; });
-  if (!/Rivista letteraria/.test(seo.t) || seo.d.length < 80 || !/effinge-anteprima\.png$/.test(seo.og) || !seo.jsonOk || !seo.h2) problems.push(`${tag}: SEO homepage ` + JSON.stringify(seo));
+  if (seo.t !== impostazioni.sito.titolo_home || seo.d.length < 80 || !/effinge-anteprima\.png$/.test(seo.og) || !seo.jsonOk || !seo.h2) problems.push(`${tag}: SEO homepage ` + JSON.stringify(seo));
   const sf0 = await page.evaluate(() => ({ attr: document.documentElement.getAttribute('data-sfondo'), bg: getComputedStyle(document.body, '::before').backgroundImage }));
   // cursore del buio: parte scuro, arriva al nero assoluto
   const velo0 = await page.evaluate(() => getComputedStyle(document.body, '::after').opacity);
@@ -63,10 +56,24 @@ for (const [w, h, tag] of [[1440, 900, 'desk'], [390, 844, 'tel']]) {
     await page.evaluate(() => localStorage.removeItem('effinge-buio')); await page.reload(); await page.waitForTimeout(2600);
   }
   if (sf0.attr !== 'grafite' || !/gradient/.test(sf0.bg)) problems.push(`${tag}: sfondo predefinito non applicato ` + JSON.stringify(sf0));
-  await page.waitForTimeout(750); await page.screenshot({ path: join(out, `${tag}-01-scrittura.png`) });
-  await page.waitForTimeout(2200); await page.screenshot({ path: join(out, `${tag}-02-scritta.png`) });
-  for (const p of [.35, .8]) { await scrollTo(page, '.apertura', p); await page.screenshot({ path: join(out, `${tag}-03-apertura-${p}.png`) }); }
-  for (const p of [.05, .45, .9]) { await scrollTo(page, '.progetto', p); await page.screenshot({ path: join(out, `${tag}-04-progetto-${p}.png`) }); }
+  const apertura = await page.evaluate(() => {
+    const apertura = document.querySelector('main > .apertura');
+    const foglio = apertura.querySelector('.foglio');
+    return foglio.contains(document.querySelector('#progetto')) &&
+      apertura.querySelectorAll('.foglio').length === 1 &&
+      apertura.nextElementSibling.id === 'scrivi' && apertura.offsetHeight <= innerHeight + 2;
+  });
+  if (!apertura) problems.push(`${tag}: attesi un foglio con la presentazione e Scrivi dopo una schermata`);
+  await page.locator('[data-riaccendi]').focus();
+  await page.keyboard.press('Enter');
+  await page.locator('.apertura h1.scrivendo').waitFor();
+  await page.locator('.apertura #progetto p.scrivendo').first().waitFor();
+  await page.screenshot({ path: join(out, `${tag}-01-scrittura.png`) });
+  // Anche un secondo avvio a metà della presentazione riparte dal titolo.
+  await page.keyboard.press('Enter');
+  await page.locator('.apertura h1.scrivendo').waitFor();
+  await page.waitForFunction(() => !document.querySelector('.apertura :is(.scrivendo,.scrittura-attesa)'));
+  await page.screenshot({ path: join(out, `${tag}-02-scritta.png`) });
   await page.evaluate(() => document.querySelector('#scrivi').scrollIntoView()); await page.waitForTimeout(400);
   await page.screenshot({ path: join(out, `${tag}-05-scrivi-mentre.png`) });
   await page.waitForTimeout(2600);
@@ -98,6 +105,9 @@ for (const [label, opts] of [['nojs', { javaScriptEnabled: false }], ['ridotto',
   await page.goto(home); await page.waitForTimeout(400);
   const t = await page.evaluate(() => { const h = document.querySelector('h1'); return getComputedStyle(h).opacity + '|' + (h.getAttribute('aria-label') || h.textContent).trim(); });
   if (!t.startsWith('1|Effinge')) problems.push(`${label}: titolo non leggibile (${t})`);
+  const righe = await page.locator('.apertura #progetto p').evaluateAll(ps =>
+    ps.filter(p => getComputedStyle(p).opacity === '1').map(p => p.textContent.trim()));
+  if (JSON.stringify(righe) !== JSON.stringify(impostazioni.progetto.righe)) problems.push(`${label}: presentazione non leggibile`);
   await page.screenshot({ path: join(out, `${label}.png`), fullPage: true });
   await ctx.close();
 }
