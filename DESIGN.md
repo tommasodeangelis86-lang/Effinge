@@ -53,6 +53,8 @@ Le **guide** usano paragrafi separati da `.9em` di spazio, senza rientro. Nella 
 
 Gli **strumenti** usano lo stesso foglio e la stessa lampada delle guide. I campi di testo e i contatori riprendono il calcolatore delle cartelle. L’anteprima 30 × 60 mostra la gabbia A4 su carta, con linee sottili. Su schermi stretti le voci Strumenti e Guide si impilano nel menu.
 
+Nella home, dopo **Scrivi** vengono **Checklist manoscritto**, **Strumenti** e **Guide per chi scrive**. L’anteprima della checklist e le schede degli strumenti riprendono la lampada dei fogli della home.
+
 ## 4. Palette
 
 ### Colori base (`:root` in `sito.css`, sovrascrivibili dal pannello in `src/_data/impostazioni.json`)

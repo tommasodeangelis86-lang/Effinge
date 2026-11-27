@@ -246,6 +246,9 @@ html:not(.js) .righe li{opacity:1}
 .scrivi-anteprima-righe{display:grid;gap:3.6cqw;margin-top:6cqw}
 .scrivi-anteprima-righe i{display:block;height:1px;background:color-mix(in srgb,var(--inchiostro) 14%,transparent)}
 .scrivi-anteprima-righe i:nth-child(2){width:86%}.scrivi-anteprima-righe i:nth-child(3){width:58%}
+.checklist-anteprima-voci{list-style:none;margin:0;padding:0;font:400 clamp(1.25rem,5.5cqw,2.25rem)/1.2 var(--display)}
+.checklist-anteprima-voci li{display:flex;align-items:center;gap:.6em;padding:.45em 0;border-bottom:1px solid color-mix(in srgb,var(--inchiostro) 20%,transparent)}
+.checklist-anteprima-voci li::before{content:"";flex:none;width:.52em;height:.52em;border:1px solid currentColor}
 @media (max-width:760px){
   .scrivi-invito-griglia{grid-template-columns:1fr;gap:36px}
   .scrivi-anteprima-frase{font-size:8cqw}
@@ -315,11 +318,13 @@ html:not(.lampada-accesa) .lettura-pagina .foglio .lampada{opacity:0!important;t
 .intestazione-h{margin:0;font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit}
 /* ——— Guide per chi scrive ——— */
 .guide-invito-griglia{max-width:1180px;margin:0 auto;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(16px,3vw,32px)}
+.strumenti-invito-griglia{grid-template-columns:repeat(3,minmax(0,1fr))}
 .guide-invito-scheda{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:16px;height:100%;min-height:clamp(150px,18vw,220px);padding:clamp(24px,4vw,48px);transition:transform .3s var(--ease)}
 .guide-invito-scheda:hover{transform:translateY(-3px)}
-.guide-invito-scheda:not(:has(> .lampada)){background-image:radial-gradient(ellipse at 52% 62%,color-mix(in srgb,var(--luce) 24%,transparent),transparent 45%,rgba(9,8,7,.45))}
-.guide-invito-scheda .lampada.buio{filter:opacity(.72)}
+.guide-invito-scheda:not(:has(> .lampada)),.checklist-anteprima:not(:has(> .lampada)){background-image:radial-gradient(ellipse at 52% 62%,color-mix(in srgb,var(--luce) 24%,transparent),transparent 45%,rgba(9,8,7,.45))}
+.guide-invito-scheda .lampada.buio,.checklist-anteprima .lampada.buio{filter:opacity(.72)}
 .guide-invito-scheda h3{margin:0;font:400 clamp(1.85rem,3.2vw,3rem)/1.08 var(--display);text-wrap:balance;overflow-wrap:anywhere}
+.strumenti-invito-griglia h3{font-size:clamp(1.75rem,2.55vw,2.6rem)}
 .guide-invito-scheda span{font:400 1.25rem/1 var(--ui)}
 .guide-invito-altre{max-width:1180px;margin:clamp(24px,4vw,48px) auto 0;text-align:center}
 @media (max-width:760px){
