@@ -67,6 +67,46 @@ data-scrittura-alla-vista data-enabled="{{ 'true' if a.attiva else 'false' }}" d
   </section>
   {%- endif %}
 
+  <section class="sezione scrivi-invito" id="checklist" aria-labelledby="h-checklist">
+    <div class="scrivi-invito-griglia">
+      <div class="scrivi-invito-testo">
+        <h2 id="h-checklist" {{ scritturaAllaVista() }}>Checklist manoscritto</h2>
+        <div class="sale">
+          <p>Controlla impaginazione e capitoli del tuo file Word. Sistema il formato e scarica una nuova copia.</p>
+          <a class="pulsante" href="/checkmanoscritto/">Apri la checklist <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+      <a class="foglio scrivi-anteprima checklist-anteprima" href="/checkmanoscritto/" data-lampada-puntatore aria-label="Apri la checklist manoscritto">
+        <div class="contenuto" aria-hidden="true">
+          <ul class="checklist-anteprima-voci">
+            <li>Impaginazione</li>
+            <li>Capitoli</li>
+            <li>Frontespizio</li>
+          </ul>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  {%- if collections.strumenti.length %}
+  <section class="sezione guide-invito" id="strumenti" aria-labelledby="h-strumenti">
+    <div class="sezione-testa">
+      <h2 id="h-strumenti" {{ scritturaAllaVista() }}>Strumenti</h2>
+      <a href="/strumenti/">Tutti gli strumenti <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="guide-invito-griglia strumenti-invito-griglia">
+      {%- for strumento in collections.strumenti %}
+      <li>
+        <a class="foglio guide-invito-scheda" href="{{ strumento.url }}" data-lampada-puntatore>
+          <h3>{{ strumento.data.titolo }}</h3>
+          <span aria-hidden="true">→</span>
+        </a>
+      </li>
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endif %}
+
   {%- if collections.guide.length %}
   {%- set limiteGuide = 6 %}
   {%- set altreGuide = collections.guide.length > limiteGuide %}
