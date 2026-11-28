@@ -18,6 +18,20 @@ for (const [nome, vp] of [['desk', { width: 1280, height: 900 }], ['tel', { widt
   await p.screenshot({ path: OUT + '/guida-' + nome + '.png', fullPage: true });
   await p.goto('http://localhost:8765/guide/impaginare-manoscritto/'); await p.screenshot({ path: OUT + '/guida2-' + nome + '.png', fullPage: true });
   await p.goto('http://localhost:8765/guide/'); await p.screenshot({ path: OUT + '/guide-' + nome + '.png' });
+  const elenco = '/guide/invio-manoscritti-editori-italiani/';
+  ok(await p.locator('.archivio > li:first-child > a').getAttribute('href') === elenco, nome + ' elenco in cima alle guide');
+  await p.locator('.archivio > li:first-child > a').click();
+  const righe = p.locator('.editori-riga');
+  ok(await righe.count() === 30 && await p.locator('.editori-riga a[href^="https:"]').count() >= 30, nome + ' editori e link ufficiali');
+  ok(await p.locator('main .foglio').count() === 0 && await p.evaluate(() => document.documentElement.scrollWidth) <= vp.width,
+    nome + ' elenco su fondo del sito senza scorrimento orizzontale');
+  await p.locator('#genere-editori').selectOption('romance');
+  ok((await p.locator('.editori-riga:visible h3').allTextContents()).join(', ') === 'Triskell Edizioni, Delos Digital, Newton Compton',
+    nome + ' filtro romance');
+  ok(await p.locator('#narrativa').isHidden() && await p.locator('a[href="#narrativa"]').isHidden(), nome + ' gruppi vuoti nascosti');
+  await p.locator('#genere-editori').selectOption('');
+  ok(await p.locator('.editori-riga:visible').count() === 30, nome + ' reset filtro');
+  await p.screenshot({ path: OUT + '/editori-' + nome + '.png' });
   await p.close();
 }
 const p = await b.newPage(); p.on('pageerror', e => errs.push(e.message));

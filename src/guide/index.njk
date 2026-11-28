@@ -8,10 +8,10 @@ eleventyExcludeFromCollections: true
 ---
 <main id="contenuto" class="archivio-pagina">
   <header class="sezione-testa"><h1>Guide per chi scrive</h1></header>
-  <p class="risorse-guide"><a href="/strumenti/">Strumenti gratuiti per scrivere e rivedere un testo</a></p>
   <ul class="archivio">
     {%- for g in collections.guide %}
-    <li><a href="{{ g.url }}"><span class="t">{{ g.data.titolo }}</span><span class="c">Guida</span><span class="d"></span></a></li>
+    <li><a href="{{ g.url }}"><span class="t">{{ g.data.titolo }}</span><span class="c">{{ 'Elenco editori' if g.data.layout == 'elenco-editori.njk' else 'Guida' }}</span><span class="d"></span></a></li>
     {%- endfor %}
   </ul>
+  <p class="risorse-guide"><a href="/strumenti/">Strumenti gratuiti per scrivere e rivedere un testo</a></p>
 </main>
