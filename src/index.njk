@@ -104,8 +104,11 @@ data-scrittura {{ parametriScrittura((a.velocita or 85) / 3, 0) }}
   {%- endif %}
 
   {%- if collections.guide.length %}
+  {%- set primaGuida = collections.guide[0] %}
+  {%- set elencoEditori = primaGuida.data.layout == 'elenco-editori.njk' %}
+  {%- set guideInGriglia = (collections.guide | escludi(primaGuida.url)) if elencoEditori else collections.guide %}
   {%- set limiteGuide = 6 %}
-  {%- set altreGuide = collections.guide.length > limiteGuide %}
+  {%- set altreGuide = guideInGriglia.length > limiteGuide %}
   <section class="sezione guide-invito" id="guide" aria-labelledby="h-guide">
     <div class="sezione-testa">
       <h2 id="h-guide" {{ scritturaAllaVista() }}>Guide per chi scrive</h2>
@@ -113,8 +116,13 @@ data-scrittura {{ parametriScrittura((a.velocita or 85) / 3, 0) }}
       <a href="/guide/">Tutte le guide <span aria-hidden="true">→</span></a>
       {%- endif %}
     </div>
+    {%- if elencoEditori %}
+    <ul class="archivio guide-invito-elenco">
+      <li><a href="{{ primaGuida.url }}"><span class="t">{{ primaGuida.data.titolo }}</span><span class="d" aria-hidden="true">→</span></a></li>
+    </ul>
+    {%- endif %}
     <ul class="guide-invito-griglia">
-      {%- for guida in collections.guide | limita(limiteGuide) %}
+      {%- for guida in guideInGriglia | limita(limiteGuide) %}
       <li>
         <a class="foglio guide-invito-scheda" href="{{ guida.url }}" data-lampada-puntatore>
           <h3>{{ guida.data.titolo }}</h3>

@@ -493,7 +493,7 @@
     scritturaAllaVista();
     Array.prototype.forEach.call(document.querySelectorAll('.archivio'), archivio);
     Array.prototype.forEach.call(document.querySelectorAll('[data-filtri]'), filtri);
-    var c = document.querySelector('[data-lettura]');
+    var c = document.querySelector('.foglio [data-lettura]');
     if (c) scene.push(lettura(c));
 
     var barra = document.querySelector('.barra');

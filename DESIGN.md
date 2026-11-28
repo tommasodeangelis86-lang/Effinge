@@ -51,6 +51,8 @@ Tre famiglie, ognuna con un compito. I file sono in `assets/fonts/` e vengono se
 
 Le **guide** usano paragrafi separati da `.9em` di spazio, senza rientro. Nella tabella delle misure del romanzo, Inter Tight e cifre tabulari tengono allineati parole, battute e cartelle. Le celle vanno a capo su telefono.
 
+L’**elenco editori** apre le Guide e compare come riga anche sopra le schede della home. La pagina usa il fondo del sito, righe divise da un filo e link ufficiali accanto allo stato degli invii. Su telefono lo stato e i link scendono sotto la descrizione.
+
 Gli **strumenti** usano lo stesso foglio e la stessa lampada delle guide. I campi di testo e i contatori riprendono il calcolatore delle cartelle. L’anteprima 30 × 60 mostra la gabbia A4 su carta, con linee sottili. Su schermi stretti le voci Strumenti e Guide si impilano nel menu.
 
 Nella home, «Effinge», le righe di presentazione e il sottotitolo si scrivono in sequenza sullo stesso foglio. **Riscrivi** ripete l’intera apertura. Dopo **Scrivi** vengono **Checklist manoscritto**, **Strumenti** e **Guide per chi scrive**. L’anteprima della checklist e le schede degli strumenti riprendono la lampada dei fogli della home.

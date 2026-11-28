@@ -1,0 +1,83 @@
+---
+layout: base.njk
+script: /assets/js/editori.js
+---
+{%- set sezioni = [
+  { id: 'narrativa', titolo: 'Narrativa per adulti', link: 'Invii aperti', azione: 'Regole e invio' },
+  { id: 'specializzati', titolo: 'Romance, fantastico, ragazzi e graphic novel', link: 'Specializzati', azione: 'Regole e invio' },
+  { id: 'finestre', titolo: 'Prossime finestre di invio', link: 'Finestre', azione: 'Finestra e regole' },
+  { id: 'cataloghi', titolo: 'Cataloghi da consultare', link: 'Cataloghi', azione: 'Contatti ufficiali' }
+] -%}
+{%- set generi = {
+  letteraria: 'Narrativa letteraria',
+  giallo: 'Giallo, noir e thriller',
+  storico: 'Romanzo storico',
+  romance: 'Romance',
+  fantastico: 'Fantasy, fantascienza e horror',
+  ragazzi: 'Ragazzi e young adult',
+  fumetto: 'Graphic novel'
+} -%}
+<main id="contenuto" class="elenco-editori" data-elenco-editori>
+  <header class="editori-testa">
+    <a class="editori-indietro" href="/guide/">← Guide per chi scrive</a>
+    <h1>{{ titolo }}</h1>
+    <p>{{ introduzione_editori }}</p>
+    <p class="editori-data">Ultima verifica <time datetime="{{ verifica_editori | dataIso }}">{{ verifica_editori | dataEstesa }}</time></p>
+  </header>
+
+  <nav class="editori-indice" aria-label="Sezioni dell’elenco editori">
+    <ul>
+      {%- for sezione in sezioni %}
+      <li data-indice-editori="{{ sezione.id }}"><a href="#{{ sezione.id }}">{{ sezione.link }}</a></li>
+      {%- endfor %}
+      <li><a href="#come-scegliere">Come scegliere</a></li>
+    </ul>
+  </nav>
+  <div class="editori-filtro" data-filtro-editori hidden>
+    <label for="genere-editori">Filtra per genere</label>
+    <select id="genere-editori">
+      <option value="">Tutti i generi</option>
+      {%- for id, nome in generi %}
+      <option value="{{ id }}">{{ nome }}</option>
+      {%- endfor %}
+    </select>
+    <span role="status" data-totale-editori></span>
+  </div>
+
+  {%- for sezione in sezioni %}
+  <section class="editori-gruppo" id="{{ sezione.id }}" aria-labelledby="h-{{ sezione.id }}" data-gruppo-editori>
+    <h2 id="h-{{ sezione.id }}">{{ sezione.titolo }}</h2>
+    <ul class="editori-righe">
+      {%- for editore in editori %}
+        {%- if editore.gruppo == sezione.id %}
+          {%- set azione = 'Avviso ufficiale' if editore.stato == 'Invii sospesi' else sezione.azione %}
+      <li class="editori-riga" data-generi="{{ editore.generi | join(' ') }}">
+        <div class="editori-profilo">
+          <h3>{{ editore.nome }}</h3>
+          <p class="editori-generi">{% for genere in editore.generi %}{{ generi[genere] }}{% if not loop.last %} · {% endif %}{% endfor %}</p>
+          {%- if editore.collane %}
+          <p class="editori-collane">{{ editore.collane }}</p>
+          {%- endif %}
+          <p class="editori-nota">{{ editore.nota }}</p>
+        </div>
+        <div class="editori-azioni">
+          <p class="editori-stato{% if not editore.stato %} editori-stato-aperto{% endif %}">{{ editore.stato or 'Invio spontaneo aperto' }}</p>
+          <a href="{{ editore.url }}" aria-label="{{ azione }} per {{ editore.nome }}">{{ azione }} <span aria-hidden="true">↗</span></a>
+          {%- if editore.catalogo %}
+          <a href="{{ editore.catalogo }}" aria-label="Catalogo di {{ editore.nome }}">Catalogo</a>
+          {%- endif %}
+        </div>
+      </li>
+        {%- endif %}
+      {%- endfor %}
+    </ul>
+  </section>
+  {%- endfor %}
+
+  <section id="come-scegliere" class="editori-consigli">
+    <div class="corpo">
+{{ content | safe }}
+    </div>
+  </section>
+  {% include "faq.njk" %}
+</main>

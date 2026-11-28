@@ -56,6 +56,7 @@ export default function (config) {
   config.addPassthroughCopy({ 'assets/css/fonts.css': 'assets/css/fonts.css', 'assets/css/sito.css': 'assets/css/sito.css', 'assets/js/sito.js': 'assets/js/sito.js', 'assets/js/scrivi.js': 'assets/js/scrivi.js', 'assets/js/scrivi-word.js': 'assets/js/scrivi-word.js', 'assets/js/scrivi-voce.js': 'assets/js/scrivi-voce.js', 'assets/css/scrivi.css': 'assets/css/scrivi.css', 'assets/vendor': 'assets/vendor', 'assets/effinge-anteprima.png': 'assets/effinge-anteprima.png', media: 'media' });
   config.addPassthroughCopy({ 'assets/fonts': 'assets/fonts' }, { filter: ['cormorant-*', 'eb-garamond-*', 'inter-tight-*'] });
   config.addPassthroughCopy('assets/js/statistiche.js');
+  config.addPassthroughCopy('assets/js/editori.js');
   config.addPassthroughCopy({ 'assets/js/scrivi-cloud.js': 'assets/js/scrivi-cloud.js' });
   config.addPassthroughCopy({ 'assets/js/strumenti.js': 'assets/js/strumenti.js', 'assets/css/strumenti.css': 'assets/css/strumenti.css', 'assets/templates': 'assets/templates' });
   config.addPassthroughCopy({ 'assets/favicon.png': 'favicon.png' });
@@ -115,8 +116,9 @@ export default function (config) {
       dati = { '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || d.estratto || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
         inLanguage: 'it-IT', articleSection: d.categoria || undefined, url, mainEntityOfPage: url, publisher: editore, isPartOf: { '@type': 'Periodical', name: s.sito.nome, url: base + '/' },
         image: d.immagine ? base + d.immagine : base + '/assets/effinge-anteprima.png' };
-    } else if (d.layout === 'guida.njk') {
+    } else if (d.layout === 'guida.njk' || d.layout === 'elenco-editori.njk') {
       dati = [{ '@type': 'Article', headline: d.titolo, description: d.seo_descrizione || '', datePublished: new Date(page.date).toISOString().slice(0, 10),
+        dateModified: d.verifica_editori ? new Date(d.verifica_editori).toISOString().slice(0, 10) : undefined,
         inLanguage: 'it-IT', url, mainEntityOfPage: url, publisher: editore, image: base + '/assets/effinge-anteprima.png' }];
     } else if (page.url === '/scrivi/' || d.strumento) {
       dati = { '@type': 'WebApplication', name: d.strumento ? d.titolo : 'Foglio Effinge', url, applicationCategory: 'ProductivityApplication', operatingSystem: 'Web', inLanguage: 'it-IT',

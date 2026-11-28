@@ -24,7 +24,7 @@
 <title>{{ titoloGoogle }}</title>
 <meta name="description" content="{{ descr }}">
 <link rel="canonical" href="{{ page.url | canonico }}">
-<meta property="og:type" content="{{ 'article' if layout == 'testo.njk' or layout == 'guida.njk' else 'website' }}">
+<meta property="og:type" content="{{ 'article' if layout == 'testo.njk' or layout == 'guida.njk' or layout == 'elenco-editori.njk' else 'website' }}">
 <meta property="og:site_name" content="{{ nomeSito }}">
 <meta property="og:title" content="{{ (titoloPagina if page.url != '/' else titoloGoogle) or s.sito.nome }}">
 <meta property="og:locale" content="it_IT">
@@ -38,7 +38,7 @@
 {%- endif %}
 <meta name="twitter:card" content="summary_large_image">
 {%- if not noindex %}
-<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo, faq: faq, strumento: strumento } | jsonld(page, impostazioni) | safe }}</script>
+<script type="application/ld+json">{{ { layout: layout, titolo: titolo, estratto: estratto, seo_descrizione: seo_descrizione, categoria: categoria, immagine: immagine, titolo_completo: titolo_completo, faq: faq, strumento: strumento, verifica_editori: verifica_editori } | jsonld(page, impostazioni) | safe }}</script>
 {%- endif %}
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png">
 <link rel="preload" href="/assets/fonts/cormorant-garamond-latin-300-normal.woff2" as="font" type="font/woff2" crossorigin>
