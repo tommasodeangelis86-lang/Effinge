@@ -62,7 +62,7 @@ script: /assets/js/editori.js
         </div>
         <div class="editori-azioni">
           <p class="editori-stato{% if not editore.stato %} editori-stato-aperto{% endif %}">{{ editore.stato or 'Invio spontaneo aperto' }}</p>
-          <a href="{{ editore.url }}" aria-label="{{ azione }} per {{ editore.nome }}">{{ azione }} <span aria-hidden="true">↗</span></a>
+          <a href="{{ editore.url }}" aria-label="{{ azione }} per {{ editore.nome }}">{{ azione }}</a>
           {%- if editore.catalogo %}
           <a href="{{ editore.catalogo }}" aria-label="Catalogo di {{ editore.nome }}">Catalogo</a>
           {%- endif %}
