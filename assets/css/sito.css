@@ -374,7 +374,7 @@ html:not(.js) .guida + .comandi{display:none}
 .altre-guide a{text-decoration:underline;text-underline-offset:3px}
 
 /* ——— Elenco editori ——— */
-.elenco-editori{width:min(calc(100% - 2 * var(--margine)),70rem);margin:0 auto;padding:clamp(105px,15vh,150px) 0 110px}
+.elenco-editori{--editori-oro:#e6bd7f;width:min(calc(100% - 2 * var(--margine)),70rem);margin:0 auto;padding:clamp(105px,15vh,150px) 0 110px}
 .editori-testa h1{max-width:24ch;margin:16px 0 18px;font:300 clamp(2.5rem,7vw,4.5rem)/1 var(--display);letter-spacing:-.01em;text-wrap:balance}
 .editori-testa > p{max-width:42em;margin:0;font:400 1.1875rem/1.6 var(--lettura);color:var(--testo-2)}
 .editori-testa .editori-data{margin-top:16px;font:450 .8125rem/1.5 var(--ui)}
@@ -388,14 +388,19 @@ html:not(.js) .guida + .comandi{display:none}
 .editori-filtro [role="status"]{color:var(--testo-2)}
 .editori-gruppo,.editori-consigli{scroll-margin-top:6rem;margin-top:clamp(40px,7vw,72px)}
 .editori-gruppo h2,.editori-consigli h2,.elenco-editori .faq h2{margin:0 0 20px;font:400 clamp(2rem,4vw,3rem)/1.05 var(--display)}
+.editori-gruppo:not([hidden]) ~ .editori-gruppo{margin-top:clamp(54px,8vw,96px)}
+.editori-gruppo h2::before{content:"";display:block;width:2.25rem;height:1px;margin-bottom:16px;background:var(--editori-oro)}
 .editori-righe{margin:0;padding:0;border-top:1px solid var(--filo);list-style:none}
-.editori-riga{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,12rem);align-items:start;gap:12px 32px;padding:22px 0;border-bottom:1px solid var(--filo)}
-.editori-riga h3{margin:0;font:400 clamp(1.6rem,3vw,2.2rem)/1.1 var(--display)}
+.editori-riga{display:grid;grid-template-columns:minmax(0,1fr) minmax(160px,12rem);align-items:start;gap:14px 32px;
+  padding:clamp(20px,3vw,28px) clamp(14px,2.5vw,28px);border-bottom:1px solid var(--filo);background:var(--stanza-2)}
+.editori-riga:nth-child(odd of :not([hidden])){background:color-mix(in srgb,var(--stanza-2) 94%,var(--carta))}
+.editori-riga h3{margin:0;color:var(--editori-oro);font:400 clamp(1.75rem,3.4vw,2.45rem)/1.05 var(--display)}
 .editori-generi,.editori-collane,.editori-stato{margin:6px 0 0;color:var(--testo-2);font:450 .8125rem/1.5 var(--ui)}
+.editori-collane{font:italic 400 1rem/1.4 var(--lettura)}
 .editori-nota{max-width:65ch;margin:8px 0 0;font:400 1.125rem/1.5 var(--lettura);color:var(--testo)}
-.editori-azioni{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
-.editori-stato{margin:0;font-weight:500}
-.editori-stato-aperto{color:var(--testo)}
+.editori-azioni{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding-inline-start:18px;border-inline-start:1px solid var(--filo)}
+.editori-stato{margin:0 0 4px;padding:3px 9px;border:1px solid var(--testo-3);border-radius:999px;font-weight:500}
+.editori-stato-aperto{border-color:color-mix(in srgb,var(--editori-oro) 48%,var(--filo));color:var(--testo)}
 .editori-azioni a{display:inline-block;min-height:24px}
 .editori-consigli .corpo,.elenco-editori .faq{margin-left:0;color:var(--testo)}
 .editori-consigli .corpo p + p{margin-top:.9em;text-indent:0}
@@ -403,8 +408,8 @@ html:not(.js) .guida + .comandi{display:none}
 .elenco-editori .faq details p,.elenco-editori .faq summary::after{color:var(--testo-2)}
 @media (max-width:640px){
   .editori-riga{grid-template-columns:minmax(0,1fr)}
-  .editori-azioni{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:4px 16px}
-  .editori-stato{width:100%}
+  .editori-azioni{flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:10px 0 0;border:0;border-top:1px solid var(--filo)}
+  .editori-stato{margin:0}
 }
 
 .barra-risorse{display:contents}
